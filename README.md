@@ -7,17 +7,24 @@ This utility comes in two versions:
 This version needs at least MOS version 1.02, which accepts loadable commands with arguments
 ### Installation
 1. Make sure to create a 'mos' directory on the microSD card
-2. Place the flash.bin in the 'mos' directory
+2. Place the flash.bin from in the 'mos' directory
 3. Place the required firmware file in the root directory of the microSD card
 4. Obtain the CRC32 checksum for the new firmware. On Linux you can use the crc32 utility. A suitable website to obtain this might be https://simplycalc.com/crc32-file.php. Use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the utility.
 
 ### Usage
-Run the upgrade utility as - FLASH \<filename\> \<crc32\>. The CRC32 needs to be 4byte, with or without a leading 0x. 
+Run the upgrade utility as - FLASH \<filename\> \<crc32\>. The CRC32 needs to be 4byte, with or without a leading 0x, but in hexadecimal format. 
 
-I.e. to upgrade to example firmware version 1.2, with checksum 0xe6834aa8 can be performed with:
+I.e. to upgrade to firmware version 1.02, with checksum 0xFE59E98D can be performed with:
 ```console
-FLASH firmware12.bin 0xe6834aa8
+FLASH firmware102.bin 0xFE59E98D
 ```
+
+## CRC32 checksums
+
+| MOS version | Filename        | CRC32      |
+|-------------|-----------------|------------|
+| 1.02        | firmware102.bin | 0xFE59E98D |
+
 ## Legacy version (MOS firmware 1.00/1.01)
 This version can run on MOS version 1.00 or 1.01 and will do a single upgrade to MOS version 1.02
 ### Installation
