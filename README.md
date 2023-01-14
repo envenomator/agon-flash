@@ -15,10 +15,7 @@ This version needs at least MOS version 1.02, which supports loadable commands w
 ```console
 Usage: FLASH <filename> <crc32>
 ```
-The provided CRC32 needs to be 4byte, with or without a leading 0x, in hexadecimal format. I.e. to upgrade to firmware version 1.02, with checksum 0xFE59E98D can be performed with:
-```console
-FLASH firmware102.bin 0xFE59E98D
-```
+The provided CRC32 needs to be 4byte, with or without a leading 0x, in hexadecimal format. 
 
 ### Valid MOS CRC32 checksums
 
