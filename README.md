@@ -30,6 +30,12 @@ This version can run on MOS version 1.00 or 1.01 and will do a single upgrade to
 2. Place the firmware102.bin in the root directory of the microSD card
 
 ### Usage
+First make sure you are on the MOS console, presented with the MOS prompt
+
+    *
+
+If you are in BBC Basic (Prompted with '>'), first type *BYE to exit BBC basic and return to MOS.
+
 Load and Jump to the binary in memory:
 ```console
 LOAD flash_legacy.bin
