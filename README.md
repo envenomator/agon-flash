@@ -19,9 +19,10 @@ The provided CRC32 needs to be 4byte, with or without a leading 0x, in hexadecim
 
 ### Valid MOS CRC32 checksums
 
-| MOS version | Filename        | CRC32      |
-|-------------|-----------------|------------|
-| 1.02        | firmware102.bin | 0xFE59E98D |
+| MOS version | Filename           | CRC32      |
+|-------------|--------------------|------------|
+| 1.02        | firmware102.bin    | 0xFE59E98D |
+| 1.03rc1     | firmware103rc1.bin | 0xC7EB8372 |
 
 ## Legacy version (MOS firmware 1.00/1.01)
 This version can run on MOS version 1.00 or 1.01 and will do a single upgrade to MOS version 1.02
