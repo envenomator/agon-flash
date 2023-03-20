@@ -13,6 +13,7 @@
 			XREF	__len_bss
 			
 			XREF	_main
+				
 			.ASSUME	ADL = 1	
 
 argv_ptrs_max:		EQU	16			; Maximum number of arguments allowed in argv
@@ -42,7 +43,12 @@ _start:			PUSH	AF			; Preserve registers
 			PUSH	DE
 			PUSH	IX
 			PUSH	IY			; Need to preserve IY for MOS			
-;			
+
+			LD	A, MB			; Save MB
+			PUSH 	AF
+			XOR 	A
+			LD 	MB, A                   ; Clear to zero so MOS API calls know how to use 24-bit addresses.
+
 			PUSH	HL			; Clear the RAM
 			CALL	_clear_bss
 			POP	HL
@@ -55,6 +61,10 @@ _start:			PUSH	AF			; Preserve registers
 			CALL	_main			; int main(int argc, char *argv[])
 			POP	DE			; Balance the stack
 			POP	DE
+
+			POP AF
+			LD	MB, A
+
 			POP	IY			; Restore registers
 			POP	IX
 			POP	DE
@@ -85,37 +95,41 @@ _clear_bss:		LD	BC, __len_bss		; Check for non-zero length
 ; - HL: Address of parameter string
 ; - IX: Address for array pointer storage
 ; Returns:
-; - BC: Number of parameters parsed
+; -  C: Number of parameters parsed
 ;
 _parse_params:		LD	BC, _exec_name
 			LD	(IX+0), BC		; ARGV[0] = the executable name
 			INC	IX
 			INC	IX
 			INC	IX
+			CALL	_skip_spaces		; Skip HL past any leading spaces
 ;
 			LD	BC, 1			; C: ARGC = 1 - also clears out top 16 bits of BCU
 			LD	B, argv_ptrs_max - 1	; B: Maximum number of argv_ptrs
 ;
-$$:			PUSH	BC			; Stack ARGC
-			CALL	_skip_spaces		; Skip any spaces
+_parse_params_1:	
+			PUSH	BC			; Stack ARGC	
 			PUSH	HL			; Stack start address of token
 			CALL	_get_token		; Get the next token
 			LD	A, C			; A: Length of the token in characters
 			POP	DE			; Start address of token (was in HL)
 			POP	BC			; ARGC
-			OR	A			; Check for A=0 (no token found)
+			OR	A			; Check for A=0 (no token found) OR at end of string
 			RET	Z
 ;
-			LD	(HL), 0			; Zero-terminate the token
-			INC	HL			; And skip onto the next character
 			LD	(IX+0), DE		; Store the pointer to the token
+			PUSH	HL			; DE=HL
+			POP	DE
+			CALL	_skip_spaces		; And skip HL past any spaces onto the next character
+			XOR	A
+			LD	(DE), A			; Zero-terminate the token
 			INC	IX
 			INC	IX
 			INC	IX			; Advance to next pointer position
 			INC	C			; Increment ARGC
 			LD	A, C			; Check for C >= A
 			CP	B
-			JR	C, $B			; And loop
+			JR	C, _parse_params_1	; And loop
 			RET
 
 ; Get the next token
@@ -142,13 +156,13 @@ $$:			LD	A, (HL)			; Get the character from the parameter string
 ; - HL: Address of parameter string
 ; Returns:
 ; - HL: Address of next none-space character
+;    F: Z if at end of string, otherwise NZ if there are more tokens to be parsed
 ;
-_skip_spaces:		LD	A, (HL)			; Get the character from the parameter string
+_skip_spaces:		LD	A, (HL)			; Get the character from the parameter string	
 			CP	' '			; Exit if not space
 			RET	NZ
 			INC	HL			; Advance to next character
 			JR	_skip_spaces		; Increment length
-
 
 			SEGMENT DATA
 

@@ -71,19 +71,15 @@ int main(int argc, char * argv[]) {
 	printf("File size    : %d byte(s)", size);
 
 	// Read file to memory
-	//mod = 0;
 	while(!mos_feof(file))
 	{
 		*ptr = mos_fgetc(file);
 		ptr++;
 		size++;
-		//mod++;
-		//if(mod > 1024)
+
 		if(size%1024 == 0)
 		{
-			//mod = 0;
 			printf("\rFile size    : %d byte(s)", size);
-
 		}
 	}		
 	mos_fclose(file);	
