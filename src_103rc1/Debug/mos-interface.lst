@@ -1,0 +1,235 @@
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED20-Mar-23     11:56:16     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ;
+                           A     2    ; Title:		AGON MOS - MOS assembly interfa
+                           A     3    ; Author:		Jeroen Venema
+                           A     4    ; Created:		15/10/2022
+                           A     5    ; Last Updated:	26/11/2022
+                           A     6    ; 
+                           A     7    ; Modinfo:
+                           A     8    ; 15/10/2022:		Added _putch, _getch
+                           A     9    ; 21/10/2022:		Added _puts
+                           A    10    ; 22/10/2022:		Added _waitvblank, _mos_f* 
+                           A    11    ; 26/11/2022:       __putch, changed default ro
+                           A    12    ; 17/12/2022:		Only required functions inc
+                           A    13    ; 18/12/2022:		Regression needed for MOS 1
+                           A    14    
+                           B     0    	.include "mos_api.inc"
+                           B     1    ;
+                           B     2    ; Title:	AGON MOS - API for user projects
+                           B     3    ; Author:	Dean Belfield
+                           B     4    ; Created:	03/08/2022
+                           B     5    ; Last Updated:	13/10/2022
+                           B     6    ;
+                           B     7    ; Modinfo:
+                           B     8    ; 05/08/2022:	Added mos_feof
+                           B     9    ; 09/08/2022:	Added system variables: cursorX
+                           B    10    ; 18/08/2022:	Added system variables: scrchar
+                           B    11    ; 05/09/2022:	Added mos_ren, vdp_pflag_mode
+                           B    12    ; 24/09/2022:	Added mos_getError, mos_mkdir
+                           B    13    ; 13/10/2022:	Added mos_oscli
+                           B    14    
+                           B    15    ; MOS high level functions
+                           B    16    ;
+       00000000            B    17    mos_getkey:		EQU	00h
+       00000001            B    18    mos_load:		EQU	01h
+       00000002            B    19    mos_save:		EQU	02h
+       00000003            B    20    mos_cd:			EQU	03h
+       00000004            B    21    mos_dir:		EQU	04h
+       00000005            B    22    mos_del:		EQU	05h
+       00000006            B    23    mos_ren:		EQU	06h
+       00000007            B    24    mos_mkdir:		EQU	07h
+       00000008            B    25    mos_sysvars:		EQU	08h
+       00000009            B    26    mos_editline:		EQU	09h
+       0000000A            B    27    mos_fopen:		EQU	0Ah
+       0000000B            B    28    mos_fclose:		EQU	0Bh
+       0000000C            B    29    mos_fgetc:		EQU	0Ch
+       0000000D            B    30    mos_fputc:		EQU	0Dh
+       0000000E            B    31    mos_feof:		EQU	0Eh
+       0000000F            B    32    mos_getError:		EQU	0Fh
+       00000010            B    33    mos_oscli:		EQU	10h
+                           B    34    
+                           B    35    ; FatFS file access functions
+                           B    36    ;
+       00000080            B    37    ffs_fopen:		EQU	80h
+       00000081            B    38    ffs_fclose:		EQU	81h
+       00000082            B    39    ffs_fread:		EQU	82h
+       00000083            B    40    ffs_fwrite:		EQU	83h
+       00000084            B    41    ffs_fseek:		EQU	84h
+       00000085            B    42    ffs_ftruncate:		EQU	85h
+       00000086            B    43    ffs_fsync:		EQU	86h
+       00000087            B    44    ffs_fforward:		EQU	87h
+       00000088            B    45    ffs_fexpand:		EQU	88h
+       00000089            B    46    ffs_fgets:		EQU	89h
+       0000008A            B    47    ffs_fputc:		EQU	8Ah
+       0000008B            B    48    ffs_fputs:		EQU	8Bh
+       0000008C            B    49    ffs_fprintf:		EQU	8Ch
+       0000008D            B    50    ffs_ftell:		EQU	8Dh
+       0000008E            B    51    ffs_feof:		EQU	8Eh
+       0000008F            B    52    ffs_fsize:		EQU	8Fh
+       00000090            B    53    ffs_ferror:		EQU	90h
+                           B    54    
+                           B    55    ; FatFS directory access functions
+                           B    56    ;
+       00000091            B    57    ffs_dopen:		EQU	91h
+       00000092            B    58    ffs_dclose:		EQU	92h
+       00000093            B    59    ffs_dread:		EQU	93h
+       00000094            B    60    ffs_dfindfirst:		EQU	94h
+       00000095            B    61    ffs_dfindnext:		EQU	95h
+                           B    62    
+                           B    63    ; FatFS file and directory management functions
+                           B    64    ;
+       00000096            B    65    ffs_stat:		EQU	96h
+       00000097            B    66    ffs_unlink:		EQU	97h
+       00000098            B    67    ffs_rename:		EQU	98h
+       00000099            B    68    ffs_chmod:		EQU	99h
+       0000009A            B    69    ffs_utime:		EQU	9Ah
+       0000009B            B    70    ffs_mkdir:		EQU	9Bh
+       0000009C            B    71    ffs_chdir:		EQU	9Ch
+       0000009D            B    72    ffs_chdrive:		EQU	9Dh
+       0000009E            B    73    ffs_getcwd:		EQU	9Eh
+                           B    74    
+                           B    75    ; FatFS volume management and system configurat
+                           B    76    ;
+       0000009F            B    77    ffs_mount:		EQU	9Fh
+       000000A0            B    78    ffs_mkfs:		EQU	A0h
+       000000A1            B    79    ffs_fdisk		EQU	A1h
+       000000A2            B    80    ffs_getfree:		EQU	A2h
+       000000A3            B    81    ffs_getlabel:		EQU	A3h
+       000000A4            B    82    ffs_setlabel:		EQU	A4h
+       000000A5            B    83    ffs_setcp:		EQU	A5h
+                           B    84    	
+                           B    85    ; File access modes
+                           B    86    ;
+       00000001            B    87    fa_read:		EQU	01h
+       00000002            B    88    fa_write:		EQU	02h
+       00000000            B    89    fa_open_existing:	EQU	00h
+       00000004            B    90    fa_create_new:		EQU	04h
+       00000008            B    91    fa_create_always:	EQU	08h
+       00000010            B    92    fa_open_always:		EQU	10h
+       00000030            B    93    fa_open_append:		EQU	30h
+                           B    94    	
+                           B    95    ; System variable indexes for api_sysvars
+                           B    96    ; Index into _sysvars in globals.asm
+                           B    97    ;
+       00000000            B    98    sysvar_time:		EQU	00h
+       00000004            B    99    sysvar_vpd_pflags:	EQU	04h
+       00000005            B   100    sysvar_keycode:		EQU	05h
+       00000006            B   101    sysvar_keymods:		EQU	06h
+       00000007            B   102    sysvar_cursorX:		EQU	07h
+       00000008            B   103    sysvar_cursorY:		EQU	08h
+       00000009            B   104    sysvar_scrchar:		EQU	09h
+       0000000A            B   105    sysvar_scrpixel:	EQU	0Ah
+       0000000D            B   106    sysvar_audioChannel:	EQU	0Dh
+       0000000E            B   107    syscar_audioSuccess:	EQU	0Eh
+                           B   108    	
+                           B   109    ; Flags for the VPD protocol
+                           B   110    ;
+       00000001            B   111    vdp_pflag_cursor:	EQU		00000001b
+       00000002            B   112    vdp_pflag_scrchar:	EQU		00000010b
+       00000004            B   113    vdp_pflag_point:	EQU		00000100b
+       00000008            B   114    vdp_pflag_audio:	EQU		00001000b
+       00000010            B   115    vdp_pflag_mode:		EQU		00010000b
+                           B   116    	
+                           B   117    ;
+                           B   118    ; Macro for calling the API
+                           B   119    ; Parameters:
+                           B   120    ; - function: One of the function numbers liste
+                           B   121    ;
+                           B   122    MOSCALL:		MACRO	function
+                           B   123    			LD	A, function
+                           B   124    			RST.LIS	08h
+                           B   125    			ENDMACRO 	
+                           A    16    
+                           A    17    	XDEF _getch
+                           A    18    	XDEF __getch
+                           A    19    	XDEF _mos_fopen
+                           A    20    	XDEF _mos_fclose
+                           A    21    	XDEF _mos_fgetc
+                           A    22    	XDEF _mos_feof
+                           A    23    
+                           A    24    	segment CODE
+                           A    25    	.assume ADL=1
+                           A    26    	
+0406C3                     A    27    _getch:
+0406C3                     A    28    __getch:
+0406C3 FDE5                A    29    	push iy
+0406C5 DDE5                A    30    	push ix
+0406C7 3E08                A    31    	ld a, mos_sysvars			; MOS Call for 
+0406C9 49CF                A    32    	rst.lis 08h					; returns point
+0406CB                     A    33    _getch0:
+0406CB DD7E05              A    34    	ld a, (ix+sysvar_keycode)	; get current k
+0406CE B7                  A    35    	or a,a
+0406CF 28 FA               A    36    	jr z, _getch0				; wait for keyp
+                           A    37    	
+0406D1 F5                  A    38    	push af						; debounce key,
+0406D2 AF                  A    39    	xor a
+0406D3 DD7705              A    40    	ld (ix+sysvar_keycode),a
+0406D6 F1                  A    41    	pop af
+0406D7 DDE1                A    42    	pop ix
+0406D9 FDE1                A    43    	pop iy
+0406DB C9                  A    44    	ret
+                           A    45    
+0406DC                     A    46    _mos_fopen:
+0406DC FDE5                A    47    	push iy
+0406DE FD210000 00         A    48    	ld iy,0
+0406E3 FD39                A    49    	add iy, sp
+                           A    50    	
+0406E5 FD2706              A    51    	ld hl, (iy+6)	; address to 0-terminated f
+0406E8 FD4E09              A    52    	ld c,  (iy+9)	; mode : fa_read / fa_write
+0406EB 3E0A                A    53    	ld a, mos_fopen
+0406ED 49CF                A    54    	rst.lis 08h		; returns filehandle in A
+                           A    55    	
+0406EF FDF9                A    56    	ld sp,iy
+0406F1 FDE1                A    57    	pop iy
+0406F3 C9                  A    58    	ret	
+                           A    59    
+0406F4                     A    60    _mos_fclose:
+0406F4 FDE5                A    61    	push iy
+0406F6 FD210000 00         A    62    	ld iy,0
+0406FB FD39                A    63    	add iy, sp
+                           A    64    	
+0406FD FD4E06              A    65    	ld c, (iy+6)	; filehandle, or 0 to close
+040700 3E0B                A    66    	ld a, mos_fclose
+040702 49CF                A    67    	rst.lis 08h		; returns number of files s
+                           A    68    	
+040704 FDF9                A    69    	ld sp,iy
+040706 FDE1                A    70    	pop iy
+040708 C9                  A    71    	ret	
+                           A    72    
+040709                     A    73    _mos_fgetc:
+040709 FDE5                A    74    	push iy
+04070B FD210000 00         A    75    	ld iy,0
+040710 FD39                A    76    	add iy, sp
+                           A    77    	
+040712 FD4E06              A    78    	ld c, (iy+6)	; filehandle
+040715 3E0C                A    79    	ld a, mos_fgetc
+040717 49CF                A    80    	rst.lis 08h		; returns character in A
+                           A    81    	
+040719 FDF9                A    82    	ld sp,iy
+04071B FDE1                A    83    	pop iy
+04071D C9                  A    84    	ret	
+                           A    85    
+04071E                     A    86    _mos_feof:
+04071E FDE5                A    87    	push iy
+040720 FD210000 00         A    88    	ld iy,0
+040725 FD39                A    89    	add iy, sp
+                           A    90    	
+040727 FD4E06              A    91    	ld c, (iy+6)	; filehandle
+04072A 3E0E                A    92    	ld a, mos_feof
+04072C 49CF                A    93    	rst.lis 08h		; returns A: 1 at End-of-Fi
+                           A    94    	
+04072E FDF9                A    95    	ld sp,iy
+040730 FDE1                A    96    	pop iy
+040732 C9                  A    97    	ret	
+                           A    98    
+                           A    99    end
+                           A   100    
+                           A   101    	
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 225

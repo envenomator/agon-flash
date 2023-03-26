@@ -1,0 +1,166 @@
+; Zilog eZ80 ANSI C Compiler Release 3.4
+; -nomodsect -optsize -noreduceopt -nopadbranch -debug
+; -peephole -globalopt -localcse -const=ROM 
+	FILE	"..\agontimer.c"
+	.assume ADL=1
+.DEBUG "C"
+	SEGMENT CODE
+;    1	/*
+;    2	 * Title:			AGON timer interface
+;    3	 * Author:			Jeroen Venema
+;    4	 * Created:			06/11/2022
+;    5	 * Last Updated:	06/11/2022
+;    6	 * 
+;    7	 * Modinfo:
+;    8	 * 06/11/2022:		Initial version
+;    9	 */
+;   10	
+;   11	#include <defines.h>
+;   12	#include <ez80.h>
+;   13	
+;   14	#define TMR0_COUNTER_1ms	(unsigned short)(((18432000 / 1000) * 1) / 16)
+;   15	
+;   16	void delayms(int ms)
+;   17	{
+_delayms:
+.DEFINE "_delayms"
+
+.VALUE _delayms
+
+.CLASS 2
+
+.TYPE 65
+
+.ENDEF
+
+.BEGFUNC "delayms",17,"_delayms"
+
+.LINE 17
+
+.DEFINE "ms"
+
+.CLASS 65
+
+.VALUE 6
+
+.TYPE 4
+
+.ENDEF
+
+.DEFINE "timer0"
+
+.CLASS 65
+
+.VALUE -2
+
+.TYPE 13
+
+.ENDEF
+
+	PUSH	IX
+	LD	IX,0
+	ADD	IX,SP
+	DEC	SP
+	DEC	SP
+;   18		unsigned short rr;
+;   19		UINT16 timer0;
+;   20	
+;   21		rr = TMR0_COUNTER_1ms - 19;	// 1,7% correction for cycles during while(ms) loop
+;   22		
+;   23		TMR0_CTL = 0x00;	// disable timer0
+.LINE 23
+
+	XOR	A,A
+	OUT0	(128),A
+;   24		
+;   25		while(ms)
+.LINE 25
+
+	JR	L_4
+L_5:
+;   26		{	
+;   27			TMR0_RR_H = (unsigned char)(rr >> 8);
+.LINE 27
+
+	LD	A,%4
+	OUT0	(130),A
+;   28			TMR0_RR_L = (unsigned char)(rr);
+.LINE 28
+
+	LD	A,%6D
+	OUT0	(129),A
+;   29					
+;   30			TMR0_CTL = 0x87; // enable, single pass, stop at 0, start countdown immediately
+.LINE 30
+
+	LD	A,%87
+	OUT0	(128),A
+;   31			do
+L_0:
+.LINE 31
+
+;   32			{
+;   33				timer0 = TMR0_DR_L;
+.LINE 33
+
+	IN0	A,(129)
+	LD	C,A
+	LD	B,%0
+	LD	HL,BC
+	LD	(IX+%FFFFFFFE),L
+	LD	(IX+%FFFFFFFF),H
+;   34				timer0 = timer0 | (TMR0_DR_H << 8);		
+.LINE 34
+
+	IN0	A,(130)
+	LD	C,A
+	LD	HL,BC
+	LD	H,L
+	LD	L,%0
+	LD	BC,(IX+%FFFFFFFE)
+	CALL	__sor
+	LD	(IX+%FFFFFFFE),L
+	LD	(IX+%FFFFFFFF),H
+;   35			}
+;   36			while(timer0);
+.LINE 36
+
+	LD	HL,(IX+%FFFFFFFE)
+	CALL	__scmpzero
+	JR	NZ,L_0
+;   37			ms--;
+.LINE 37
+
+	LD	BC,(IX+%6)
+	DEC	BC
+	LD	(IX+%6),BC
+;   38		}
+L_4:
+.LINE 38
+
+	LD	HL,(IX+%6)
+	CALL	__icmpzero
+	JR	NZ,L_5
+.LINE 39
+
+	LD	SP,IX
+	POP	IX
+	RET	
+
+
+;**************************** _delayms ***************************
+;Name                         Addr/Register   Size   Type
+;timer0                                IX-2      2   variable
+;ms                                    IX+6      3   parameter
+
+
+; Stack Frame Size: 11 (bytes)
+;       Spill Code: 0 (instruction)
+
+
+.ENDFUNC "delayms",39,"_delayms"
+	XREF __sor:ROM
+	XREF __scmpzero:ROM
+	XREF __icmpzero:ROM
+	XDEF _delayms
+	END
