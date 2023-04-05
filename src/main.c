@@ -6,6 +6,8 @@
  * 
  * Modinfo:
  * 17/12/2022:		Initial version
+ * 05/04/2022:		Changed timer to 5sec at reset.
+ *                  Sends cls just before reset
  */
 
 #include <ez80.h>
@@ -134,11 +136,13 @@ int main(int argc, char * argv[]) {
 				default:
 					// RESET SYSTEM
 					printf("\r\n");
-					for(counter = 9; counter >0; counter--)
+					for(counter = 5; counter >0; counter--)
 					{
 						printf("\rReset in %ds",counter);
 						delayms(1000);
 					}
+					putch(12);
+					delayms(500);
 					reset();
 			}
 	
