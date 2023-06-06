@@ -10,10 +10,11 @@ RANGE EXTIO $000000 : $00FFFF
 RANGE INTIO $000000 : $0000FF
 
 CHANGE CODE = RAM
+CHANGE TEXT = RAM
 CHANGE STRSECT = RAM
 CHANGE DATA = RAM 
 
-ORDER CODE,DATA
+ORDER CODE,TEXT,DATA
 
 DEFINE __low_bss = base of BSS
 DEFINE __len_bss = length of BSS
@@ -25,6 +26,7 @@ DEFINE __len_bss = length of BSS
  ".\flash.obj", \
  ".\agontimer.obj", \
  ".\strtoll.obj", \
+ ".\crc32.obj", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\chelpD.lib", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtD.lib", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtSD.lib", \
