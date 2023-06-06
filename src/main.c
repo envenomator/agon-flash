@@ -37,6 +37,7 @@ int putch(int c)
 int main(int argc, char * argv[]) {
 	UINT32 crcexpected,crcresult,crcbackup;
 	UINT24 size = 0;
+	UINT24 got;
 	UINT8 file;
 	char* ptr = (char*)BUFFER1;
 	UINT8 response;
@@ -73,11 +74,10 @@ int main(int argc, char * argv[]) {
 	printf("File size    : %d byte(s)", size);
 
 	// Read file to memory
-	while(!mos_feof(file))
+	while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0)
 	{
-		*ptr = mos_fgetc(file);
-		ptr++;
-		size++;
+		ptr += got;
+		size += got;
 
 		if(size%1024 == 0)
 		{
