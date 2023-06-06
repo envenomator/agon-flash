@@ -31,6 +31,7 @@ mos_fputc:		EQU	0Dh
 mos_feof:		EQU	0Eh
 mos_getError:		EQU	0Fh
 mos_oscli:		EQU	10h
+mos_fread:		EQU	1Ah
 
 ; FatFS file access functions
 ;
