@@ -24,7 +24,7 @@ DEFINE __len_bss = length of BSS
  ".\mos-interface.obj", \
  ".\flash.obj", \
  ".\agontimer.obj", \
- ".\crc32.obj", \
+ ".\strtoll.obj", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\chelpD.lib", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtD.lib", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtSD.lib", \
