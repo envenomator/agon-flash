@@ -9,8 +9,6 @@
 #define FLASHPAGES	128
 #define FLASHSTART	0x0
 
-#define BLOCKSIZE	16384
-
 extern void enableFlashKeyRegister(void);
 extern void lockFlashKeyRegister(void);
 extern void fastmemcpy(UINT24 destination, UINT24 source, UINT24 size);
