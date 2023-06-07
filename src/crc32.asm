@@ -116,7 +116,7 @@ $loop:		LD		A,(DE)
 		POP	IX
 		RET
 
-		SEGMENT	TEXT
+		SEGMENT	DATA
 
 		; The crc32 routine is optimised in such a way as to require
 		; the following table to be aligned on a 1024 byte boundary.
