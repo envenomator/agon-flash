@@ -4,7 +4,7 @@ The utility version you need, depends on the *current* version of MOS. When you 
 Please follow the guide for your *current* MOS version:
 1. [*Current* MOS Version 1.03 or higher](#current-mos-firmware-103-or-higher)
 2. [*Current* MOS Version 1.02](#current-mos-firmware-102)
-3. [*Current* Version 1.00 or 1.01](#legacy-version-mos-firmware-100101)
+3. [*Current* Version 1.00 or 1.01](#current-mos-firmware-100101-legacy-version)
 
 ## Current MOS firmware 1.03 or higher
 This version needs at least MOS version 1.03, which supports several enhancements to the MOS file API.
