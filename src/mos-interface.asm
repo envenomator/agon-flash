@@ -18,7 +18,6 @@
 	XDEF _mos_fopen
 	XDEF _mos_fclose
 	XDEF _mos_fgetc
-	XDEF _mos_fread
 	XDEF _mos_feof
 	XDEF _mos_save
 	XDEF _mos_del
@@ -119,25 +118,6 @@ _mos_fgetc:
 	ld sp,ix
 	pop ix
 	ret	
-
-_mos_fread:
-	push ix
-	ld ix,0
-	add ix,sp
-
-	ld c, (ix+6)	; filehandle
-	ld hl, (ix+9)	; buffer
-	ld de, (ix+12)	; bytes to read
-
-	ld a, mos_fread
-	rst.lil 08h
-
-	push	de	; Move 24-bit result from DE into HL
-	pop	hl
-
-	ld sp,ix
-	pop ix
-	ret
 
 _mos_fputc:
 	push ix
