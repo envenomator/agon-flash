@@ -83,3 +83,5 @@ The MOS currently has no built-in backup code, or second slot, that it can acces
 Having subjected my own gear muuuuultiple times to this utility, I feel it's safe for general use in upgrading the MOS firmware to a new version.
 The responsibility for any issues during and/or after the firmware upgrade, lies with the user of this utility.
 
+## If all else fails
+Stuff breaks, things happen. Yeah, wonderful, but what if after whatever happened, you have bricked your AgonLight? Take a deep breath, and have a look at [this](https://github.com/envenomator/agon-vdpflash) utility to perform a *baremetal* recovery.
