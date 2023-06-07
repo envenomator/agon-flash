@@ -1,17 +1,34 @@
 # Agon MOS firmware upgrade utility
-This utility comes in two versions:
-1. A generic utility version ***needing at least MOS version 1.02*** that will flash new versions of Agon MOS, . The utility is loaded as a MOS command and can take arguments from the commandline.
-2. A 'legacy' utility version that can upgrade MOS 1.00 or 1.01 to MOS 1.02 only. Afterwards, the generic version can be used to upgrade to later MOS versions.
+The utility version you need, depends on the *current* version of MOS. When you reset your AgonLight, the MOS version is displayed on the first line.
 
-## Generic version (Needs MOS firmware 1.02)
+Please follow the guide for your *current* MOS version:
+1. [*Current* MOS Version 1.03 or higher](#current-mos-firmware-103-or-higher)
+2. [*Current* MOS Version 1.02](#current-mos-firmware-102)
+3. [*Current* Version 1.00 or 1.01](#legacy-version-mos-firmware-100101)
+
+## Current MOS firmware 1.03 or higher
+This version needs at least MOS version 1.03, which supports several enhancements to the MOS file API.
+### Installation
+1. Make sure to create a 'mos' directory on the microSD card
+2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.03%20or%20higher/flash.bin) from in the 'mos' directory
+3. Place the required firmware file in the root directory of the microSD card
+4. Obtain the CRC32 checksum for the new firmware. The [table below](#valid-mos-crc32-checksums) lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
+
+### Target MOS version
+Any new MOS version can be flashed using this utility version
+
+## Current MOS firmware 1.02
 This version needs at least MOS version 1.02, which supports loadable commands with arguments.
 ### Installation
 1. Make sure to create a 'mos' directory on the microSD card
-2. Place the flash.bin from in the 'mos' directory
+2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.02/flash.bin) from in the 'mos' directory
 3. Place the required firmware file in the root directory of the microSD card
-4. Obtain the CRC32 checksum for the new firmware. The table below lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
+4. Obtain the CRC32 checksum for the new firmware. The [table below](#valid-mos-crc32-checksums) lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
 
-### Usage
+### Target MOS version
+Any new MOS version can be flashed using this utility version
+
+## Usage for *current* MOS versions 1.02+
 ```console
 Usage: FLASH <filename> <crc32>
 ```
@@ -22,20 +39,16 @@ To upgrade from MOS 1.02 to version 1.03 for example:
 FLASH firmware103.bin 0x81E397C9
 ```
 
-### Valid MOS CRC32 checksums
-
-| MOS version | Filename           | CRC32      |
-|-------------|--------------------|------------|
-| 1.02        | firmware102.bin    | 0xFE59E98D |
-| 1.03        | firmware103.bin    | 0x81E397C9 |
-
-## Legacy version (MOS firmware 1.00/1.01)
-This version can run on MOS version 1.00 or 1.01 and will do a single upgrade to MOS version 1.02
+## Current MOS firmware 1.00/1.01 (Legacy version)
+This version can run on MOS version 1.00 or 1.01 and will do a single upgrade to MOS version 1.02 only.
 ### Installation
-1. Place the flash_legacy.bin in the root directory of the microSD card
-2. Place the firmware102.bin in the root directory of the microSD card
+1. Place the [flash_legacy.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%20up%20to%201.01/flash_legacy.bin) in the *root* directory of the microSD card
+2. Place the [firmware102.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/firmware102.bin) in the root directory of the microSD card
 
-### Usage
+### Target MOS version
+Only MOS version 1.02 can be flashed using this utility version. For additional MOS upgrades, you need [this](#current-mos-firmware-102) utility version afterwards.
+
+### Usage for *current* MOS version 1.00/1.01
 First make sure you are on the MOS console, presented with the MOS prompt
 
     *
@@ -47,6 +60,14 @@ Load and Jump to the binary in memory:
 LOAD flash_legacy.bin
 JMP &040000
 ```
+
+## Valid MOS CRC32 checksums
+
+| MOS version | Filename           | CRC32      |
+|-------------|--------------------|------------|
+| 1.02        | firmware102.bin    | 0xFE59E98D |
+| 1.03        | firmware103.bin    | 0x81E397C9 |
+
 ## Workflow
 The utility reads in the given firmware file to memory and verifies this against the given CRC32 checksum.
 If the file is larger than the amount of flash, the tool will exit.

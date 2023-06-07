@@ -8,6 +8,7 @@
  * 17/12/2022:		Initial version
  * 05/04/2022:		Changed timer to 5sec at reset.
  *                  Sends cls just before reset
+ * 07/06/2023:		Included faster crc32, by Leigh Brown
  */
 
 #include <ez80.h>
@@ -37,6 +38,7 @@ int putch(int c)
 int main(int argc, char * argv[]) {
 	UINT32 crcexpected,crcresult,crcbackup;
 	UINT24 size = 0;
+	UINT24 got;
 	UINT8 file;
 	char* ptr = (char*)BUFFER1;
 	UINT8 response;
@@ -45,7 +47,7 @@ int main(int argc, char * argv[]) {
 	UINT24 addressto,addressfrom;
 	enum states state;
 	
-	printf("Agon MOS firmware upgrade utility\n\r\n\r");
+	printf("Agon MOS firmware upgrade utility v1.3\n\r\n\r");
 	
 	if(argc != 3)
 	{
@@ -73,16 +75,11 @@ int main(int argc, char * argv[]) {
 	printf("File size    : %d byte(s)", size);
 
 	// Read file to memory
-	while(!mos_feof(file))
+	while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0)
 	{
-		*ptr = mos_fgetc(file);
-		ptr++;
-		size++;
-
-		if(size%1024 == 0)
-		{
-			printf("\rFile size    : %d byte(s)", size);
-		}
+		ptr += got;
+		size += got;
+		printf("\rFile size    : %d byte(s)", size);
 	}		
 	mos_fclose(file);	
 	printf("\rFile size    : %d byte(s)\n\r", size);

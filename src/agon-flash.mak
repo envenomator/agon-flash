@@ -26,16 +26,16 @@ ZTPDIR = C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\ZTP2.5.1
 ZTPDIR_ESCSPACE = C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\ZTP2.5.1
 
 # project directory
-PRJDIR = C:\source\agon-flash\src_103rc1
-PRJDIR_ESCSPACE = C:\source\agon-flash\src_103rc1
+PRJDIR = C:\source\agon-flash\src
+PRJDIR_ESCSPACE = C:\source\agon-flash\src
 
 # intermediate files directory
-WORKDIR = C:\source\agon-flash\src_103rc1\Debug
-WORKDIR_ESCSPACE = C:\source\agon-flash\src_103rc1\Debug
+WORKDIR = C:\source\agon-flash\src\Debug
+WORKDIR_ESCSPACE = C:\source\agon-flash\src\Debug
 
 # output files directory
-OUTDIR = C:\source\agon-flash\src_103rc1\Debug\
-OUTDIR_ESCSPACE = C:\source\agon-flash\src_103rc1\Debug\
+OUTDIR = C:\source\agon-flash\src\Debug\
+OUTDIR_ESCSPACE = C:\source\agon-flash\src\Debug\
 
 # tools
 CC = @"$(BIN)\eZ80cc"
@@ -118,28 +118,36 @@ clean:
             $(RM) "$(WORKDIR)\agontimer.lst"
 	@if exist "$(WORKDIR)\agontimer.src"  \
             $(RM) "$(WORKDIR)\agontimer.src"
+	@if exist "$(WORKDIR)\strtoll.obj"  \
+            $(RM) "$(WORKDIR)\strtoll.obj"
+	@if exist "$(WORKDIR)\strtoll.lis"  \
+            $(RM) "$(WORKDIR)\strtoll.lis"
+	@if exist "$(WORKDIR)\strtoll.lst"  \
+            $(RM) "$(WORKDIR)\strtoll.lst"
+	@if exist "$(WORKDIR)\strtoll.src"  \
+            $(RM) "$(WORKDIR)\strtoll.src"
 	@if exist "$(WORKDIR)\crc32.obj"  \
             $(RM) "$(WORKDIR)\crc32.obj"
 	@if exist "$(WORKDIR)\crc32.lis"  \
             $(RM) "$(WORKDIR)\crc32.lis"
 	@if exist "$(WORKDIR)\crc32.lst"  \
             $(RM) "$(WORKDIR)\crc32.lst"
-	@if exist "$(WORKDIR)\crc32.src"  \
-            $(RM) "$(WORKDIR)\crc32.src"
 
 relist: 
-	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src_103rc1\Debug\flash.map" \
-            C:\source\agon-flash\src_103rc1\init.asm
-	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src_103rc1\Debug\flash.map" \
-            C:\source\agon-flash\src_103rc1\Debug\main.src
-	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src_103rc1\Debug\flash.map" \
-            C:\source\agon-flash\src_103rc1\mos-interface.asm
-	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src_103rc1\Debug\flash.map" \
-            C:\source\agon-flash\src_103rc1\flash.asm
-	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src_103rc1\Debug\flash.map" \
-            C:\source\agon-flash\src_103rc1\Debug\agontimer.src
-	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src_103rc1\Debug\flash.map" \
-            C:\source\agon-flash\src_103rc1\Debug\crc32.src
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\init.asm
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\Debug\main.src
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\mos-interface.asm
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\flash.asm
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\Debug\agontimer.src
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\Debug\strtoll.src
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\crc32.asm
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -152,6 +160,7 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\mos-interface.obj  \
             $(WORKDIR_ESCSPACE)\flash.obj  \
             $(WORKDIR_ESCSPACE)\agontimer.obj  \
+            $(WORKDIR_ESCSPACE)\strtoll.obj  \
             $(WORKDIR_ESCSPACE)\crc32.obj
 
 flash: $(OBJS)
@@ -209,8 +218,8 @@ $(WORKDIR_ESCSPACE)\agontimer.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\agontimer.c"
 
-$(WORKDIR_ESCSPACE)\crc32.obj :  \
-            $(PRJDIR_ESCSPACE)\crc32.c  \
+$(WORKDIR_ESCSPACE)\strtoll.obj :  \
+            $(PRJDIR_ESCSPACE)\strtoll.c  \
             $(INCLUDE_ESCSPACE)\std\CTYPE.H  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
@@ -225,5 +234,9 @@ $(WORKDIR_ESCSPACE)\crc32.obj :  \
             $(INCLUDE_ESCSPACE)\zilog\uart.h  \
             $(INCLUDE_ESCSPACE)\zilog\uartdefs.h  \
             $(PRJDIR_ESCSPACE)\crc32.h
-	 $(CC) $(CFLAGS) "$(PRJDIR)\crc32.c"
+	 $(CC) $(CFLAGS) "$(PRJDIR)\strtoll.c"
+
+$(WORKDIR_ESCSPACE)\crc32.obj :  \
+            $(PRJDIR_ESCSPACE)\crc32.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\crc32.asm"
 
