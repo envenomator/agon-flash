@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ERRNO.H>
+#include <ctype.h>
 #include "mos-interface.h"
 #include "flash.h"
 #include "agontimer.h"
@@ -103,7 +104,8 @@ int main(int argc, char * argv[]) {
 	// Ask user to continue
 	printf("Erase and program flash (y/n)? ");
 	response = 0;
-	while((response != 'y') && (response != 'n')) response = getch();
+	while((response != 'y') && (response != 'n'))
+		response = tolower(getch());
 	if(response == 'y')
 	{
 		printf("\r\nBacking up existing firmware... ");
