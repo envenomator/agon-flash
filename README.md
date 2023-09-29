@@ -12,10 +12,10 @@ This version needs at least MOS version 1.03, which supports several enhancement
 1. Make sure to create a 'mos' directory on the microSD card
 2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.03%20or%20higher/flash.bin) from in the 'mos' directory
 3. Place the required firmware file in the root directory of the microSD card
-4. Obtain the CRC32 checksum for the new firmware. The [table below](#valid-mos-crc32-checksums) lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
+4. Obtain the CRC32 checksum for the new firmware. [This table](https://github.com/envenomator/agon-binaries/blob/master/README.md) at agon-binaries lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
 
 ### Target MOS version
-Any new MOS version can be flashed using this utility version
+Any new MOS version can be flashed using this utility version. Precompiled binaries can be found at my [agon-binaries](https://github.com/envenomator/agon-binaries) repository.
 
 ## Current MOS firmware 1.02
 This version needs at least MOS version 1.02, which supports loadable commands with arguments.
@@ -23,7 +23,7 @@ This version needs at least MOS version 1.02, which supports loadable commands w
 1. Make sure to create a 'mos' directory on the microSD card
 2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.02/flash.bin) from in the 'mos' directory
 3. Place the required firmware file in the root directory of the microSD card
-4. Obtain the CRC32 checksum for the new firmware. The [table below](#valid-mos-crc32-checksums) lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
+4. Obtain the CRC32 checksum for the new firmware. [This table](https://github.com/envenomator/agon-binaries/blob/master/README.md) at agon-binaries lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
 
 ### Target MOS version
 Any new MOS version can be flashed using this utility version
@@ -36,7 +36,7 @@ The provided CRC32 needs to be 4byte, with or without a leading 0x, in hexadecim
 
 To upgrade from MOS 1.02 to version 1.03 for example:
 ```console
-FLASH firmware103.bin 0x81E397C9
+FLASH MOS103.bin 0x81E397C9
 ```
 
 ## Current MOS firmware 1.00/1.01 (Legacy version)
@@ -60,13 +60,6 @@ Load and Jump to the binary in memory:
 LOAD flash_legacy.bin
 JMP &040000
 ```
-
-## Valid MOS CRC32 checksums
-
-| MOS version | Filename           | CRC32      |
-|-------------|--------------------|------------|
-| 1.02        | [firmware102.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/firmware102.bin)    | 0xFE59E98D |
-| 1.03        | [firmware103.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/firmware103.bin)    | 0x81E397C9 |
 
 ## Workflow
 The utility reads in the given firmware file to memory and verifies this against the given CRC32 checksum.
