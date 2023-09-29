@@ -26,7 +26,7 @@ This version needs at least MOS version 1.02, which supports loadable commands w
 4. Obtain the CRC32 checksum for the new firmware. [This table](https://github.com/envenomator/agon-binaries/blob/master/README.md) at agon-binaries lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
 
 ### Target MOS version
-Any new MOS version can be flashed using this utility version
+Any new MOS version can be flashed using this utility version. Precompiled binaries can be found at my [agon-binaries](https://github.com/envenomator/agon-binaries) repository.
 
 ## Usage for *current* MOS versions 1.02+
 ```console
