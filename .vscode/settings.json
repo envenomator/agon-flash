@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"*.s": "ez80-asm",
+		"agontimer.h": "c"
+	}
+}

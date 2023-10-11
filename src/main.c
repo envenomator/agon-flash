@@ -19,6 +19,10 @@
 #include "flash.h"
 #include "agontimer.h"
 #include "crc32.h"
+#include "./stdint.h"
+#include <string.h>
+
+#define UNLOCKMATCHLENGTH 9
 
 int errno; // needed by standard library
 enum states{firmware,recover,systemreset};
@@ -35,6 +39,54 @@ int putch(int c)
 	return c;
 }
 
+uint8_t getCharAt(uint16_t x, uint16_t y) {
+	delayms(20);
+	putch(23);
+	putch(0);
+	putch(131);
+	putch(x & 0xFF);
+	putch((x >> 8) & 0xFF);
+	putch(y & 0xFF);
+	putch((y >> 8) & 0xFF);
+	delayms(20);
+	return getsysvar_scrchar();
+}
+
+bool vdp_ota_present(void) {
+	char test[UNLOCKMATCHLENGTH];
+	uint16_t n;
+//	uint8_t ypos;
+
+	putch(23);
+	putch(29);
+	putch(0);
+	printf("unlock");
+
+	//delayms(100); // give the system time to print out the next line
+	//ypos = getsysvar_cursorY() - 1;
+	//for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, ypos);
+	for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, 1);
+
+	//printf("<<%s>>\n\r", test);
+	if(memcmp(test, "unlocked!",UNLOCKMATCHLENGTH) == 0) return true;
+	else return false;
+}
+
+void usage(void) {
+	printf("Usage: FLASH <mos|vdp> <filename>\n\r");
+}
+
+void update_vdp(char *filename) {
+	putch(12); // cls
+	printf("Unlocking VDP updater...\r\n");
+	if(!vdp_ota_present()) printf(" failed\r\nIncompatible VDP\r\n");
+}
+
+void update_mos(char *filename) {
+	printf("Updating MOS\r\n");
+	return;
+}
+
 int main(int argc, char * argv[]) {
 	UINT32 crcexpected,crcresult,crcbackup;
 	UINT24 size = 0;
@@ -47,29 +99,42 @@ int main(int argc, char * argv[]) {
 	UINT24 addressto,addressfrom;
 	enum states state;
 	
-	printf("Agon MOS firmware upgrade utility v1.3\n\r\n\r");
+	printf("Agon MOS firmware upgrade utility v1.4\n\r\n\r");
 	
-	if(argc != 3)
-	{
-		printf("Usage: FLASH <filename> <crc32>\n\r\r\n");
-		printf("       <filename> - e.g. firmware.bin\r\n");
-		printf("       <crc32> - 4byte HEX CRC32 checksum\r\n");
+	if(argc != 3) {
+		usage();
 		return 0;
 	}
 
-	file = mos_fopen(argv[1], fa_read);
+	if(memcmp(argv[1], "mos", 3) == 0) {
+		update_mos(argv[2]);
+		return 0;
+	}
+	else {
+		if(memcmp(argv[1], "vdp", 3) == 0) {
+			update_vdp(argv[2]);
+			return 0;
+		}
+		else {
+			usage();
+			return 0;
+		}
+	}
+
+	
+	file = mos_fopen(argv[2], fa_read);
 	if(!file)
 	{
-		printf("Error opening \"%s\"\n\r",argv[1]);
+		printf("Error opening \"%s\"\n\r",argv[2]);
 		return 0;
 	}
 	
-	crcexpected = strtoll(argv[2]);
-	if(errno)
-	{
-		printf("Incorrect crc32 format\n\r");
-		return 0;
-	}
+	//crcexpected = strtoll(argv[2]);
+	//if(errno)
+	//{
+	//	printf("Incorrect crc32 format\n\r");
+	//	return 0;
+	//}
 
 	printf("Loading file : %s\n\r",argv[1]);
 	printf("File size    : %d byte(s)", size);

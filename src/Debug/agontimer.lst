@@ -1,0 +1,175 @@
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED11-Oct-23     16:14:48     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Zilog eZ80 ANSI C Compiler Release 3.4
+                           A     2    ; -nomodsect -optsize -noreduceopt -nopadbranch
+                           A     3    ; -peephole -globalopt -localcse -const=ROM 
+                           A     4    	FILE	"..\agontimer.c"
+                           A     5    	.assume ADL=1
+                           A     6    .DEBUG "C"
+                           A     7    	SEGMENT CODE
+                           A     8    ;    1	/*
+                           A     9    ;    2	 * Title:			AGON timer interfac
+                           A    10    ;    3	 * Author:			Jeroen Venema
+                           A    11    ;    4	 * Created:			06/11/2022
+                           A    12    ;    5	 * Last Updated:	06/11/2022
+                           A    13    ;    6	 * 
+                           A    14    ;    7	 * Modinfo:
+                           A    15    ;    8	 * 06/11/2022:		Initial version
+                           A    16    ;    9	 */
+                           A    17    ;   10	
+                           A    18    ;   11	#include <defines.h>
+                           A    19    ;   12	#include <ez80.h>
+                           A    20    ;   13	
+                           A    21    ;   14	#define TMR0_COUNTER_1ms	(unsigned s
+                           A    22    ;   15	
+                           A    23    ;   16	void delayms(int ms)
+                           A    24    ;   17	{
+0B09FC                     A    25    _delayms:
+                           A    26    .DEFINE "_delayms"
+                           A    27    
+                           A    28    .VALUE _delayms
+                           A    29    
+                           A    30    .CLASS 2
+                           A    31    
+                           A    32    .TYPE 65
+                           A    33    
+                           A    34    .ENDEF
+                           A    35    
+                           A    36    .BEGFUNC "delayms",17,"_delayms"
+                           A    37    
+                           A    38    .LINE 17
+                           A    39    
+                           A    40    .DEFINE "ms"
+                           A    41    
+                           A    42    .CLASS 65
+                           A    43    
+                           A    44    .VALUE 6
+                           A    45    
+                           A    46    .TYPE 4
+                           A    47    
+                           A    48    .ENDEF
+                           A    49    
+                           A    50    .DEFINE "timer0"
+                           A    51    
+                           A    52    .CLASS 65
+                           A    53    
+                           A    54    .VALUE -2
+                           A    55    
+                           A    56    .TYPE 13
+                           A    57    
+                           A    58    .ENDEF
+                           A    59    
+0B09FC DDE5                A    60    	PUSH	IX
+0B09FE DD210000 00         A    61    	LD	IX,0
+0B0A03 DD39                A    62    	ADD	IX,SP
+0B0A05 3B                  A    63    	DEC	SP
+0B0A06 3B                  A    64    	DEC	SP
+                           A    65    ;   18		unsigned short rr;
+                           A    66    ;   19		UINT16 timer0;
+                           A    67    ;   20	
+                           A    68    ;   21		rr = TMR0_COUNTER_1ms - 19;	// 1,7%
+                           A    69    ;   22		
+                           A    70    ;   23		TMR0_CTL = 0x00;	// disable time
+                           A    71    .LINE 23
+                           A    72    
+0B0A07 AF                  A    73    	XOR	A,A
+0B0A08 ED3980              A    74    	OUT0	(128),A
+                           A    75    ;   24		
+                           A    76    ;   25		while(ms)
+                           A    77    .LINE 25
+                           A    78    
+0B0A0B 18 43               A    79    	JR	L_4
+0B0A0D                     A    80    L_5:
+                           A    81    ;   26		{	
+                           A    82    ;   27			TMR0_RR_H = (unsigned char)(rr 
+                           A    83    .LINE 27
+                           A    84    
+0B0A0D 3E04                A    85    	LD	A,%4
+0B0A0F ED3982              A    86    	OUT0	(130),A
+                           A    87    ;   28			TMR0_RR_L = (unsigned char)(rr)
+                           A    88    .LINE 28
+                           A    89    
+0B0A12 3E6D                A    90    	LD	A,%6D
+0B0A14 ED3981              A    91    	OUT0	(129),A
+                           A    92    ;   29					
+                           A    93    ;   30			TMR0_CTL = 0x87; // enable, sin
+                           A    94    .LINE 30
+                           A    95    
+0B0A17 3E87                A    96    	LD	A,%87
+0B0A19 ED3980              A    97    	OUT0	(128),A
+                           A    98    ;   31			do
+0B0A1C                     A    99    L_0:
+                           A   100    .LINE 31
+                           A   101    
+                           A   102    ;   32			{
+                           A   103    ;   33				timer0 = TMR0_DR_L;
+                           A   104    .LINE 33
+                           A   105    
+0B0A1C ED3881              A   106    	IN0	A,(129)
+0B0A1F 4F                  A   107    	LD	C,A
+0B0A20 0600                A   108    	LD	B,%0
+0B0A22 C5E1                A   109    	LD	HL,BC
+0B0A24 DD75FE              A   110    	LD	(IX+%FFFFFFFE),L
+0B0A27 DD74FF              A   111    	LD	(IX+%FFFFFFFF),H
+                           A   112    ;   34				timer0 = timer0 | (TMR0_DR_
+                           A   113    .LINE 34
+                           A   114    
+0B0A2A ED3882              A   115    	IN0	A,(130)
+0B0A2D 4F                  A   116    	LD	C,A
+0B0A2E C5E1                A   117    	LD	HL,BC
+0B0A30 65                  A   118    	LD	H,L
+0B0A31 2E00                A   119    	LD	L,%0
+0B0A33 DD07FE              A   120    	LD	BC,(IX+%FFFFFFFE)
+0B0A36 CD 66 15 0B         A   121    	CALL	__sor
+0B0A3A DD75FE              A   122    	LD	(IX+%FFFFFFFE),L
+0B0A3D DD74FF              A   123    	LD	(IX+%FFFFFFFF),H
+                           A   124    ;   35			}
+                           A   125    ;   36			while(timer0);
+                           A   126    .LINE 36
+                           A   127    
+0B0A40 DD27FE              A   128    	LD	HL,(IX+%FFFFFFFE)
+0B0A43 CD 0E 15 0B         A   129    	CALL	__scmpzero
+0B0A47 20 D3               A   130    	JR	NZ,L_0
+                           A   131    ;   37			ms--;
+                           A   132    .LINE 37
+                           A   133    
+0B0A49 DD0706              A   134    	LD	BC,(IX+%6)
+0B0A4C 0B                  A   135    	DEC	BC
+0B0A4D DD0F06              A   136    	LD	(IX+%6),BC
+                           A   137    ;   38		}
+0B0A50                     A   138    L_4:
+                           A   139    .LINE 38
+                           A   140    
+0B0A50 DD2706              A   141    	LD	HL,(IX+%6)
+0B0A53 CD D3 11 0B         A   142    	CALL	__icmpzero
+0B0A57 20 B4               A   143    	JR	NZ,L_5
+                           A   144    .LINE 39
+                           A   145    
+0B0A59 DDF9                A   146    	LD	SP,IX
+0B0A5B DDE1                A   147    	POP	IX
+0B0A5D C9                  A   148    	RET	
+                           A   149    
+                           A   150    
+                           A   151    ;**************************** _delayms ********
+                           A   152    ;Name                         Addr/Register   S
+                           A   153    ;timer0                                IX-2    
+                           A   154    ;ms                                    IX+6    
+                           A   155    
+                           A   156    
+                           A   157    ; Stack Frame Size: 11 (bytes)
+                           A   158    ;       Spill Code: 0 (instruction)
+                           A   159    
+                           A   160    
+                           A   161    .ENDFUNC "delayms",39,"_delayms"
+                           A   162    	XREF __sor:ROM
+                           A   163    	XREF __scmpzero:ROM
+                           A   164    	XREF __icmpzero:ROM
+                           A   165    	XDEF _delayms
+                           A   166    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 167

@@ -1,0 +1,81 @@
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED11-Oct-23     16:14:48     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ;
+                           A     2    ; Title:		Flash interface
+                           A     3    ; Author:		Jeroen Venema
+                           A     4    ; Created:		16/12/2022
+                           A     5    ; Last Updated:	16/12/2022
+                           A     6    ; 
+                           A     7    ; Modinfo:
+                           A     8    
+                           A     9    	XDEF _enableFlashKeyRegister
+                           A    10    	XDEF _lockFlashKeyRegister
+                           A    11    	XDEF _fastmemcpy
+                           A    12    	XDEF _reset
+                           A    13    	
+                           A    14    	segment CODE
+                           A    15    	.assume ADL=1
+                           A    16    
+0B09B0                     A    17    _enableFlashKeyRegister:
+0B09B0 DDE5                A    18    	push	ix
+0B09B2 DD210000 00         A    19    	ld		ix,0
+0B09B7 DD39                A    20    	add		ix,sp
+                           A    21    	
+                           A    22    	; actual work here
+0B09B9 3EB6                A    23    	ld		a, b6h			; unlock
+0B09BB ED39F5              A    24    	out0	(F5h), a
+0B09BE 3E49                A    25    	ld		a, 49h
+0B09C0 ED39F5              A    26    	out0	(F5h), a
+                           A    27    	
+0B09C3 DDF9                A    28    	ld		sp,ix
+0B09C5 DDE1                A    29    	pop		ix
+0B09C7 C9                  A    30    	ret
+                           A    31    
+0B09C8                     A    32    _lockFlashKeyRegister:
+0B09C8 DDE5                A    33    	push	ix
+0B09CA DD210000 00         A    34    	ld		ix,0
+0B09CF DD39                A    35    	add		ix,sp
+                           A    36    	
+                           A    37    	; actual work here
+0B09D1 3EFF                A    38    	ld		a, ffh			; lock
+0B09D3 ED39F5              A    39    	out0	(F5h), a
+                           A    40    	
+0B09D6 DDF9                A    41    	ld		sp,ix
+0B09D8 DDE1                A    42    	pop		ix
+0B09DA C9                  A    43    	ret
+                           A    44    	
+0B09DB                     A    45    _reset:
+0B09DB C7                  A    46    	rst 0h
+0B09DC C9                  A    47    	ret	;will never get here
+                           A    48    	
+0B09DD                     A    49    _fastmemcpy:
+0B09DD DDE5                A    50    	push	ix
+0B09DF DD210000 00         A    51    	ld		ix,0
+0B09E4 DD39                A    52    	add		ix,sp
+                           A    53    		
+0B09E6 C5                  A    54    	push bc
+0B09E7 D5                  A    55    	push de
+0B09E8 E5                  A    56    	push hl
+                           A    57    	
+0B09E9 DD1706              A    58    	ld		de, (ix+6)	; destination address
+0B09EC DD2709              A    59    	ld		hl, (ix+9)	; source
+0B09EF DD070C              A    60    	ld		bc, (ix+12)	; number of bytes to wr
+0B09F2 EDB0                A    61    	ldir
+                           A    62    
+0B09F4 E1                  A    63    	pop hl
+0B09F5 D1                  A    64    	pop de
+0B09F6 C1                  A    65    	pop bc
+                           A    66    
+0B09F7 DDF9                A    67    	ld		sp,ix
+0B09F9 DDE1                A    68    	pop		ix
+0B09FB C9                  A    69    	ret
+                           A    70    
+                           A    71    	
+                           A    72    end
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 73
