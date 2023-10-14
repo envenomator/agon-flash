@@ -2,11 +2,12 @@
  * Title:			AGON MOS - MOS c header interface
  * Author:			Jeroen Venema
  * Created:			15/10/2022
- * Last Updated:	15/10/2022
+ * Last Updated:	14/10/2022
  * 
  * Modinfo:
  * 15/10/2022:		Added putch, getch
  * 22/10/2022:		Added waitvblank, mos_f* functions
+ * 14/10/2023:		Added mos_flseek
  */
 
 #ifndef MOS_H
@@ -52,5 +53,5 @@ extern char	 mos_fgetc(UINT8 fh);					 // returns character from file
 extern UINT24 mos_fread(UINT8 fh, char *buffer , UINT24 btr); // read from file into buffer
 extern void	 mos_fputc(UINT8 fh, char c);			 // writes character to file
 extern UINT8 mos_feof(UINT8 fh);					 // returns 1 if EOF, 0 otherwise
-
+extern UINT8  mos_flseek(UINT8 fh, UINT32 offset);
 #endif MOS_H

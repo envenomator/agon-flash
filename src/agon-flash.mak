@@ -132,6 +132,12 @@ clean:
             $(RM) "$(WORKDIR)\crc32.lis"
 	@if exist "$(WORKDIR)\crc32.lst"  \
             $(RM) "$(WORKDIR)\crc32.lst"
+	@if exist "$(WORKDIR)\filesize.obj"  \
+            $(RM) "$(WORKDIR)\filesize.obj"
+	@if exist "$(WORKDIR)\filesize.lis"  \
+            $(RM) "$(WORKDIR)\filesize.lis"
+	@if exist "$(WORKDIR)\filesize.lst"  \
+            $(RM) "$(WORKDIR)\filesize.lst"
 
 relist: 
 	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
@@ -148,6 +154,8 @@ relist:
             C:\source\agon-flash\src\Debug\strtoll.src
 	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
             C:\source\agon-flash\src\crc32.asm
+	$(AS) $(ASFLAGS) -relist:"C:\source\agon-flash\src\Debug\flash.map" \
+            C:\source\agon-flash\src\filesize.asm
 
 # pre-4.11.0 compatibility
 rebuildall: buildall 
@@ -161,7 +169,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\flash.obj  \
             $(WORKDIR_ESCSPACE)\agontimer.obj  \
             $(WORKDIR_ESCSPACE)\strtoll.obj  \
-            $(WORKDIR_ESCSPACE)\crc32.obj
+            $(WORKDIR_ESCSPACE)\crc32.obj  \
+            $(WORKDIR_ESCSPACE)\filesize.obj
 
 flash: $(OBJS)
 	 $(LD) $(LDFLAGS)
@@ -177,6 +186,7 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
             $(INCLUDE_ESCSPACE)\std\Stdarg.h  \
             $(INCLUDE_ESCSPACE)\std\Stdio.h  \
             $(INCLUDE_ESCSPACE)\std\Stdlib.h  \
+            $(INCLUDE_ESCSPACE)\std\String.h  \
             $(INCLUDE_ESCSPACE)\zilog\cio.h  \
             $(INCLUDE_ESCSPACE)\zilog\defines.h  \
             $(INCLUDE_ESCSPACE)\zilog\eZ80190.h  \
@@ -191,7 +201,8 @@ $(WORKDIR_ESCSPACE)\main.obj :  \
             $(PRJDIR_ESCSPACE)\agontimer.h  \
             $(PRJDIR_ESCSPACE)\crc32.h  \
             $(PRJDIR_ESCSPACE)\flash.h  \
-            $(PRJDIR_ESCSPACE)\mos-interface.h
+            $(PRJDIR_ESCSPACE)\mos-interface.h  \
+            $(PRJDIR_ESCSPACE)\stdint.h
 	 $(CC) $(CFLAGS) "$(PRJDIR)\main.c"
 
 $(WORKDIR_ESCSPACE)\mos-interface.obj :  \
@@ -239,4 +250,8 @@ $(WORKDIR_ESCSPACE)\strtoll.obj :  \
 $(WORKDIR_ESCSPACE)\crc32.obj :  \
             $(PRJDIR_ESCSPACE)\crc32.asm
 	 $(AS) $(ASFLAGS) "$(PRJDIR)\crc32.asm"
+
+$(WORKDIR_ESCSPACE)\filesize.obj :  \
+            $(PRJDIR_ESCSPACE)\filesize.asm
+	 $(AS) $(ASFLAGS) "$(PRJDIR)\filesize.asm"
 

@@ -19,10 +19,14 @@
 #include "flash.h"
 #include "agontimer.h"
 #include "crc32.h"
+#include "filesize.h"
 #include "./stdint.h"
 #include <string.h>
 
 #define UNLOCKMATCHLENGTH 9
+
+#define EXIT_FILENOTFOUND	4
+#define EXIT_INVALIDPARAMETER	19
 
 int errno; // needed by standard library
 enum states{firmware,recover,systemreset};
@@ -55,39 +59,89 @@ uint8_t getCharAt(uint16_t x, uint16_t y) {
 bool vdp_ota_present(void) {
 	char test[UNLOCKMATCHLENGTH];
 	uint16_t n;
-//	uint8_t ypos;
 
 	putch(23);
 	putch(29);
 	putch(0);
 	printf("unlock");
 
-	//delayms(100); // give the system time to print out the next line
-	//ypos = getsysvar_cursorY() - 1;
-	//for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, ypos);
-	for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, 1);
-
-	//printf("<<%s>>\n\r", test);
+	for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, 3);
+	// 3 - line on-screen
 	if(memcmp(test, "unlocked!",UNLOCKMATCHLENGTH) == 0) return true;
 	else return false;
 }
 
+uint8_t mos_magicnumbers[] = {0xF3, 0xED, 0x7D, 0x5B, 0xC3};
+#define MOS_MAGICLENGTH 5
+bool containsMosHeader(uint8_t *filestart) {
+	uint8_t n;
+	bool match = true;
+
+	for(n = 0; n < MOS_MAGICLENGTH; n++) if(mos_magicnumbers[n] != filestart[n]) match = false;
+	return match;
+}
+
+uint8_t esp32_magicnumbers[] = {0x32, 0x54, 0xCD, 0xAB};
+#define ESP32_MAGICLENGTH 4
+#define ESP32_MAGICSTART 0x20
+bool containsESP32Header(uint8_t *filestart) {
+	uint8_t n;
+	bool match = true;
+
+	filestart += ESP32_MAGICSTART; // start of ESP32 magic header
+	for(n = 0; n < ESP32_MAGICLENGTH; n++) {
+		if(esp32_magicnumbers[n] != filestart[n]) match = false;
+	}
+	return match;
+}
+
+void print_version(void) {
+	printf("Agon firmware upgrade utility v1.4\n\r\n\r");
+}
+
 void usage(void) {
+	print_version();
 	printf("Usage: FLASH <mos|vdp> <filename>\n\r");
 }
 
-void update_vdp(char *filename) {
+uint8_t update_vdp(char *filename) {
+	uint8_t file;
+	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
+	uint24_t filesize;
+
 	putch(12); // cls
+	print_version();	
 	printf("Unlocking VDP updater...\r\n");
-	if(!vdp_ota_present()) printf(" failed\r\nIncompatible VDP\r\n");
+	
+	if(!vdp_ota_present()) {
+		printf(" failed - incompatible VDP\r\n");
+		return 0;
+	}
+
+	file = mos_fopen(filename, fa_read);
+	if(!file) {
+		printf("Error opening \"%s\"\n\r",filename);
+		return EXIT_FILENOTFOUND;
+	}
+
+	mos_fread(file, (char *)buffer, ESP32_MAGICLENGTH + ESP32_MAGICSTART);
+	if(!containsESP32Header(buffer)) {
+		printf("File does not contain valid ESP32 code\r\n");
+		return EXIT_INVALIDPARAMETER;
+	}
+
+	mos_flseek(file, 0); // reset to zero, because we read part of the header already
+
+	// Do actual work here
+	printf("Updating VDP firmware\r\n");
+	filesize = getFileSize(file);	
+	startVDPupdate(file, filesize);
+	mos_fclose(file);
+	reset();
+	return 0; // will never return, but let's give the compiler a break
 }
 
-void update_mos(char *filename) {
-	printf("Updating MOS\r\n");
-	return;
-}
-
-int main(int argc, char * argv[]) {
+uint8_t update_mos(char *filename) {
 	UINT32 crcexpected,crcresult,crcbackup;
 	UINT24 size = 0;
 	UINT24 got;
@@ -101,42 +155,16 @@ int main(int argc, char * argv[]) {
 	
 	printf("Agon MOS firmware upgrade utility v1.4\n\r\n\r");
 	
-	if(argc != 3) {
-		usage();
-		return 0;
-	}
+	return 0; // DISABLE FOR NOW
 
-	if(memcmp(argv[1], "mos", 3) == 0) {
-		update_mos(argv[2]);
-		return 0;
-	}
-	else {
-		if(memcmp(argv[1], "vdp", 3) == 0) {
-			update_vdp(argv[2]);
-			return 0;
-		}
-		else {
-			usage();
-			return 0;
-		}
-	}
-
-	
-	file = mos_fopen(argv[2], fa_read);
+	file = mos_fopen(filename, fa_read);
 	if(!file)
 	{
-		printf("Error opening \"%s\"\n\r",argv[2]);
-		return 0;
+		printf("Error opening \"%s\"\n\r",filename);
+		return EXIT_FILENOTFOUND;
 	}
 	
-	//crcexpected = strtoll(argv[2]);
-	//if(errno)
-	//{
-	//	printf("Incorrect crc32 format\n\r");
-	//	return 0;
-	//}
-
-	printf("Loading file : %s\n\r",argv[1]);
+	printf("Loading file : %s\n\r",filename);
 	printf("File size    : %d byte(s)", size);
 
 	// Read file to memory
@@ -154,6 +182,12 @@ int main(int argc, char * argv[]) {
 		return 0;
 	}
 
+	if(!containsMosHeader((uint8_t *)ptr)) {
+		printf("File does not contain valid MOS ez80 startup code\r\n");
+		return EXIT_INVALIDPARAMETER;
+	}
+
+	crcexpected = 0;
 	printf("Testing CRC32: 0x%08lx\n\r",crcexpected);
 	crcresult = crc32((char*)BUFFER1, size);
 	printf("CRC32 result : 0x%08lx\n\r",crcresult);
@@ -287,5 +321,26 @@ int main(int argc, char * argv[]) {
 	else printf("\n\rUser abort\n\r");
 	
 	return 0;
+}
+
+int main(int argc, char * argv[]) {
+
+	if(argc != 3) {
+		usage();
+		return 0;
+	}
+
+	if(memcmp(argv[1], "mos", 3) == 0) {
+		return update_mos(argv[2]);
+	}
+	else {
+		if(memcmp(argv[1], "vdp", 3) == 0) {
+			return update_vdp(argv[2]);
+		}
+		else {
+			usage();
+			return 0;
+		}
+	}
 }
 

@@ -11,6 +11,7 @@
 <file filter-key="">.\agontimer.c</file>
 <file filter-key="">.\strtoll.c</file>
 <file filter-key="">.\crc32.asm</file>
+<file filter-key="">.\filesize.asm</file>
 </files>
 
 <!-- configuration information -->

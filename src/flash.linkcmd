@@ -26,6 +26,7 @@ DEFINE __len_bss = length of BSS
  ".\agontimer.obj", \
  ".\strtoll.obj", \
  ".\crc32.obj", \
+ ".\filesize.obj", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\chelpD.lib", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtD.lib", \
  "C:\ZiLOG\ZDSII_eZ80Acclaim!_5.3.5\lib\std\crtSD.lib", \

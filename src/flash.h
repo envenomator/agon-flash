@@ -14,5 +14,5 @@ extern void enableFlashKeyRegister(void);
 extern void lockFlashKeyRegister(void);
 extern void fastmemcpy(UINT24 destination, UINT24 source, UINT24 size);
 extern void reset(void);
-
+extern void startVDPupdate(UINT8 filehandle, UINT24 filesize);
 #endif FLASH_H

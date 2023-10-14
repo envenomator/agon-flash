@@ -1,0 +1,42 @@
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED14-Oct-23     11:19:36     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    	XDEF _getFileSize
+                           A     2    	
+                           A     3    	segment CODE
+                           A     4    	.assume ADL=1
+                           A     5    
+       00000019            A     6    mos_getfil:			.EQU	19h
+       00000000            A     7    fil_obj:			.EQU	0
+       0000000B            A     8    ffobjid_objsize:	.EQU	11
+                           A     9    
+                           A    10    ; Gets filesize from an open file
+                           A    11    ; requires MOS mos_getfil call
+                           A    12    ; Input: A - MOS filehandle
+                           A    13    ; Output: HL - 24bit filesize
+                           A    14    
+0B0E7E                     A    15    _getFileSize:
+0B0E7E DDE5                A    16    	PUSH IX
+0B0E80 DD210000 00         A    17    	LD	 IX, 0h
+0B0E85 DD39                A    18    	ADD	 IX, SP
+                           A    19    
+                           A    20        ; get pointer to FIL structure in MOS memor
+0B0E87 DD7E06              A    21    	LD	A, (IX+6)
+0B0E8A 4F                  A    22        LD  C, A
+0B0E8B 3E19                A    23        LD  A, mos_getfil
+0B0E8D 5BCF                A    24        RST.LIL 08h
+                           A    25    
+0B0E8F 110B0000            A    26        LD  DE, fil_obj + ffobjid_objsize    ; offs
+0B0E93 19                  A    27        ADD HL, DE
+0B0E94 ED27                A    28        LD  HL, (HL)     ; load actual FSIZE_t valu
+                           A    29    
+0B0E96 DDF9                A    30    	LD	SP, IX
+0B0E98 DDE1                A    31    	POP	IX
+0B0E9A C9                  A    32    	RET
+                           A    33    end
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 34

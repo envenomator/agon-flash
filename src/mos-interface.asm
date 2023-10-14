@@ -2,7 +2,7 @@
 ; Title:		AGON MOS - MOS assembly interface
 ; Author:		Jeroen Venema
 ; Created:		15/10/2022
-; Last Updated:	23/02/2023
+; Last Updated:	14/10/2023
 ; 
 ; Modinfo:
 ; 15/10/2022:		Added _putch, _getch
@@ -11,6 +11,7 @@
 ; 26/11/2022:       __putch, changed default routine entries to use IY
 ; 10/01/2023:		Added _getsysvar_cursorX/Y and _getsysvar_scrchar
 ; 23/02/2023:		Added _mos_save and _mos_del, also changed stackframe to use ix exclusively
+; 14/10/2023:		Added _mos_flseek
 	.include "mos_api.inc"
 
 	XDEF _getch
@@ -22,6 +23,7 @@
 	XDEF _mos_feof
 	XDEF _mos_save
 	XDEF _mos_del
+	XDEF _mos_flseek
 	XDEF _getsysvar_cursorX
 	XDEF _getsysvar_cursorY
 	XDEF _getsysvar_scrchar
@@ -34,13 +36,13 @@ _getch:
 	ld a, mos_sysvars			; MOS Call for mos_sysvars
 	rst.lil 08h					; returns pointer to sysvars in ixu
 _getch0:
-	ld a, (ix+sysvar_keycode)	; get current keycode
+	ld a, (ix+sysvar_keyascii)	; get current keycode
 	or a,a
 	jr z, _getch0				; wait for keypress
 	
 	push af						; debounce key, reload keycode with 0
 	xor a
-	ld (ix+sysvar_keycode),a
+	ld (ix+sysvar_keyascii),a
 	pop af
 	pop ix
 	ret
@@ -191,6 +193,20 @@ _mos_save:
 	ld a,	mos_save
 	rst.lil	08h			; save file to SD card
 
+	ld		sp,ix
+	pop		ix
+	ret
+
+_mos_flseek:
+	push	ix
+	ld 		ix,0
+	add 	ix, sp
+	ld 		bc, (ix+6)	; file handle
+	ld		de, 0
+	ld		hl, (ix+9)  ; 24 least significant bits
+	ld		e,  (ix+12)	; 8 most most significant bits
+	ld a,	mos_flseek
+	rst.lil	08h
 	ld		sp,ix
 	pop		ix
 	ret
