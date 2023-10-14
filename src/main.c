@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ERRNO.H>
+#include <ctype.h>
 #include "mos-interface.h"
 #include "flash.h"
 #include "agontimer.h"
@@ -122,7 +123,7 @@ bool getResponse(flashtype t, uint32_t crc) {
 			break;
 	}
 
-	while((response != 'y') && (response != 'n')) response = getch();
+	while((response != 'y') && (response != 'n')) response = tolower(getch());
 	if(response == 'n') printf("\r\nUser abort\n\r\n\r");
 	else printf("\r\n\r\n");
 	return response == 'y';
