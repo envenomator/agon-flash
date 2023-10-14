@@ -7,114 +7,128 @@
 ; Modinfo
 ;
 
-		XDEF	_crc32
+	XDEF	_crc32
+	XDEF	_crc32_initialize
+	XDEF	_crc32_finalize
 
-		.ASSUME ADL = 1
-		SEGMENT		CODE
+	.ASSUME ADL = 1
+	SEGMENT		CODE
 
 ; UINT32 crc32(const char *s, UINT24 len);
 ;              IX+6           IX+9
 ; NB: We use local stack storage without allocating it by decrementing SP.
 ;     That's okay, /as long as/ we don't call any other functions.
 
-		SCOPE
+	SCOPE
+
+_crc32_initialize:
+    ; Initialise output to 0xFFFFFFFF
+    EXX
+    LD  A, FFh
+    LD  (crc32result+3), A
+    LD  (crc32result+2), A
+    LD  (crc32result+1), A
+    LD  (crc32result), A
+    EXX
+    RET
+
+_crc32_finalize:
+	PUSH	IX
+	LD		IX,0
+	ADD		IX,SP
+
+    LD  A, (crc32result+3)
+    CPL
+    LD  (crc32result+3), A
+    LD  A, (crc32result+2)
+    CPL
+    LD  (crc32result+2), A
+    LD  A, (crc32result+1)
+    CPL
+    LD  (crc32result+1), A
+    LD  A, (crc32result)
+    CPL
+    LD  (crc32result), A
+
+	LD	A, (crc32result+3)
+	LD	DE, 0
+	LD	E, A
+	LD	HL, (crc32result)
+	POP	IX
+	RET
 
 _crc32:
-		; Function prologue
-		PUSH		IX
-		LD		IX,0
-		ADD		IX,SP
+	; Function prologue
+	PUSH	IX
+	LD		IX,0
+	ADD		IX,SP
 
-		; Initialise output to 0xFFFFFFFF
-		EXX
-		LD		D,0FFh
-		LD		E,D
-		LD		B,D
-		LD		C,D
-		EXX
+	LD		DE, (IX+6)
+	LD		HL, (IX+9)
+; expects DE to point to buffer to check
+; expects HL to contain the bytecount
+    LD		BC,1
 
-		; Use DE to store pointer to current byte
-		LD		DE,(IX+6)
+    EXX
+    LD A, (crc32result+3)
+    LD D, A
+    LD A, (crc32result+2)
+    LD E, A
+    LD A, (crc32result+1)
+    LD B, A
+    LD A, (crc32result)
+    LD C, A
+    EXX
 
-		; Use HL to count bytes remaining
-		LD		HL,(IX+9)
+$$:	
+    LD	A,(DE)
+    INC	DE
+    
+    ; Calculate offset into lookup table
+    EXX
+    XOR	C
+    LD	HL,crc32_lookup_table >> 2
+    LD	L,A
+    ADD	HL,HL
+    ADD	HL,HL
 
-		; Use BC to hold constant `1'
-		LD		BC,1
+    LD	A,B
+    XOR	(HL)
+    INC	HL
+    LD	C,A
 
-		; And we are off to the races...
-$loop:		LD		A,(DE)
-		INC		DE
-		
-		; Calculate offset into lookup table
-		EXX
+    LD	A,E
+    XOR	(HL)
+    INC	HL
+    LD	B,A
 
-		XOR		C
-		LD		HL,crc32_lookup_table >> 2
-		LD		L,A
-		ADD		HL,HL
-		ADD		HL,HL
+    LD	A,D
+    XOR	(HL)
+    INC	HL
+    LD	E,A
 
-		LD		A,B
-		XOR		(HL)
-		INC		HL
-		LD		C,A
+    LD	D,(HL)
+    EXX
 
-		LD		A,E
-		XOR		(HL)
-		INC		HL
-		LD		B,A
+    ; Decrement count and loop if not zero
+    OR	A,A
+    SBC	HL,BC
+    JR	NZ,$B
 
-		LD		A,D
-		XOR		(HL)
-		INC		HL
-		LD		E,A
+    EXX
+    LD  A, D
+    LD  (crc32result+3), A
+    LD  A, E
+    LD  (crc32result+2), A
+    LD  A, B
+    LD  (crc32result+1), A
+    LD  A, C
+    LD  (crc32result), A
+    EXX
 
-		LD		D,(HL)
-
-		EXX
-
-		; Decrement count and loop if not zero
-		OR		A,A
-		SBC		HL,BC
-		JR		NZ,$loop
-		
-		; Invert all bits and move to E:HL to return
-		; in other words... E:HL := ~(DE:BC)
-		; Slightly tricky as cannot directly access the top byte of HL
-		EXX
-
-		; Move ~E into H, ~B into L
-		LD		A,E
-		CPL
-		LD		H,A
-		LD		A,B
-		CPL
-		LD		L,A
-
-		; Shift them into top 16-bits
-		ADD		HL,HL
-		ADD		HL,HL
-		ADD		HL,HL
-		ADD		HL,HL
-		ADD		HL,HL
-		ADD		HL,HL
-		ADD		HL,HL
-		ADD		HL,HL
-
-		; Move ~C into low 8-bits of HL
-		LD	A,C
-		CPL
-		LD	L,A
-
-		; Finally, move ~D to E, complementing again
-		LD	A,D
-		CPL
-		LD	E,A
-
-		; Function epilogue
-		POP	IX
-		RET
+	; Function epilogue
+	POP	IX
+	RET
 
 		SEGMENT	DATA
 
@@ -187,5 +201,8 @@ crc32_lookup_table:
 		DL	%bad03605, %cdd70693, %54de5729, %23d967bf
 		DL	%b3667a2e, %c4614ab8, %5d681b02, %2a6f2b94
 		DL	%b40bbe37, %c30c8ea1, %5a05df1b, %2d02ef8d	
+
+crc32result:
+	DS 4
 
 		END

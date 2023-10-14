@@ -108,6 +108,9 @@ uint8_t update_vdp(char *filename) {
 	uint8_t file;
 	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
 	uint24_t filesize;
+	uint32_t crcresult;
+	uint24_t size, n;
+	uint8_t response;
 
 	putch(12); // cls
 	print_version();	
@@ -129,10 +132,27 @@ uint8_t update_vdp(char *filename) {
 		printf("File does not contain valid ESP32 code\r\n");
 		return EXIT_INVALIDPARAMETER;
 	}
+	printf("\r\nValid ESP32 code\r\nCalculating CRC32");
+	crc32_initialize();
+	mos_flseek(file, 0);
+	while(1) {
+		size = mos_fread(file, (char *)BUFFER1, 16384);
+		if(size == 0) break;
+		putch('.');
+		crc32((char *)BUFFER1, size);
+	}
+	crcresult = crc32_finalize();
+	printf("\r\n\r\n0x%04lX - flash to VDP (y/n)?", crcresult);
 
-	mos_flseek(file, 0); // reset to zero, because we read part of the header already
-
+	response = 0;
+	while((response != 'y') && (response != 'n')) response = getch();
+	printf("\r\n");
+	if(response == 'n') {
+		printf("User abort\n\r\n\r");
+		return 0;
+	}
 	// Do actual work here
+	mos_flseek(file, 0); // reset to zero, because we read part of the header already
 	printf("Updating VDP firmware\r\n");
 	filesize = getFileSize(file);	
 	startVDPupdate(file, filesize);
