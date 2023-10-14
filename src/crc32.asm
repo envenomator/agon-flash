@@ -2,10 +2,10 @@
 ; Title:	crc32
 ; Author:	Leigh Brown
 ; Created:	26/05/2023
-; Last Updated:	26/05/2023
+; Last Updated:	14/10/2023
 
 ; Modinfo
-;
+;	crc32 can handle different blocks now
 
 	XDEF	_crc32
 	XDEF	_crc32_initialize

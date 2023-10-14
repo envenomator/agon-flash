@@ -1,14 +1,15 @@
 /*
- * Title:			Agon MOS firmware upgrade utility
+ * Title:			Agon firmware upgrade utility
  * Author:			Jeroen Venema
  * Created:			17/12/2022
- * Last Updated:	17/12/2022
+ * Last Updated:	14/10/2023
  * 
  * Modinfo:
  * 17/12/2022:		Initial version
  * 05/04/2022:		Changed timer to 5sec at reset.
  *                  Sends cls just before reset
  * 07/06/2023:		Included faster crc32, by Leigh Brown
+ * 14/10/2023:		VDP update code, MOS update rewritten for simplicity
  */
 
 #include <ez80.h>

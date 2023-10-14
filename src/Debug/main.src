@@ -150,44 +150,45 @@ _errno:
 .TYPE 4
 .ENDEF
 ;    1	/*
-;    2	 * Title:			Agon MOS firmware upgrade utility
+;    2	 * Title:			Agon firmware upgrade utility
 ;    3	 * Author:			Jeroen Venema
 ;    4	 * Created:			17/12/2022
-;    5	 * Last Updated:	17/12/2022
+;    5	 * Last Updated:	14/10/2023
 ;    6	 * 
 ;    7	 * Modinfo:
 ;    8	 * 17/12/2022:		Initial version
 ;    9	 * 05/04/2022:		Changed timer to 5sec at reset.
 ;   10	 *                  Sends cls just before reset
 ;   11	 * 07/06/2023:		Included faster crc32, by Leigh Brown
-;   12	 */
-;   13	
-;   14	#include <ez80.h>
-;   15	#include <stdio.h>
-;   16	#include <stdlib.h>
-;   17	#include <ERRNO.H>
-;   18	#include "mos-interface.h"
-;   19	#include "flash.h"
-;   20	#include "agontimer.h"
-;   21	#include "crc32.h"
-;   22	#include "filesize.h"
-;   23	#include "./stdint.h"
-;   24	#include <string.h>
-;   25	
-;   26	#define UNLOCKMATCHLENGTH 9
-;   27	
-;   28	#define EXIT_FILENOTFOUND	4
-;   29	#define EXIT_INVALIDPARAMETER	19
-;   30	
-;   31	int errno; // needed by standard library
+;   12	 * 14/10/2023:		VDP update code, MOS update rewritten for simplicity
+;   13	 */
+;   14	
+;   15	#include <ez80.h>
+;   16	#include <stdio.h>
+;   17	#include <stdlib.h>
+;   18	#include <ERRNO.H>
+;   19	#include "mos-interface.h"
+;   20	#include "flash.h"
+;   21	#include "agontimer.h"
+;   22	#include "crc32.h"
+;   23	#include "filesize.h"
+;   24	#include "./stdint.h"
+;   25	#include <string.h>
+;   26	
+;   27	#define UNLOCKMATCHLENGTH 9
+;   28	
+;   29	#define EXIT_FILENOTFOUND	4
+;   30	#define EXIT_INVALIDPARAMETER	19
+;   31	
+;   32	int errno; // needed by standard library
 	SEGMENT CODE
-;   32	enum states{firmware,retry,systemreset};
-;   33	
-;   34	// separate putch function that doesn't rely on a running MOS firmware
-;   35	// UART0 initialization done by MOS firmware previously
-;   36	// This utility doesn't run without MOS to load it anyway
-;   37	int putch(int c)
-;   38	{
+;   33	enum states{firmware,retry,systemreset};
+;   34	
+;   35	// separate putch function that doesn't rely on a running MOS firmware
+;   36	// UART0 initialization done by MOS firmware previously
+;   37	// This utility doesn't run without MOS to load it anyway
+;   38	int putch(int c)
+;   39	{
 _putch:
 .DEFINE "_putch"
 
@@ -199,9 +200,9 @@ _putch:
 
 .ENDEF
 
-.BEGFUNC "putch",38,"_putch"
+.BEGFUNC "putch",39,"_putch"
 
-.LINE 38
+.LINE 39
 
 .DEFINE "c"
 
@@ -216,11 +217,11 @@ _putch:
 	ADD	IX,SP
 .ENDEF
 
-;   39		UINT8 lsr,temt;
-;   40		
-;   41		while((UART0_LSR & 0x40) == 0);
+;   40		UINT8 lsr,temt;
+;   41		
+;   42		while((UART0_LSR & 0x40) == 0);
 L_1:
-.LINE 41
+.LINE 42
 
 	IN0	A,(197)
 	AND	A,%40
@@ -228,17 +229,17 @@ L_1:
 	LD	L,A
 	CALL	__icmpzero
 	JR	Z,L_1
-;   42		UART0_THR = c;
-.LINE 42
+;   43		UART0_THR = c;
+.LINE 43
 
 	LD	A,(IX+%6)
 	OUT0	(192),A
-;   43		return c;
-.LINE 43
+;   44		return c;
+.LINE 44
 
 	LD	HL,(IX+%6)
-;   44	}
-.LINE 44
+;   45	}
+.LINE 45
 
 	LD	SP,IX
 	POP	IX
@@ -254,9 +255,9 @@ L_1:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "putch",44,"_putch"
-;   45	
-;   46	uint8_t getCharAt(uint16_t x, uint16_t y) {
+.ENDFUNC "putch",45,"_putch"
+;   46	
+;   47	uint8_t getCharAt(uint16_t x, uint16_t y) {
 _getCharAt:
 .DEFINE "_getCharAt"
 
@@ -268,9 +269,9 @@ _getCharAt:
 
 .ENDEF
 
-.BEGFUNC "getCharAt",46,"_getCharAt"
+.BEGFUNC "getCharAt",47,"_getCharAt"
 
-.LINE 46
+.LINE 47
 
 .DEFINE "x"
 
@@ -295,50 +296,50 @@ _getCharAt:
 	PUSH	IX
 	LD	IX,0
 	ADD	IX,SP
-;   47		delayms(20);
-.LINE 47
+;   48		delayms(20);
+.LINE 48
 
 	LD	BC,20
 	PUSH	BC
 	CALL	_delayms
 	POP	BC
-;   48		putch(23);
-.LINE 48
+;   49		putch(23);
+.LINE 49
 
 	LD	BC,23
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;   49		putch(0);
-.LINE 49
+;   50		putch(0);
+.LINE 50
 
 	LD	BC,0
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;   50		putch(131);
-.LINE 50
+;   51		putch(131);
+.LINE 51
 
 	LD	BC,131
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;   51		putch(x & 0xFF);
-.LINE 51
-
-	LD	BC,(IX+%6)
-	CALL	__stoiu
-	LD	A,L
-	UEXT	HL
-	LD	L,A
-	PUSH	HL
-	CALL	_putch
-	POP	BC
-;   52		putch((x >> 8) & 0xFF);
+;   52		putch(x & 0xFF);
 .LINE 52
 
 	LD	BC,(IX+%6)
 	CALL	__stoiu
+	LD	A,L
+	UEXT	HL
+	LD	L,A
+	PUSH	HL
+	CALL	_putch
+	POP	BC
+;   53		putch((x >> 8) & 0xFF);
+.LINE 53
+
+	LD	BC,(IX+%6)
+	CALL	__stoiu
 	LD	A,%8
 	CALL	__ishrs_b
 	LD	A,L
@@ -347,22 +348,22 @@ _getCharAt:
 	PUSH	HL
 	CALL	_putch
 	POP	BC
-;   53		putch(y & 0xFF);
-.LINE 53
-
-	LD	BC,(IX+%9)
-	CALL	__stoiu
-	LD	A,L
-	UEXT	HL
-	LD	L,A
-	PUSH	HL
-	CALL	_putch
-	POP	BC
-;   54		putch((y >> 8) & 0xFF);
+;   54		putch(y & 0xFF);
 .LINE 54
 
 	LD	BC,(IX+%9)
 	CALL	__stoiu
+	LD	A,L
+	UEXT	HL
+	LD	L,A
+	PUSH	HL
+	CALL	_putch
+	POP	BC
+;   55		putch((y >> 8) & 0xFF);
+.LINE 55
+
+	LD	BC,(IX+%9)
+	CALL	__stoiu
 	LD	A,%8
 	CALL	__ishrs_b
 	LD	A,L
@@ -371,19 +372,19 @@ _getCharAt:
 	PUSH	HL
 	CALL	_putch
 	POP	BC
-;   55		delayms(20);
-.LINE 55
+;   56		delayms(20);
+.LINE 56
 
 	LD	BC,20
 	PUSH	BC
 	CALL	_delayms
 	POP	BC
-;   56		return getsysvar_scrchar();
-.LINE 56
+;   57		return getsysvar_scrchar();
+.LINE 57
 
 	CALL	_getsysvar_scrchar
-;   57	}
-.LINE 57
+;   58	}
+.LINE 58
 
 	LD	SP,IX
 	POP	IX
@@ -403,9 +404,9 @@ _getCharAt:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "getCharAt",57,"_getCharAt"
-;   58	
-;   59	bool vdp_ota_present(void) {
+.ENDFUNC "getCharAt",58,"_getCharAt"
+;   59	
+;   60	bool vdp_ota_present(void) {
 _vdp_ota_present:
 .DEFINE "_vdp_ota_present"
 
@@ -417,9 +418,9 @@ _vdp_ota_present:
 
 .ENDEF
 
-.BEGFUNC "vdp_ota_present",59,"_vdp_ota_present"
+.BEGFUNC "vdp_ota_present",60,"_vdp_ota_present"
 
-.LINE 59
+.LINE 60
 
 .DEFINE "n"
 
@@ -448,32 +449,32 @@ _vdp_ota_present:
 	ADD	IX,SP
 	LEA	HL,IX+%FFFFFFF5
 	LD	SP,HL
-;   60		char test[UNLOCKMATCHLENGTH];
-;   61		uint16_t n;
-;   62	
-;   63		putch(23);
-.LINE 63
+;   61		char test[UNLOCKMATCHLENGTH];
+;   62		uint16_t n;
+;   63	
+;   64		putch(23);
+.LINE 64
 
 	LD	BC,23
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;   64		putch(29);
-.LINE 64
+;   65		putch(29);
+.LINE 65
 
 	LD	BC,29
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;   65		putch(0);
-.LINE 65
+;   66		putch(0);
+.LINE 66
 
 	LD	BC,0
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;   66		printf("unlock");
-.LINE 66
+;   67		printf("unlock");
+.LINE 67
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -481,9 +482,9 @@ _vdp_ota_present:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;   67	
-;   68		for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, 3);
-.LINE 68
+;   68	
+;   69		for(n = 0; n < UNLOCKMATCHLENGTH+1; n++) test[n] = getCharAt(n+8, 3);
+.LINE 69
 
 	LD	(IX+%FFFFFFFE),%0
 	LD	(IX+%FFFFFFFF),%0
@@ -513,9 +514,9 @@ L_8:
 	OR	A,A
 	SBC.SIS	HL,BC
 	JR	C,L_6
-;   69		// 3 - line on-screen
-;   70		if(memcmp(test, "unlocked!",UNLOCKMATCHLENGTH) == 0) return true;
-.LINE 70
+;   70		// 3 - line on-screen
+;   71		if(memcmp(test, "unlocked!",UNLOCKMATCHLENGTH) == 0) return true;
+.LINE 71
 
 	LD	BC,9
 	PUSH	BC
@@ -530,14 +531,14 @@ L_8:
 	JR	NZ,L_10
 	LD	A,%1
 	JR	L_12
-;   71		else return false;
+;   72		else return false;
 L_10:
-.LINE 71
+.LINE 72
 
 	XOR	A,A
-;   72	}
+;   73	}
 L_12:
-.LINE 72
+.LINE 73
 
 	LD	SP,IX
 	POP	IX
@@ -559,7 +560,7 @@ L_12:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "vdp_ota_present",72,"_vdp_ota_present"
+.ENDFUNC "vdp_ota_present",73,"_vdp_ota_present"
 	SEGMENT STRSECT
 L__3:
 	DB	"unlock"
@@ -581,11 +582,11 @@ _mos_magicnumbers:
 .DIM 5
 .TYPE 108
 .ENDEF
-;   73	
-;   74	uint8_t mos_magicnumbers[] = {0xF3, 0xED, 0x7D, 0x5B, 0xC3};
+;   74	
+;   75	uint8_t mos_magicnumbers[] = {0xF3, 0xED, 0x7D, 0x5B, 0xC3};
 	SEGMENT CODE
-;   75	#define MOS_MAGICLENGTH 5
-;   76	bool containsMosHeader(uint8_t *filestart) {
+;   76	#define MOS_MAGICLENGTH 5
+;   77	bool containsMosHeader(uint8_t *filestart) {
 _containsMosHeader:
 .DEFINE "_containsMosHeader"
 
@@ -597,9 +598,9 @@ _containsMosHeader:
 
 .ENDEF
 
-.BEGFUNC "containsMosHeader",76,"_containsMosHeader"
+.BEGFUNC "containsMosHeader",77,"_containsMosHeader"
 
-.LINE 76
+.LINE 77
 
 .DEFINE "filestart"
 
@@ -636,14 +637,14 @@ _containsMosHeader:
 	ADD	IX,SP
 	DEC	SP
 	DEC	SP
-;   77		uint8_t n;
-;   78		bool match = true;
-.LINE 78
+;   78		uint8_t n;
+;   79		bool match = true;
+.LINE 79
 
 	LD	(IX+%FFFFFFFE),%1
-;   79	
-;   80		for(n = 0; n < MOS_MAGICLENGTH; n++) if(mos_magicnumbers[n] != filestart[n]) match = false;
-.LINE 80
+;   80	
+;   81		for(n = 0; n < MOS_MAGICLENGTH; n++) if(mos_magicnumbers[n] != filestart[n]) match = false;
+.LINE 81
 
 	LD	(IX+%FFFFFFFF),%0
 	JR	L_17
@@ -669,12 +670,12 @@ L_17:
 	LD	A,(IX+%FFFFFFFF)
 	CP	A,%5
 	JR	C,L_15
-;   81		return match;
-.LINE 81
+;   82		return match;
+.LINE 82
 
 	LD	A,(IX+%FFFFFFFE)
-;   82	}
-.LINE 82
+;   83	}
+.LINE 83
 
 	LD	SP,IX
 	POP	IX
@@ -693,7 +694,7 @@ L_17:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "containsMosHeader",82,"_containsMosHeader"
+.ENDFUNC "containsMosHeader",83,"_containsMosHeader"
 	SEGMENT DATA
 _esp32_magicnumbers:
 	DB	50
@@ -707,12 +708,12 @@ _esp32_magicnumbers:
 .DIM 4
 .TYPE 108
 .ENDEF
-;   83	
-;   84	uint8_t esp32_magicnumbers[] = {0x32, 0x54, 0xCD, 0xAB};
+;   84	
+;   85	uint8_t esp32_magicnumbers[] = {0x32, 0x54, 0xCD, 0xAB};
 	SEGMENT CODE
-;   85	#define ESP32_MAGICLENGTH 4
-;   86	#define ESP32_MAGICSTART 0x20
-;   87	bool containsESP32Header(uint8_t *filestart) {
+;   86	#define ESP32_MAGICLENGTH 4
+;   87	#define ESP32_MAGICSTART 0x20
+;   88	bool containsESP32Header(uint8_t *filestart) {
 _containsESP32Header:
 .DEFINE "_containsESP32Header"
 
@@ -724,9 +725,9 @@ _containsESP32Header:
 
 .ENDEF
 
-.BEGFUNC "containsESP32Header",87,"_containsESP32Header"
+.BEGFUNC "containsESP32Header",88,"_containsESP32Header"
 
-.LINE 87
+.LINE 88
 
 .DEFINE "filestart"
 
@@ -763,26 +764,26 @@ _containsESP32Header:
 	ADD	IX,SP
 	DEC	SP
 	DEC	SP
-;   88		uint8_t n;
-;   89		bool match = true;
-.LINE 89
+;   89		uint8_t n;
+;   90		bool match = true;
+.LINE 90
 
 	LD	(IX+%FFFFFFFE),%1
-;   90	
-;   91		filestart += ESP32_MAGICSTART; // start of ESP32 magic header
-.LINE 91
+;   91	
+;   92		filestart += ESP32_MAGICSTART; // start of ESP32 magic header
+.LINE 92
 
 	LD	IY,(IX+%6)
 	LEA	IY,IY+%20
 	LD	(IX+%6),IY
-;   92		for(n = 0; n < ESP32_MAGICLENGTH; n++) {
-.LINE 92
+;   93		for(n = 0; n < ESP32_MAGICLENGTH; n++) {
+.LINE 93
 
 	LD	(IX+%FFFFFFFF),%0
 	JR	L_24
 L_22:
-;   93			if(esp32_magicnumbers[n] != filestart[n]) match = false;
-.LINE 93
+;   94			if(esp32_magicnumbers[n] != filestart[n]) match = false;
+.LINE 94
 
 	LD	A,(IX+%FFFFFFFF)
 	UEXT	HL
@@ -799,21 +800,21 @@ L_22:
 	CP	A,(HL)
 	JR	Z,L_23
 	LD	(IX+%FFFFFFFE),%0
-;   94		}
+;   95		}
 L_23:
-.LINE 94
+.LINE 95
 
 	INC	(IX+%FFFFFFFF)
 L_24:
 	LD	A,(IX+%FFFFFFFF)
 	CP	A,%4
 	JR	C,L_22
-;   95		return match;
-.LINE 95
+;   96		return match;
+.LINE 96
 
 	LD	A,(IX+%FFFFFFFE)
-;   96	}
-.LINE 96
+;   97	}
+.LINE 97
 
 	LD	SP,IX
 	POP	IX
@@ -832,9 +833,9 @@ L_24:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "containsESP32Header",96,"_containsESP32Header"
-;   97	
-;   98	void print_version(void) {
+.ENDFUNC "containsESP32Header",97,"_containsESP32Header"
+;   98	
+;   99	void print_version(void) {
 _print_version:
 .DEFINE "_print_version"
 
@@ -846,13 +847,13 @@ _print_version:
 
 .ENDEF
 
-.BEGFUNC "print_version",98,"_print_version"
+.BEGFUNC "print_version",99,"_print_version"
 
 	PUSH	IX
 	LD	IX,0
 	ADD	IX,SP
-;   99		printf("Agon firmware upgrade utility v1.4\n\r\n\r");
-.LINE 99
+;  100		printf("Agon firmware upgrade utility v1.4\n\r\n\r");
+.LINE 100
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -860,8 +861,8 @@ _print_version:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  100	}
-.LINE 100
+;  101	}
+.LINE 101
 
 	LD	SP,IX
 	POP	IX
@@ -879,14 +880,14 @@ _print_version:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "print_version",100,"_print_version"
+.ENDFUNC "print_version",101,"_print_version"
 	SEGMENT STRSECT
 L__14:
 	DB	"Agon firmware upgrade utility v1.4"
 	DB	10,13,10,13,0
 	SEGMENT CODE
-;  101	
-;  102	void usage(void) {
+;  102	
+;  103	void usage(void) {
 _usage:
 .DEFINE "_usage"
 
@@ -898,17 +899,17 @@ _usage:
 
 .ENDEF
 
-.BEGFUNC "usage",102,"_usage"
+.BEGFUNC "usage",103,"_usage"
 
 	PUSH	IX
 	LD	IX,0
 	ADD	IX,SP
-;  103		print_version();
-.LINE 103
+;  104		print_version();
+.LINE 104
 
 	CALL	_print_version
-;  104		printf("Usage: FLASH <mos|vdp> <filename>\n\r");
-.LINE 104
+;  105		printf("Usage: FLASH <mos|vdp> <filename>\n\r");
+.LINE 105
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -916,8 +917,8 @@ _usage:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  105	}
-.LINE 105
+;  106	}
+.LINE 106
 
 	LD	SP,IX
 	POP	IX
@@ -935,19 +936,19 @@ _usage:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "usage",105,"_usage"
+.ENDFUNC "usage",106,"_usage"
 	SEGMENT STRSECT
 L__16:
 	DB	"Usage: FLASH <mos|vdp> <filename>"
 	DB	10,13,0
 	SEGMENT CODE
-;  106	
-;  107	typedef enum {
-;  108		MOS,
-;  109		VDP
-;  110	} flashtype;
-;  111	
-;  112	bool getResponse(flashtype t, uint32_t crc) {
+;  107	
+;  108	typedef enum {
+;  109		MOS,
+;  110		VDP
+;  111	} flashtype;
+;  112	
+;  113	bool getResponse(flashtype t, uint32_t crc) {
 _getResponse:
 .DEFINE "_getResponse"
 
@@ -959,9 +960,9 @@ _getResponse:
 
 .ENDEF
 
-.BEGFUNC "getResponse",112,"_getResponse"
+.BEGFUNC "getResponse",113,"_getResponse"
 
-.LINE 112
+.LINE 113
 
 .DEFINE "t"
 
@@ -997,13 +998,13 @@ _getResponse:
 	LD	IX,0
 	ADD	IX,SP
 	DEC	SP
-;  113		uint8_t response = 0;
-.LINE 113
+;  114		uint8_t response = 0;
+.LINE 114
 
 	LD	(IX+%FFFFFFFF),%0
-;  114	
-;  115		switch(t) {
-.LINE 115
+;  115	
+;  116		switch(t) {
+.LINE 116
 
 	LD	HL,(IX+%6)
 	CALL	__case8D
@@ -1018,12 +1019,12 @@ L__18:
 
 	DW24	L_32	
 
-;  116			case MOS:
+;  117			case MOS:
 L_29:
-.LINE 116
-
-;  117				printf("\r\n\r\n0x%04lX - flash to MOS (y/n)?", crc);
 .LINE 117
+
+;  118				printf("\r\n\r\n0x%04lX - flash to MOS (y/n)?", crc);
+.LINE 118
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1049,16 +1050,16 @@ L_29:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  118				break;
-.LINE 118
-
-	JR	L_32
-;  119			case VDP:
-L_30:
+;  119				break;
 .LINE 119
 
-;  120				printf("\r\n\r\n0x%04lX - flash to VDP (y/n)?", crc);
+	JR	L_32
+;  120			case VDP:
+L_30:
 .LINE 120
+
+;  121				printf("\r\n\r\n0x%04lX - flash to VDP (y/n)?", crc);
+.LINE 121
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1084,15 +1085,15 @@ L_30:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  121				break;
-.LINE 121
+;  122				break;
+.LINE 122
 
 	JR	L_32
-;  122		}
-;  123	
-;  124		while((response != 'y') && (response != 'n')) response = getch();
+;  123		}
+;  124	
+;  125		while((response != 'y') && (response != 'n')) response = getch();
 L_33:
-.LINE 124
+.LINE 125
 
 	CALL	_getch
 	LD	(IX+%FFFFFFFF),A
@@ -1104,8 +1105,8 @@ L_32:
 	CP	A,%6E
 	JR	NZ,L_33
 L_37:
-;  125		if(response == 'n') printf("\r\nUser abort\n\r\n\r");
-.LINE 125
+;  126		if(response == 'n') printf("\r\nUser abort\n\r\n\r");
+.LINE 126
 
 	LD	A,(IX+%FFFFFFFF)
 	CP	A,%6E
@@ -1116,8 +1117,8 @@ L_37:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  126		else printf("\r\n\r\n");
-.LINE 126
+;  127		else printf("\r\n\r\n");
+.LINE 127
 
 	JR	L_38
 L_36:
@@ -1128,8 +1129,8 @@ L_36:
 	CALL	___print_sendstring
 	POP	BC
 L_38:
-;  127		return response == 'y';
-.LINE 127
+;  128		return response == 'y';
+.LINE 128
 
 	LD	A,(IX+%FFFFFFFF)
 	CP	A,%79
@@ -1139,8 +1140,8 @@ L_38:
 L__29:
 	XOR	A,A
 L__30:
-;  128	}
-.LINE 128
+;  129	}
+.LINE 129
 
 	LD	SP,IX
 	POP	IX
@@ -1164,7 +1165,7 @@ L__30:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "getResponse",128,"_getResponse"
+.ENDFUNC "getResponse",129,"_getResponse"
 	SEGMENT STRSECT
 L__19:
 	DB	13,10,13,10
@@ -1187,8 +1188,8 @@ L__26:
 L__27:
 	DB	13,10,13,10,0
 	SEGMENT CODE
-;  129	
-;  130	uint8_t update_vdp(char *filename) {
+;  130	
+;  131	uint8_t update_vdp(char *filename) {
 _update_vdp:
 .DEFINE "_update_vdp"
 
@@ -1200,9 +1201,9 @@ _update_vdp:
 
 .ENDEF
 
-.BEGFUNC "update_vdp",130,"_update_vdp"
+.BEGFUNC "update_vdp",131,"_update_vdp"
 
-.LINE 130
+.LINE 131
 
 .DEFINE "filename"
 
@@ -1271,26 +1272,26 @@ _update_vdp:
 	ADD	IX,SP
 	LEA	HL,IX+%FFFFFFD1
 	LD	SP,HL
-;  131		uint8_t file;
-;  132		uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
-;  133		uint24_t filesize;
-;  134		uint32_t crcresult;
-;  135		uint24_t size, n;
-;  136		uint8_t response;
-;  137	
-;  138		putch(12); // cls
-.LINE 138
+;  132		uint8_t file;
+;  133		uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
+;  134		uint24_t filesize;
+;  135		uint32_t crcresult;
+;  136		uint24_t size, n;
+;  137		uint8_t response;
+;  138	
+;  139		putch(12); // cls
+.LINE 139
 
 	LD	BC,12
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;  139		print_version();	
-.LINE 139
+;  140		print_version();	
+.LINE 140
 
 	CALL	_print_version
-;  140		printf("Unlocking VDP updater...\r\n");
-.LINE 140
+;  141		printf("Unlocking VDP updater...\r\n");
+.LINE 141
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1298,15 +1299,15 @@ _update_vdp:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  141		
-;  142		if(!vdp_ota_present()) {
-.LINE 142
+;  142		
+;  143		if(!vdp_ota_present()) {
+.LINE 143
 
 	CALL	_vdp_ota_present
 	OR	A,A
 	JR	NZ,L_41
-;  143			printf(" failed - incompatible VDP\r\n");
-.LINE 143
+;  144			printf(" failed - incompatible VDP\r\n");
+.LINE 144
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1314,18 +1315,18 @@ _update_vdp:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  144			return 0;
-.LINE 144
+;  145			return 0;
+.LINE 145
 
 	XOR	A,A
 	JR	L_53
-;  145		}
+;  146		}
 L_41:
-.LINE 145
+.LINE 146
 
-;  146	
-;  147		file = mos_fopen(filename, fa_read);
-.LINE 147
+;  147	
+;  148		file = mos_fopen(filename, fa_read);
+.LINE 148
 
 	LD	BC,1
 	PUSH	BC
@@ -1335,13 +1336,13 @@ L_41:
 	POP	BC
 	POP	BC
 	LD	(IX+%FFFFFFFF),A
-;  148		if(!file) {
-.LINE 148
+;  149		if(!file) {
+.LINE 149
 
 	OR	A,A
 	JR	NZ,L_43
-;  149			printf("Error opening \"%s\"\n\r",filename);
-.LINE 149
+;  150			printf("Error opening \"%s\"\n\r",filename);
+.LINE 150
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1357,18 +1358,18 @@ L_41:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  150			return EXIT_FILENOTFOUND;
-.LINE 150
+;  151			return EXIT_FILENOTFOUND;
+.LINE 151
 
 	LD	A,%4
 	JR	L_53
-;  151		}
+;  152		}
 L_43:
-.LINE 151
+.LINE 152
 
-;  152	
-;  153		mos_fread(file, (char *)buffer, ESP32_MAGICLENGTH + ESP32_MAGICSTART);
-.LINE 153
+;  153	
+;  154		mos_fread(file, (char *)buffer, ESP32_MAGICLENGTH + ESP32_MAGICSTART);
+.LINE 154
 
 	LD	BC,36
 	PUSH	BC
@@ -1380,16 +1381,16 @@ L_43:
 	POP	BC
 	POP	BC
 	POP	BC
-;  154		if(!containsESP32Header(buffer)) {
-.LINE 154
+;  155		if(!containsESP32Header(buffer)) {
+.LINE 155
 
 	PEA	IX+%FFFFFFD1
 	CALL	_containsESP32Header
 	POP	BC
 	OR	A,A
 	JR	NZ,L_45
-;  155			printf("File does not contain valid ESP32 code\r\n");
-.LINE 155
+;  156			printf("File does not contain valid ESP32 code\r\n");
+.LINE 156
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1397,25 +1398,25 @@ L_43:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  156			mos_fclose(file);
-.LINE 156
+;  157			mos_fclose(file);
+.LINE 157
 
 	LD	C,(IX+%FFFFFFFF)
 	LD	B,%0
 	PUSH	BC
 	CALL	_mos_fclose
 	POP	BC
-;  157			return EXIT_INVALIDPARAMETER;
-.LINE 157
+;  158			return EXIT_INVALIDPARAMETER;
+.LINE 158
 
 	LD	A,%13
 	JR	L_53
-;  158		}
+;  159		}
 L_45:
-.LINE 158
-
-;  159		printf("\r\nValid ESP32 code\r\nCalculating CRC32");
 .LINE 159
+
+;  160		printf("\r\nValid ESP32 code\r\nCalculating CRC32");
+.LINE 160
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1423,12 +1424,12 @@ L_45:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  160		crc32_initialize();
-.LINE 160
+;  161		crc32_initialize();
+.LINE 161
 
 	CALL	_crc32_initialize
-;  161		mos_flseek(file, 0);
-.LINE 161
+;  162		mos_flseek(file, 0);
+.LINE 162
 
 	LD	BC,0
 	PUSH	BC
@@ -1440,12 +1441,12 @@ L_45:
 	POP	BC
 	POP	BC
 	POP	BC
-;  162		while(1) {
+;  163		while(1) {
 L_49:
-.LINE 162
-
-;  163			size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
 .LINE 163
+
+;  164			size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
+.LINE 164
 
 	LD	BC,16384
 	PUSH	BC
@@ -1459,20 +1460,20 @@ L_49:
 	POP	BC
 	POP	BC
 	LD	(IX+%FFFFFFFC),HL
-;  164			if(size == 0) break;
-.LINE 164
+;  165			if(size == 0) break;
+.LINE 165
 
 	CALL	__icmpzero
 	JR	Z,L_50
-;  165			putch('.');
-.LINE 165
+;  166			putch('.');
+.LINE 166
 
 	LD	BC,46
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;  166			crc32((char *)BUFFER1, size);
-.LINE 166
+;  167			crc32((char *)BUFFER1, size);
+.LINE 167
 
 	LD	BC,(IX+%FFFFFFFC)
 	PUSH	BC
@@ -1482,18 +1483,18 @@ L_49:
 	POP	BC
 	POP	BC
 	JR	L_49
-;  167		}
+;  168		}
 L_50:
-.LINE 167
-
-;  168		crcresult = crc32_finalize();
 .LINE 168
+
+;  169		crcresult = crc32_finalize();
+.LINE 169
 
 	CALL	_crc32_finalize
 	LD	(IX+%FFFFFFF5),HL
 	LD	(IX+%FFFFFFF8),E
-;  169		if(!getResponse(VDP, crcresult)) {
-.LINE 169
+;  170		if(!getResponse(VDP, crcresult)) {
+.LINE 170
 
 	LD	C,(IX+%FFFFFFF8)
 	LD	B,%0
@@ -1508,26 +1509,26 @@ L_50:
 	POP	BC
 	OR	A,A
 	JR	NZ,L_52
-;  170			mos_fclose(file);
-.LINE 170
+;  171			mos_fclose(file);
+.LINE 171
 
 	LD	C,(IX+%FFFFFFFF)
 	LD	B,%0
 	PUSH	BC
 	CALL	_mos_fclose
 	POP	BC
-;  171			return 0;
-.LINE 171
+;  172			return 0;
+.LINE 172
 
 	XOR	A,A
 	JR	L_53
-;  172		}
+;  173		}
 L_52:
-.LINE 172
+.LINE 173
 
-;  173		// Do actual work here
-;  174		mos_flseek(file, 0); // reset to zero, because we read part of the header already
-.LINE 174
+;  174		// Do actual work here
+;  175		mos_flseek(file, 0); // reset to zero, because we read part of the header already
+.LINE 175
 
 	LD	BC,0
 	PUSH	BC
@@ -1539,8 +1540,8 @@ L_52:
 	POP	BC
 	POP	BC
 	POP	BC
-;  175		printf("Updating VDP firmware\r\n");
-.LINE 175
+;  176		printf("Updating VDP firmware\r\n");
+.LINE 176
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1548,8 +1549,8 @@ L_52:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  176		filesize = getFileSize(file);	
-.LINE 176
+;  177		filesize = getFileSize(file);	
+.LINE 177
 
 	LD	C,(IX+%FFFFFFFF)
 	LD	B,%0
@@ -1557,8 +1558,8 @@ L_52:
 	CALL	_getFileSize
 	POP	BC
 	LD	(IX+%FFFFFFF9),HL
-;  177		startVDPupdate(file, filesize);
-.LINE 177
+;  178		startVDPupdate(file, filesize);
+.LINE 178
 
 	LD	BC,HL
 	PUSH	BC
@@ -1568,25 +1569,25 @@ L_52:
 	CALL	_startVDPupdate
 	POP	BC
 	POP	BC
-;  178		mos_fclose(file);
-.LINE 178
+;  179		mos_fclose(file);
+.LINE 179
 
 	LD	C,(IX+%FFFFFFFF)
 	LD	B,%0
 	PUSH	BC
 	CALL	_mos_fclose
 	POP	BC
-;  179		reset();
-.LINE 179
-
-	CALL	_reset
-;  180		return 0; // will never return, but let's give the compiler a break
+;  180		reset();
 .LINE 180
 
-	XOR	A,A
-;  181	}
-L_53:
+	CALL	_reset
+;  181		return 0; // will never return, but let's give the compiler a break
 .LINE 181
+
+	XOR	A,A
+;  182	}
+L_53:
+.LINE 182
 
 	LD	SP,IX
 	POP	IX
@@ -1621,7 +1622,7 @@ L_53:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "update_vdp",181,"_update_vdp"
+.ENDFUNC "update_vdp",182,"_update_vdp"
 	SEGMENT STRSECT
 L__32:
 	DB	"Unlocking VDP updater..."
@@ -1648,8 +1649,8 @@ L__43:
 	DB	"Updating VDP firmware"
 	DB	13,10,0
 	SEGMENT CODE
-;  182	
-;  183	uint8_t update_mos(char *filename) {
+;  183	
+;  184	uint8_t update_mos(char *filename) {
 _update_mos:
 .DEFINE "_update_mos"
 
@@ -1661,9 +1662,9 @@ _update_mos:
 
 .ENDEF
 
-.BEGFUNC "update_mos",183,"_update_mos"
+.BEGFUNC "update_mos",184,"_update_mos"
 
-.LINE 183
+.LINE 184
 
 .DEFINE "filename"
 
@@ -1820,39 +1821,39 @@ _update_mos:
 	ADD	IX,SP
 	LEA	HL,IX+%FFFFFFD5
 	LD	SP,HL
-;  184		uint32_t crcexpected,crcresult;
-;  185		uint24_t size = 0;
-.LINE 185
+;  185		uint32_t crcexpected,crcresult;
+;  186		uint24_t size = 0;
+.LINE 186
 
 	LD	BC,0
 	LD	(IX+%FFFFFFD9),BC
-;  186		uint24_t got;
-;  187		uint8_t file;
-;  188		char* ptr = (char*)BUFFER1;
-.LINE 188
+;  187		uint24_t got;
+;  188		uint8_t file;
+;  189		char* ptr = (char*)BUFFER1;
+.LINE 189
 
 	LD	BC,327680
 	LD	(IX+%FFFFFFEA),BC
-;  189		uint8_t value;
-;  190		uint24_t counter,pagemax, lastpagebytes;
-;  191		uint24_t addressto,addressfrom;
-;  192		enum states state;
-;  193		uint24_t filesize;
-;  194	
-;  195		putch(12); // cls
-.LINE 195
+;  190		uint8_t value;
+;  191		uint24_t counter,pagemax, lastpagebytes;
+;  192		uint24_t addressto,addressfrom;
+;  193		enum states state;
+;  194		uint24_t filesize;
+;  195	
+;  196		putch(12); // cls
+.LINE 196
 
 	LD	BC,12
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;  196		print_version();	
-.LINE 196
+;  197		print_version();	
+.LINE 197
 
 	CALL	_print_version
-;  197		
-;  198		file = mos_fopen(filename, fa_read);
-.LINE 198
+;  198		
+;  199		file = mos_fopen(filename, fa_read);
+.LINE 199
 
 	LD	BC,1
 	PUSH	BC
@@ -1862,14 +1863,14 @@ _update_mos:
 	POP	BC
 	POP	BC
 	LD	(IX+%FFFFFFFC),A
-;  199		if(!file)
-.LINE 199
+;  200		if(!file)
+.LINE 200
 
 	OR	A,A
 	JR	NZ,L_55
-;  200		{
-;  201			printf("Error opening \"%s\"\n\r",filename);
-.LINE 201
+;  201		{
+;  202			printf("Error opening \"%s\"\n\r",filename);
+.LINE 202
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1885,18 +1886,18 @@ _update_mos:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  202			return EXIT_FILENOTFOUND;
-.LINE 202
+;  203			return EXIT_FILENOTFOUND;
+.LINE 203
 
 	LD	A,%4
 	JR	L_100
-;  203		}
+;  204		}
 L_55:
-.LINE 203
+.LINE 204
 
-;  204	
-;  205		mos_fread(file, (char *)BUFFER1, MOS_MAGICLENGTH);
-.LINE 205
+;  205	
+;  206		mos_fread(file, (char *)BUFFER1, MOS_MAGICLENGTH);
+.LINE 206
 
 	LD	BC,5
 	PUSH	BC
@@ -1909,8 +1910,8 @@ L_55:
 	POP	BC
 	POP	BC
 	POP	BC
-;  206		if(!containsMosHeader((uint8_t *)BUFFER1)) {
-.LINE 206
+;  207		if(!containsMosHeader((uint8_t *)BUFFER1)) {
+.LINE 207
 
 	LD	BC,327680
 	PUSH	BC
@@ -1918,8 +1919,8 @@ L_55:
 	POP	BC
 	OR	A,A
 	JR	NZ,L_57
-;  207			printf("File does not contain valid MOS ez80 startup code\r\n");
-.LINE 207
+;  208			printf("File does not contain valid MOS ez80 startup code\r\n");
+.LINE 208
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1927,26 +1928,26 @@ L_55:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  208			mos_fclose(file);
-.LINE 208
+;  209			mos_fclose(file);
+.LINE 209
 
 	LD	C,(IX+%FFFFFFFC)
 	LD	B,%0
 	PUSH	BC
 	CALL	_mos_fclose
 	POP	BC
-;  209			return EXIT_INVALIDPARAMETER;
-.LINE 209
+;  210			return EXIT_INVALIDPARAMETER;
+.LINE 210
 
 	LD	A,%13
 	JR	L_100
-;  210		}
+;  211		}
 L_57:
-.LINE 210
+.LINE 211
 
-;  211	
-;  212		filesize = getFileSize(file);
-.LINE 212
+;  212	
+;  213		filesize = getFileSize(file);
+.LINE 213
 
 	LD	C,(IX+%FFFFFFFC)
 	LD	B,%0
@@ -1954,16 +1955,16 @@ L_57:
 	CALL	_getFileSize
 	POP	BC
 	LD	(IX+%FFFFFFF0),HL
-;  213		if(filesize > FLASHSIZE) {
-.LINE 213
+;  214		if(filesize > FLASHSIZE) {
+.LINE 214
 
 	LD	BC,HL
 	LD	HL,131072
 	OR	A,A
 	SBC	HL,BC
 	JR	NC,L_59
-;  214			printf("File too large for 128KB embedded flash\r\n");
-.LINE 214
+;  215			printf("File too large for 128KB embedded flash\r\n");
+.LINE 215
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1971,26 +1972,26 @@ L_57:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  215			mos_fclose(file);
-.LINE 215
+;  216			mos_fclose(file);
+.LINE 216
 
 	LD	C,(IX+%FFFFFFFC)
 	LD	B,%0
 	PUSH	BC
 	CALL	_mos_fclose
 	POP	BC
-;  216			return EXIT_INVALIDPARAMETER;
-.LINE 216
+;  217			return EXIT_INVALIDPARAMETER;
+.LINE 217
 
 	LD	A,%13
 	JR	L_100
-;  217		}
+;  218		}
 L_59:
-.LINE 217
+.LINE 218
 
-;  218	
-;  219		printf("\r\nValid ez80 code\r\nCalculating CRC32");
-.LINE 219
+;  219	
+;  220		printf("\r\nValid ez80 code\r\nCalculating CRC32");
+.LINE 220
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -1998,13 +1999,13 @@ L_59:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  220	
-;  221		crc32_initialize();
-.LINE 221
+;  221	
+;  222		crc32_initialize();
+.LINE 222
 
 	CALL	_crc32_initialize
-;  222		mos_flseek(file, 0);
-.LINE 222
+;  223		mos_flseek(file, 0);
+.LINE 223
 
 	LD	BC,0
 	PUSH	BC
@@ -2016,15 +2017,15 @@ L_59:
 	POP	BC
 	POP	BC
 	POP	BC
-;  223		
-;  224		// Read file to memory
-;  225		while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
-.LINE 225
+;  224		
+;  225		// Read file to memory
+;  226		while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
+.LINE 226
 
 	JR	L_60
 L_61:
-;  226			crc32(ptr, got);
-.LINE 226
+;  227			crc32(ptr, got);
+.LINE 227
 
 	LD	BC,(IX+%FFFFFFE3)
 	PUSH	BC
@@ -2033,23 +2034,23 @@ L_61:
 	CALL	_crc32
 	POP	BC
 	POP	BC
-;  227			ptr += got;
-.LINE 227
+;  228			ptr += got;
+.LINE 228
 
 	LD	BC,(IX+%FFFFFFE3)
 	LD	HL,(IX+%FFFFFFEA)
 	ADD	HL,BC
 	LD	(IX+%FFFFFFEA),HL
-;  228			putch('.');
-.LINE 228
+;  229			putch('.');
+.LINE 229
 
 	LD	BC,46
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;  229		}		
+;  230		}		
 L_60:
-.LINE 229
+.LINE 230
 
 	LD	BC,16384
 	PUSH	BC
@@ -2069,14 +2070,14 @@ L_60:
 	OR	A,A
 	SBC	HL,BC
 	JR	C,L_61
-;  230		crcresult = crc32_finalize();
-.LINE 230
+;  231		crcresult = crc32_finalize();
+.LINE 231
 
 	CALL	_crc32_finalize
 	LD	(IX+%FFFFFFE6),HL
 	LD	(IX+%FFFFFFE9),E
-;  231		if(!getResponse(MOS, crcresult)) {
-.LINE 231
+;  232		if(!getResponse(MOS, crcresult)) {
+.LINE 232
 
 	LD	C,(IX+%FFFFFFE9)
 	LD	B,%0
@@ -2091,66 +2092,66 @@ L_60:
 	POP	BC
 	OR	A,A
 	JR	NZ,L_64
-;  232			mos_fclose(file);
-.LINE 232
+;  233			mos_fclose(file);
+.LINE 233
 
 	LD	C,(IX+%FFFFFFFC)
 	LD	B,%0
 	PUSH	BC
 	CALL	_mos_fclose
 	POP	BC
-;  233			return 0;
-.LINE 233
+;  234			return 0;
+.LINE 234
 
 	XOR	A,A
 	JR	L_100
-;  234		}
+;  235		}
 L_64:
-.LINE 234
+.LINE 235
 
-;  235	
-;  236		// Actual work here	
-;  237		di();								// prohibit any access to the old MOS firmware
-.LINE 237
+;  236	
+;  237		// Actual work here	
+;  238		di();								// prohibit any access to the old MOS firmware
+.LINE 238
 
 	di
-;  238	
-;  239		// start address in flash
-;  240		addressto = FLASHSTART;
-.LINE 240
+;  239	
+;  240		// start address in flash
+;  241		addressto = FLASHSTART;
+.LINE 241
 
 	LD	BC,0
 	LD	(IX+%FFFFFFED),BC
-;  241		addressfrom = BUFFER1;
-.LINE 241
+;  242		addressfrom = BUFFER1;
+.LINE 242
 
 	LD	BC,327680
 	LD	(IX+%FFFFFFF9),BC
-;  242		
-;  243		crcexpected = crcresult;
-.LINE 243
+;  243		
+;  244		crcexpected = crcresult;
+.LINE 244
 
 	LD	BC,(IX+%FFFFFFE6)
 	LD	A,(IX+%FFFFFFE9)
 	LD	(IX+%FFFFFFD5),BC
 	LD	(IX+%FFFFFFD8),A
-;  244		state = firmware;
-.LINE 244
+;  245		state = firmware;
+.LINE 245
 
 	LD	BC,0
 	LD	(IX+%FFFFFFF3),BC
-;  245		size = filesize;	
-.LINE 245
+;  246		size = filesize;	
+.LINE 246
 
 	LD	BC,(IX+%FFFFFFF0)
 	LD	(IX+%FFFFFFD9),BC
-;  246		while(1)
+;  247		while(1)
 L_98:
-.LINE 246
+.LINE 247
 
-;  247		{
-;  248			switch(state)
-.LINE 248
+;  248		{
+;  249			switch(state)
+.LINE 249
 
 	LD	HL,(IX+%FFFFFFF3)
 	CALL	__case8D
@@ -2165,50 +2166,50 @@ L__55:
 
 	DW24	L_67	
 
-;  249			{
-;  250				case firmware:
+;  250			{
+;  251				case firmware:
 L_65:
-.LINE 250
+.LINE 251
 
-;  251					// start address in flash
-;  252					addressfrom = BUFFER1;
-.LINE 252
-
-	LD	BC,327680
-	LD	(IX+%FFFFFFF9),BC
-;  253					crc32_initialize();
+;  252					// start address in flash
+;  253					addressfrom = BUFFER1;
 .LINE 253
 
-	CALL	_crc32_initialize
-;  254					break;
+	LD	BC,327680
+	LD	(IX+%FFFFFFF9),BC
+;  254					crc32_initialize();
 .LINE 254
 
-	JR	L_70
-;  255				case retry:
-L_66:
+	CALL	_crc32_initialize
+;  255					break;
 .LINE 255
 
-;  256					// start address in flash
-;  257					addressfrom = BUFFER1;
-.LINE 257
+	JR	L_70
+;  256				case retry:
+L_66:
+.LINE 256
+
+;  257					// start address in flash
+;  258					addressfrom = BUFFER1;
+.LINE 258
 
 	LD	BC,327680
 	LD	(IX+%FFFFFFF9),BC
-;  258					crc32_initialize();
-.LINE 258
-
-	CALL	_crc32_initialize
-;  259					break;
+;  259					crc32_initialize();
 .LINE 259
 
-	JR	L_70
-;  260				default:
-L_67:
+	CALL	_crc32_initialize
+;  260					break;
 .LINE 260
 
-;  261					// RESET SYSTEM
-;  262					printf("\r\n");
-.LINE 262
+	JR	L_70
+;  261				default:
+L_67:
+.LINE 261
+
+;  262					// RESET SYSTEM
+;  263					printf("\r\n");
+.LINE 263
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2216,8 +2217,8 @@ L_67:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  263					printf("Done\r\n");
-.LINE 263
+;  264					printf("Done\r\n");
+.LINE 264
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2225,8 +2226,8 @@ L_67:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  264					printf("Press reset button");
-.LINE 264
+;  265					printf("Press reset button");
+.LINE 265
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2234,19 +2235,19 @@ L_67:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  265					while(1); // force cold boot for the user, so VDP will reset optimally
+;  266					while(1); // force cold boot for the user, so VDP will reset optimally
 L_69:
-.LINE 265
-
-	JR	L_69
-;  266			}
-L_70:
 .LINE 266
 
-;  267	
-;  268			// Unprotect and erase flash
-;  269			printf("Erasing flash... ");
-.LINE 269
+	JR	L_69
+;  267			}
+L_70:
+.LINE 267
+
+;  268	
+;  269			// Unprotect and erase flash
+;  270			printf("Erasing flash... ");
+.LINE 270
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2254,75 +2255,75 @@ L_70:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  270			enableFlashKeyRegister();	// unlock Flash Key Register, so we can write to the Flash Write/Erase protection registers
-.LINE 270
+;  271			enableFlashKeyRegister();	// unlock Flash Key Register, so we can write to the Flash Write/Erase protection registers
+.LINE 271
 
 	CALL	_enableFlashKeyRegister
-;  271			FLASH_PROT = 0;				// disable protection on all 8x16KB blocks in the flash
-.LINE 271
+;  272			FLASH_PROT = 0;				// disable protection on all 8x16KB blocks in the flash
+.LINE 272
 
 	XOR	A,A
 	OUT0	(250),A
-;  272			enableFlashKeyRegister();	// will need to unlock again after previous write to the flash protection register
-.LINE 272
+;  273			enableFlashKeyRegister();	// will need to unlock again after previous write to the flash protection register
+.LINE 273
 
 	CALL	_enableFlashKeyRegister
-;  273			FLASH_FDIV = 0x5F;			// Ceiling(18Mhz * 5,1us) = 95, or 0x5F
-.LINE 273
+;  274			FLASH_FDIV = 0x5F;			// Ceiling(18Mhz * 5,1us) = 95, or 0x5F
+.LINE 274
 
 	LD	A,%5F
 	OUT0	(249),A
-;  274			
-;  275			for(counter = 0; counter < FLASHPAGES; counter++)
-.LINE 275
+;  275			
+;  276			for(counter = 0; counter < FLASHPAGES; counter++)
+.LINE 276
 
 	LD	BC,0
 	LD	(IX+%FFFFFFFD),BC
 	JR	L_76
 L_74:
-;  276			{
-;  277				FLASH_PAGE = counter;
-.LINE 277
+;  277			{
+;  278				FLASH_PAGE = counter;
+.LINE 278
 
 	LD	A,(IX+%FFFFFFFD)
 	OUT0	(252),A
-;  278				FLASH_PGCTL = 0x02;			// Page erase bit enable, start erase
-.LINE 278
+;  279				FLASH_PGCTL = 0x02;			// Page erase bit enable, start erase
+.LINE 279
 
 	LD	A,%2
 	OUT0	(255),A
-;  279	
-;  280				do
+;  280	
+;  281				do
 L_72:
-.LINE 280
+.LINE 281
 
-;  281				{
-;  282					value = FLASH_PGCTL;
-.LINE 282
+;  282				{
+;  283					value = FLASH_PGCTL;
+.LINE 283
 
 	IN0	A,(255)
 	LD	(IX+%FFFFFFE2),A
-;  283				}
-;  284				while(value & 0x02);// wait for completion of erase			
-.LINE 284
+;  284				}
+;  285				while(value & 0x02);// wait for completion of erase			
+.LINE 285
 
 	AND	A,%2
 	JR	NZ,L_72
 	LD	BC,(IX+%FFFFFFFD)
 	INC	BC
 	LD	(IX+%FFFFFFFD),BC
-;  285			}
+;  286			}
 L_76:
-.LINE 285
+.LINE 286
 
 	LD	BC,128
 	LD	HL,(IX+%FFFFFFFD)
 	OR	A,A
 	SBC	HL,BC
 	JR	C,L_74
-;  286			
-;  287			printf("\r\nWriting new firmware...\r\n");
-.LINE 287
+;  287			
+;  288			printf("\r\nWriting new firmware...\r\n");
+.LINE 288
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2330,17 +2331,17 @@ L_76:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  288			
-;  289			// determine number of pages to write
-;  290			pagemax = size/PAGESIZE;
-.LINE 290
+;  289			
+;  290			// determine number of pages to write
+;  291			pagemax = size/PAGESIZE;
+.LINE 291
 
 	LD	HL,(IX+%FFFFFFF0)
 	LD	A,%A
 	CALL	__ishru_b
 	LD	(IX+%FFFFFFF6),HL
-;  291			if(size%PAGESIZE) // last page has less than PAGESIZE bytes
-.LINE 291
+;  292			if(size%PAGESIZE) // last page has less than PAGESIZE bytes
+.LINE 292
 
 	LD	BC,1023
 	LD	HL,(IX+%FFFFFFF0)
@@ -2348,39 +2349,39 @@ L_76:
 	LD	(IX+%FFFFFFDC),HL
 	CALL	__icmpzero
 	JR	Z,L_79
-;  292			{
-;  293				pagemax += 1;
-.LINE 293
+;  293			{
+;  294				pagemax += 1;
+.LINE 294
 
 	LD	BC,(IX+%FFFFFFF6)
 	INC	BC
 	LD	(IX+%FFFFFFF6),BC
-;  294				lastpagebytes = size%PAGESIZE;			
-.LINE 294
+;  295				lastpagebytes = size%PAGESIZE;			
+.LINE 295
 
 	LD	BC,(IX+%FFFFFFDC)
 	LD	(IX+%FFFFFFDF),BC
-;  295			}
-;  296			else lastpagebytes = PAGESIZE; // normal last page
-.LINE 296
+;  296			}
+;  297			else lastpagebytes = PAGESIZE; // normal last page
+.LINE 297
 
 	JR	L_87
 L_79:
 	LD	BC,1024
 	LD	(IX+%FFFFFFDF),BC
 L_87:
-;  297			
-;  298			// write out each page to flash
-;  299			for(counter = 0; counter < pagemax; counter++)
-.LINE 299
+;  298			
+;  299			// write out each page to flash
+;  300			for(counter = 0; counter < pagemax; counter++)
+.LINE 300
 
 	LD	BC,0
 	LD	(IX+%FFFFFFFD),BC
 	JR	L_86
 L_84:
-;  300			{
-;  301				printf("\rWriting flash page %03d/%03d", counter+1, pagemax);
-.LINE 301
+;  301			{
+;  302				printf("\rWriting flash page %03d/%03d", counter+1, pagemax);
+.LINE 302
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2421,9 +2422,9 @@ L_84:
 	CALL	__u_itoa
 	POP	BC
 	POP	BC
-;  302				
-;  303				if(counter == (pagemax - 1)) // last page to write - might need to write less than PAGESIZE
-.LINE 303
+;  303				
+;  304				if(counter == (pagemax - 1)) // last page to write - might need to write less than PAGESIZE
+.LINE 304
 
 	LD	IY,(IX+%FFFFFFF6)
 	LEA	HL,IY+%FFFFFFFF
@@ -2431,8 +2432,8 @@ L_84:
 	OR	A,A
 	SBC	HL,BC
 	JR	NZ,L_82
-;  304					fastmemcpy(addressto,addressfrom,lastpagebytes);				
-.LINE 304
+;  305					fastmemcpy(addressto,addressfrom,lastpagebytes);				
+.LINE 305
 
 	LD	BC,(IX+%FFFFFFDF)
 	PUSH	BC
@@ -2444,14 +2445,14 @@ L_84:
 	POP	BC
 	POP	BC
 	POP	BC
-;  305					//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, lastpagebytes);
-;  306				else 
-.LINE 306
+;  306					//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, lastpagebytes);
+;  307				else 
+.LINE 307
 
 	JR	L_83
 L_82:
-;  307					fastmemcpy(addressto,addressfrom,PAGESIZE);
-.LINE 307
+;  308					fastmemcpy(addressto,addressfrom,PAGESIZE);
+.LINE 308
 
 	LD	BC,1024
 	PUSH	BC
@@ -2464,17 +2465,17 @@ L_82:
 	POP	BC
 	POP	BC
 L_83:
-;  308					//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, PAGESIZE);
-;  309			
-;  310				addressto += PAGESIZE;
-.LINE 310
+;  309					//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, PAGESIZE);
+;  310			
+;  311				addressto += PAGESIZE;
+.LINE 311
 
 	LD	BC,1024
 	LD	HL,(IX+%FFFFFFED)
 	ADD	HL,BC
 	LD	(IX+%FFFFFFED),HL
-;  311				addressfrom += PAGESIZE;
-.LINE 311
+;  312				addressfrom += PAGESIZE;
+.LINE 312
 
 	LD	HL,(IX+%FFFFFFF9)
 	ADD	HL,BC
@@ -2482,21 +2483,21 @@ L_83:
 	LD	BC,(IX+%FFFFFFFD)
 	INC	BC
 	LD	(IX+%FFFFFFFD),BC
-;  312			}
+;  313			}
 L_86:
-.LINE 312
+.LINE 313
 
 	LD	BC,(IX+%FFFFFFF6)
 	LD	HL,(IX+%FFFFFFFD)
 	OR	A,A
 	SBC	HL,BC
 	JR	C,L_84
-;  313			lockFlashKeyRegister();	// lock the flash before WARM reset
-.LINE 313
+;  314			lockFlashKeyRegister();	// lock the flash before WARM reset
+.LINE 314
 
 	CALL	_lockFlashKeyRegister
-;  314			printf("\r\n");
-.LINE 314
+;  315			printf("\r\n");
+.LINE 315
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2504,10 +2505,10 @@ L_86:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  315			
-;  316			//Verify correct CRC in flash
-;  317			printf("Verifying flash checksum... ");
-.LINE 317
+;  316			
+;  317			//Verify correct CRC in flash
+;  318			printf("Verifying flash checksum... ");
+.LINE 318
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2515,8 +2516,8 @@ L_86:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  318			crc32((char*)FLASHSTART, size);
-.LINE 318
+;  319			crc32((char*)FLASHSTART, size);
+.LINE 319
 
 	LD	BC,(IX+%FFFFFFF0)
 	PUSH	BC
@@ -2525,15 +2526,15 @@ L_86:
 	CALL	_crc32
 	POP	BC
 	POP	BC
-;  319			crcresult = crc32_finalize();
-.LINE 319
+;  320			crcresult = crc32_finalize();
+.LINE 320
 
 	CALL	_crc32_finalize
 	LD	(IX+%FFFFFFE6),HL
 	LD	(IX+%FFFFFFE9),E
-;  320	
-;  321			if(crcresult == crcexpected)
-.LINE 321
+;  321	
+;  322			if(crcresult == crcexpected)
+.LINE 322
 
 	LD	HL,(IX+%FFFFFFE6)
 	LD	E,(IX+%FFFFFFE9)
@@ -2541,9 +2542,9 @@ L_86:
 	LD	A,(IX+%FFFFFFD8)
 	CALL	__lcmpu
 	JR	NZ,L_96
-;  322			{
-;  323				printf("- OK\r\n");
-.LINE 323
+;  323			{
+;  324				printf("- OK\r\n");
+.LINE 324
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2551,20 +2552,20 @@ L_86:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  324				state = systemreset;
-.LINE 324
+;  325				state = systemreset;
+.LINE 325
 
 	LD	BC,2
 	LD	(IX+%FFFFFFF3),BC
-;  325			}
-;  326			else // CRC Failure - next action depends on current state
-.LINE 326
+;  326			}
+;  327			else // CRC Failure - next action depends on current state
+.LINE 327
 
 	JR	L_98
 L_96:
-;  327			{	 // User interaction not possible without MOS handling interrupts
-;  328				switch(state)
-.LINE 328
+;  328			{	 // User interaction not possible without MOS handling interrupts
+;  329				switch(state)
+.LINE 329
 
 	LD	HL,(IX+%FFFFFFF3)
 	CALL	__case8D
@@ -2579,13 +2580,13 @@ L__71:
 
 	DW24	L_93	
 
-;  329				{
-;  330					case firmware:
+;  330				{
+;  331					case firmware:
 L_89:
-.LINE 330
-
-;  331						printf("\r\nError occured during flash write\r\nRetry...\r\n");
 .LINE 331
+
+;  332						printf("\r\nError occured during flash write\r\nRetry...\r\n");
+.LINE 332
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2593,21 +2594,21 @@ L_89:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  332						state = retry;
-.LINE 332
+;  333						state = retry;
+.LINE 333
 
 	LD	BC,1
 	LD	(IX+%FFFFFFF3),BC
-;  333						break;
-.LINE 333
-
-	JR	L_98
-;  334					case retry:
-L_90:
+;  334						break;
 .LINE 334
 
-;  335						printf("\r\nRetry failed\r\n");
+	JR	L_98
+;  335					case retry:
+L_90:
 .LINE 335
+
+;  336						printf("\r\nRetry failed\r\n");
+.LINE 336
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
@@ -2615,28 +2616,28 @@ L_90:
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  336						while(1); // no more options unfortunately, system needs a firmware programmer
+;  337						while(1); // no more options unfortunately, system needs a firmware programmer
 L_92:
-.LINE 336
-
-	JR	L_92
-;  337					default:
-L_93:
 .LINE 337
 
-;  338						state = retry;
+	JR	L_92
+;  338					default:
+L_93:
 .LINE 338
+
+;  339						state = retry;
+.LINE 339
 
 	LD	BC,1
 	LD	(IX+%FFFFFFF3),BC
 	JR	L_98
-;  339				}
-;  340			}
-;  341		}		
-;  342		return 0;
-;  343	}
+;  340				}
+;  341			}
+;  342		}		
+;  343		return 0;
+;  344	}
 L_100:
-.LINE 343
+.LINE 344
 
 	LD	SP,IX
 	POP	IX
@@ -2684,7 +2685,7 @@ L_100:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "update_mos",343,"_update_mos"
+.ENDFUNC "update_mos",344,"_update_mos"
 	SEGMENT STRSECT
 L__46:
 	DB	"Error opening \""
@@ -2742,8 +2743,8 @@ L__73:
 	DB	"Retry failed"
 	DB	13,10,0
 	SEGMENT CODE
-;  344	
-;  345	int main(int argc, char * argv[]) {
+;  345	
+;  346	int main(int argc, char * argv[]) {
 _main:
 .DEFINE "_main"
 
@@ -2755,9 +2756,9 @@ _main:
 
 .ENDEF
 
-.BEGFUNC "main",345,"_main"
+.BEGFUNC "main",346,"_main"
 
-.LINE 345
+.LINE 346
 
 .DEFINE "argc"
 
@@ -2782,32 +2783,32 @@ _main:
 	PUSH	IX
 	LD	IX,0
 	ADD	IX,SP
-;  346	
-;  347		if(argc != 3) {
-.LINE 347
+;  347	
+;  348		if(argc != 3) {
+.LINE 348
 
 	LD	BC,3
 	LD	HL,(IX+%6)
 	OR	A,A
 	SBC	HL,BC
 	JR	Z,L_106
-;  348			usage();
-.LINE 348
+;  349			usage();
+.LINE 349
 
 	CALL	_usage
-;  349			return 0;
-.LINE 349
+;  350			return 0;
+.LINE 350
 
 	OR	A,A
 	SBC	HL,HL
 	JR	L_107
-;  350		}
+;  351		}
 L_106:
-.LINE 350
+.LINE 351
 
-;  351	
-;  352		if(memcmp(argv[1], "mos", 3) == 0) {
-.LINE 352
+;  352	
+;  353		if(memcmp(argv[1], "mos", 3) == 0) {
+.LINE 353
 
 	PUSH	BC
 	LD	BC,L__76
@@ -2822,8 +2823,8 @@ L_106:
 	POP	BC
 	CALL	__icmpzero
 	JR	NZ,L_105
-;  353			return update_mos(argv[2]);
-.LINE 353
+;  354			return update_mos(argv[2]);
+.LINE 354
 
 	LD	IY,(IX+%9)
 	LEA	HL,IY+%6
@@ -2834,13 +2835,13 @@ L_106:
 	UEXT	HL
 	LD	L,A
 	JR	L_107
-;  354		}
-;  355		else {
+;  355		}
+;  356		else {
 L_105:
-.LINE 355
-
-;  356			if(memcmp(argv[1], "vdp", 3) == 0) {
 .LINE 356
+
+;  357			if(memcmp(argv[1], "vdp", 3) == 0) {
+.LINE 357
 
 	LD	BC,3
 	PUSH	BC
@@ -2856,8 +2857,8 @@ L_105:
 	POP	BC
 	CALL	__icmpzero
 	JR	NZ,L_103
-;  357				return update_vdp(argv[2]);
-.LINE 357
+;  358				return update_vdp(argv[2]);
+.LINE 358
 
 	LD	IY,(IX+%9)
 	LEA	HL,IY+%6
@@ -2868,25 +2869,25 @@ L_105:
 	UEXT	HL
 	LD	L,A
 	JR	L_107
-;  358			}
-;  359			else {
+;  359			}
+;  360			else {
 L_103:
-.LINE 359
-
-;  360				usage();
 .LINE 360
 
-	CALL	_usage
-;  361				return 0;
+;  361				usage();
 .LINE 361
+
+	CALL	_usage
+;  362				return 0;
+.LINE 362
 
 	OR	A,A
 	SBC	HL,HL
-;  362			}
-;  363		}
-;  364	}
+;  363			}
+;  364		}
+;  365	}
 L_107:
-.LINE 364
+.LINE 365
 
 	LD	SP,IX
 	POP	IX
@@ -2904,7 +2905,7 @@ L_107:
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "main",364,"_main"
+.ENDFUNC "main",365,"_main"
 	SEGMENT STRSECT
 L__76:
 	DB	"mos"
