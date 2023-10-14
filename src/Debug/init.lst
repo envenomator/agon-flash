@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED14-Oct-23     12:22:05     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED14-Oct-23     13:12:47     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -58,12 +58,12 @@ PC     Object              I  Line    Source
 0B0053 CD 77 00 0B         A    53    			CALL	_clear_bss
 0B0057 E1                  A    54    			POP	HL
                            A    55    ;
-0B0058 DD21 3B 1B 0B       A    56    			LD	IX, argv_ptrs		; The argv 
+0B0058 DD21 AB 1B 0B       A    56    			LD	IX, argv_ptrs		; The argv 
 0B005D DDE5                A    57    			PUSH	IX			; Parameter 2: 
 0B005F CD 96 00 0B         A    58    			CALL	_parse_params		; Parse
 0B0063 0600                A    59    			LD	B, 0			; Clear B from 
 0B0065 C5                  A    60    			PUSH	BC			; Parameter 1: 
-0B0066 CD C3 0A 0B         A    61    			CALL	_main			; int main(
+0B0066 CD 33 0B 0B         A    61    			CALL	_main			; int main(
 0B006A D1                  A    62    			POP	DE			; Balance the stack
 0B006B D1                  A    63    			POP	DE
                            A    64    
@@ -85,13 +85,13 @@ PC     Object              I  Line    Source
 0B007E B0                  A    80    			OR	A, B
 0B007F C8                  A    81    			RET	Z			; BSS is zero-lengt
 0B0080 AF                  A    82    			XOR	A, A
-0B0081 32 74 1B 0B         A    83    			LD 	(__low_bss), A
+0B0081 32 48 24 0B         A    83    			LD 	(__low_bss), A
 0B0085 ED62                A    84    			SBC	HL, HL			; HL = 0
 0B0087 0B                  A    85    			DEC	BC			; 1st byte's taken 
 0B0088 ED42                A    86    			SBC	HL, BC
 0B008A C8                  A    87    			RET	Z		  	; Just 1 byte ...
-0B008B 21 74 1B 0B         A    88    			LD	HL, __low_bss		; Reset HL
-0B008F 11 75 1B 0B         A    89    			LD	DE, __low_bss + 1	; [DE] = bs
+0B008B 21 48 24 0B         A    88    			LD	HL, __low_bss		; Reset HL
+0B008F 11 49 24 0B         A    89    			LD	DE, __low_bss + 1	; [DE] = bs
 0B0093 EDB0                A    90    			LDIR				; Clear this se
 0B0095 C9                  A    91    			RET
                            A    92    			
@@ -174,14 +174,14 @@ PC     Object              I  Line    Source
                            A   169    
                            A   170    ; Storage for the argv array pointers
                            A   171    ;
-0B1B3B 000000 000000       A   172    argv_ptrs:		BLKP	argv_ptrs_max, 0
-0B1B41 000000 000000 
-0B1B47 000000 000000 
-0B1B4D 000000 000000 
-0B1B53 000000 000000 
-0B1B59 000000 000000 
-0B1B5F 000000 000000 
-0B1B65 000000 000000 
+0B1BAB 000000 000000       A   172    argv_ptrs:		BLKP	argv_ptrs_max, 0
+0B1BB1 000000 000000 
+0B1BB7 000000 000000 
+0B1BBD 000000 000000 
+0B1BC3 000000 000000 
+0B1BC9 000000 000000 
+0B1BCF 000000 000000 
+0B1BD5 000000 000000 
                            A   173    			
                            A   174    			END
 

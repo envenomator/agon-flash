@@ -104,6 +104,28 @@ void usage(void) {
 	printf("Usage: FLASH <mos|vdp> <filename>\n\r");
 }
 
+typedef enum {
+	MOS,
+	VDP
+} flashtype;
+
+bool getResponse(flashtype t, uint32_t crc) {
+	uint8_t response = 0;
+
+	switch(t) {
+		case MOS:
+			printf("\r\n\r\n0x%04lX - flash to MOS (y/n)?", crc);
+			break;
+		case VDP:
+			printf("\r\n\r\n0x%04lX - flash to VDP (y/n)?", crc);
+			break;
+	}
+
+	while((response != 'y') && (response != 'n')) response = getch();
+	printf("\r\nUser abort\n\r\n\r");
+	return response == 'y';
+}
+
 uint8_t update_vdp(char *filename) {
 	uint8_t file;
 	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
@@ -142,15 +164,8 @@ uint8_t update_vdp(char *filename) {
 		crc32((char *)BUFFER1, size);
 	}
 	crcresult = crc32_finalize();
-	printf("\r\n\r\n0x%04lX - flash to VDP (y/n)?", crcresult);
+	if(!getResponse(VDP, crcresult)) return 0;
 
-	response = 0;
-	while((response != 'y') && (response != 'n')) response = getch();
-	printf("\r\n");
-	if(response == 'n') {
-		printf("User abort\n\r\n\r");
-		return 0;
-	}
 	// Do actual work here
 	mos_flseek(file, 0); // reset to zero, because we read part of the header already
 	printf("Updating VDP firmware\r\n");
