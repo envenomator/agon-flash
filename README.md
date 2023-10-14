@@ -1,4 +1,4 @@
-# Agon MOS firmware upgrade utility
+# Agon firmware upgrade utility
 The utility version you need, depends on the *current* version of MOS. When you reset your AgonLight, the MOS version is displayed on the first line.
 
 Please follow the guide for your *current* MOS version:
@@ -11,11 +11,18 @@ This version needs at least MOS version 1.03, which supports several enhancement
 ### Installation
 1. Make sure to create a 'mos' directory on the microSD card
 2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.03%20or%20higher/flash.bin) from in the 'mos' directory
-3. Place the required firmware file in the root directory of the microSD card
-4. Obtain the CRC32 checksum for the new firmware. [This table](https://github.com/envenomator/agon-binaries/blob/master/README.md) at agon-binaries lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
+3. Place the required (MOS or VDP) firmware file in the root directory of the microSD card
+
+## Usage (version 1.4+)
+```console
+Usage: FLASH <mos|vdp> <filename>
+```
 
 ### Target MOS version
 Any new MOS version can be flashed using this utility version. Precompiled binaries can be found at my [agon-binaries](https://github.com/envenomator/agon-binaries) repository.
+
+### Target VDP version
+Any new VDP version can be flashed using this utility version, as long as the required update receiver is present in the VDP. It looks like this might be planned for VDP 1.04 release version.
 
 ## Current MOS firmware 1.02
 This version needs at least MOS version 1.02, which supports loadable commands with arguments.
