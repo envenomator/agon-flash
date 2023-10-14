@@ -152,20 +152,23 @@ uint8_t update_vdp(char *filename) {
 	mos_fread(file, (char *)buffer, ESP32_MAGICLENGTH + ESP32_MAGICSTART);
 	if(!containsESP32Header(buffer)) {
 		printf("File does not contain valid ESP32 code\r\n");
+		mos_fclose(file);
 		return EXIT_INVALIDPARAMETER;
 	}
 	printf("\r\nValid ESP32 code\r\nCalculating CRC32");
 	crc32_initialize();
 	mos_flseek(file, 0);
 	while(1) {
-		size = mos_fread(file, (char *)BUFFER1, 16384);
+		size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
 		if(size == 0) break;
 		putch('.');
 		crc32((char *)BUFFER1, size);
 	}
 	crcresult = crc32_finalize();
-	if(!getResponse(VDP, crcresult)) return 0;
-
+	if(!getResponse(VDP, crcresult)) {
+		mos_fclose(file);
+		return 0;
+	}
 	// Do actual work here
 	mos_flseek(file, 0); // reset to zero, because we read part of the header already
 	printf("Updating VDP firmware\r\n");
@@ -187,35 +190,52 @@ uint8_t update_mos(char *filename) {
 	UINT24 counter,pagemax, lastpagebytes;
 	UINT24 addressto,addressfrom;
 	enum states state;
-	
-	printf("Agon MOS firmware upgrade utility v1.4\n\r\n\r");
-	
-	return 0; // DISABLE FOR NOW
+	uint24_t filesize;
 
+	putch(12); // cls
+	print_version();	
+	
 	file = mos_fopen(filename, fa_read);
 	if(!file)
 	{
 		printf("Error opening \"%s\"\n\r",filename);
 		return EXIT_FILENOTFOUND;
 	}
-	
-	printf("Loading file : %s\n\r",filename);
-	printf("File size    : %d byte(s)", size);
 
+	filesize = getFileSize(file);
+	if(filesize > FLASHSIZE) {
+		printf("Too large for 128KB embedded flash\r\n");
+		mos_fclose(file);
+		return EXIT_INVALIDPARAMETER;
+	}
+
+	mos_fread(file, (char *)BUFFER1, MOS_MAGICLENGTH);
+	if(!containsMosHeader((uint8_t *)BUFFER1)) {
+		printf("File does not contain valid MOS ez80 startup code\r\n");
+		mos_fclose(file);
+		return EXIT_INVALIDPARAMETER;
+	}
+	printf("\r\nValid ez80 code\r\nCalculating CRC32");
+
+	crc32_initialize();
+	mos_flseek(file, 0);
+	
 	// Read file to memory
-	while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0)
-	{
+	while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
+		crc32(ptr, got);
 		ptr += got;
-		size += got;
-		printf("\rFile size    : %d byte(s)", size);
+		putch('.');
 	}		
-	mos_fclose(file);	
-	printf("\rFile size    : %d byte(s)\n\r", size);
-	if(size > FLASHSIZE)
-	{
-		printf("Too large for 128KB flash - aborting\r\n");
+	crcresult = crc32_finalize();
+	if(!getResponse(MOS, crcresult)) {
+		mos_fclose(file);
 		return 0;
 	}
+
+	mos_fclose(file);
+	return 0;	
+	
+	printf("\rFile size    : %d byte(s)\n\r", size);
 
 	if(!containsMosHeader((uint8_t *)ptr)) {
 		printf("File does not contain valid MOS ez80 startup code\r\n");

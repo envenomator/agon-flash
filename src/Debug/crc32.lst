@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED14-Oct-23     13:12:47     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED14-Oct-23     13:39:35     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -25,114 +25,114 @@ PC     Object              I  Line    Source
                            A    21    
                            A    22    	SCOPE
                            A    23    
-0B0F99                     A    24    _crc32_initialize:
+0B0F48                     A    24    _crc32_initialize:
                            A    25        ; Initialise output to 0xFFFFFFFF
-0B0F99 D9                  A    26        EXX
-0B0F9A 3EFF                A    27        LD  A, FFh
-0B0F9C 32 03 20 0B         A    28        LD  (crc32result+3), A
-0B0FA0 32 02 20 0B         A    29        LD  (crc32result+2), A
-0B0FA4 32 01 20 0B         A    30        LD  (crc32result+1), A
-0B0FA8 32 00 20 0B         A    31        LD  (crc32result), A
-0B0FAC D9                  A    32        EXX
-0B0FAD C9                  A    33        RET
+0B0F48 D9                  A    26        EXX
+0B0F49 3EFF                A    27        LD  A, FFh
+0B0F4B 32 03 20 0B         A    28        LD  (crc32result+3), A
+0B0F4F 32 02 20 0B         A    29        LD  (crc32result+2), A
+0B0F53 32 01 20 0B         A    30        LD  (crc32result+1), A
+0B0F57 32 00 20 0B         A    31        LD  (crc32result), A
+0B0F5B D9                  A    32        EXX
+0B0F5C C9                  A    33        RET
                            A    34    
-0B0FAE                     A    35    _crc32_finalize:
-0B0FAE DDE5                A    36    	PUSH	IX
-0B0FB0 DD210000 00         A    37    	LD		IX,0
-0B0FB5 DD39                A    38    	ADD		IX,SP
+0B0F5D                     A    35    _crc32_finalize:
+0B0F5D DDE5                A    36    	PUSH	IX
+0B0F5F DD210000 00         A    37    	LD		IX,0
+0B0F64 DD39                A    38    	ADD		IX,SP
                            A    39    
-0B0FB7 3A 03 20 0B         A    40        LD  A, (crc32result+3)
-0B0FBB 2F                  A    41        CPL
-0B0FBC 32 03 20 0B         A    42        LD  (crc32result+3), A
-0B0FC0 3A 02 20 0B         A    43        LD  A, (crc32result+2)
-0B0FC4 2F                  A    44        CPL
-0B0FC5 32 02 20 0B         A    45        LD  (crc32result+2), A
-0B0FC9 3A 01 20 0B         A    46        LD  A, (crc32result+1)
-0B0FCD 2F                  A    47        CPL
-0B0FCE 32 01 20 0B         A    48        LD  (crc32result+1), A
-0B0FD2 3A 00 20 0B         A    49        LD  A, (crc32result)
-0B0FD6 2F                  A    50        CPL
-0B0FD7 32 00 20 0B         A    51        LD  (crc32result), A
+0B0F66 3A 03 20 0B         A    40        LD  A, (crc32result+3)
+0B0F6A 2F                  A    41        CPL
+0B0F6B 32 03 20 0B         A    42        LD  (crc32result+3), A
+0B0F6F 3A 02 20 0B         A    43        LD  A, (crc32result+2)
+0B0F73 2F                  A    44        CPL
+0B0F74 32 02 20 0B         A    45        LD  (crc32result+2), A
+0B0F78 3A 01 20 0B         A    46        LD  A, (crc32result+1)
+0B0F7C 2F                  A    47        CPL
+0B0F7D 32 01 20 0B         A    48        LD  (crc32result+1), A
+0B0F81 3A 00 20 0B         A    49        LD  A, (crc32result)
+0B0F85 2F                  A    50        CPL
+0B0F86 32 00 20 0B         A    51        LD  (crc32result), A
                            A    52    
-0B0FDB 3A 03 20 0B         A    53    	LD	A, (crc32result+3)
-0B0FDF 11000000            A    54    	LD	DE, 0
-0B0FE3 5F                  A    55    	LD	E, A
-0B0FE4 2A 00 20 0B         A    56    	LD	HL, (crc32result)
-0B0FE8 DDE1                A    57    	POP	IX
-0B0FEA C9                  A    58    	RET
+0B0F8A 3A 03 20 0B         A    53    	LD	A, (crc32result+3)
+0B0F8E 11000000            A    54    	LD	DE, 0
+0B0F92 5F                  A    55    	LD	E, A
+0B0F93 2A 00 20 0B         A    56    	LD	HL, (crc32result)
+0B0F97 DDE1                A    57    	POP	IX
+0B0F99 C9                  A    58    	RET
                            A    59    
-0B0FEB                     A    60    _crc32:
+0B0F9A                     A    60    _crc32:
                            A    61    	; Function prologue
-0B0FEB DDE5                A    62    	PUSH	IX
-0B0FED DD210000 00         A    63    	LD		IX,0
-0B0FF2 DD39                A    64    	ADD		IX,SP
+0B0F9A DDE5                A    62    	PUSH	IX
+0B0F9C DD210000 00         A    63    	LD		IX,0
+0B0FA1 DD39                A    64    	ADD		IX,SP
                            A    65    
-0B0FF4 DD1706              A    66    	LD		DE, (IX+6)
-0B0FF7 DD2709              A    67    	LD		HL, (IX+9)
+0B0FA3 DD1706              A    66    	LD		DE, (IX+6)
+0B0FA6 DD2709              A    67    	LD		HL, (IX+9)
                            A    68    ; expects DE to point to buffer to check
                            A    69    ; expects HL to contain the bytecount
-0B0FFA 01010000            A    70        LD		BC,1
+0B0FA9 01010000            A    70        LD		BC,1
                            A    71    
-0B0FFE D9                  A    72        EXX
-0B0FFF 3A 03 20 0B         A    73        LD A, (crc32result+3)
-0B1003 57                  A    74        LD D, A
-0B1004 3A 02 20 0B         A    75        LD A, (crc32result+2)
-0B1008 5F                  A    76        LD E, A
-0B1009 3A 01 20 0B         A    77        LD A, (crc32result+1)
-0B100D 47                  A    78        LD B, A
-0B100E 3A 00 20 0B         A    79        LD A, (crc32result)
-0B1012 4F                  A    80        LD C, A
-0B1013 D9                  A    81        EXX
+0B0FAD D9                  A    72        EXX
+0B0FAE 3A 03 20 0B         A    73        LD A, (crc32result+3)
+0B0FB2 57                  A    74        LD D, A
+0B0FB3 3A 02 20 0B         A    75        LD A, (crc32result+2)
+0B0FB7 5F                  A    76        LD E, A
+0B0FB8 3A 01 20 0B         A    77        LD A, (crc32result+1)
+0B0FBC 47                  A    78        LD B, A
+0B0FBD 3A 00 20 0B         A    79        LD A, (crc32result)
+0B0FC1 4F                  A    80        LD C, A
+0B0FC2 D9                  A    81        EXX
                            A    82    
-0B1014                     A    83    $$:	
-0B1014 1A                  A    84        LD	A,(DE)
-0B1015 13                  A    85        INC	DE
+0B0FC3                     A    83    $$:	
+0B0FC3 1A                  A    84        LD	A,(DE)
+0B0FC4 13                  A    85        INC	DE
                            A    86        
                            A    87        ; Calculate offset into lookup table
-0B1016 D9                  A    88        EXX
-0B1017 A9                  A    89        XOR	C
-0B1018 21 00 C7 02         A    90        LD	HL,crc32_lookup_table >> 2
-0B101C 6F                  A    91        LD	L,A
-0B101D 29                  A    92        ADD	HL,HL
-0B101E 29                  A    93        ADD	HL,HL
+0B0FC5 D9                  A    88        EXX
+0B0FC6 A9                  A    89        XOR	C
+0B0FC7 21 00 C7 02         A    90        LD	HL,crc32_lookup_table >> 2
+0B0FCB 6F                  A    91        LD	L,A
+0B0FCC 29                  A    92        ADD	HL,HL
+0B0FCD 29                  A    93        ADD	HL,HL
                            A    94    
-0B101F 78                  A    95        LD	A,B
-0B1020 AE                  A    96        XOR	(HL)
-0B1021 23                  A    97        INC	HL
-0B1022 4F                  A    98        LD	C,A
+0B0FCE 78                  A    95        LD	A,B
+0B0FCF AE                  A    96        XOR	(HL)
+0B0FD0 23                  A    97        INC	HL
+0B0FD1 4F                  A    98        LD	C,A
                            A    99    
-0B1023 7B                  A   100        LD	A,E
-0B1024 AE                  A   101        XOR	(HL)
-0B1025 23                  A   102        INC	HL
-0B1026 47                  A   103        LD	B,A
+0B0FD2 7B                  A   100        LD	A,E
+0B0FD3 AE                  A   101        XOR	(HL)
+0B0FD4 23                  A   102        INC	HL
+0B0FD5 47                  A   103        LD	B,A
                            A   104    
-0B1027 7A                  A   105        LD	A,D
-0B1028 AE                  A   106        XOR	(HL)
-0B1029 23                  A   107        INC	HL
-0B102A 5F                  A   108        LD	E,A
+0B0FD6 7A                  A   105        LD	A,D
+0B0FD7 AE                  A   106        XOR	(HL)
+0B0FD8 23                  A   107        INC	HL
+0B0FD9 5F                  A   108        LD	E,A
                            A   109    
-0B102B 56                  A   110        LD	D,(HL)
-0B102C D9                  A   111        EXX
+0B0FDA 56                  A   110        LD	D,(HL)
+0B0FDB D9                  A   111        EXX
                            A   112    
                            A   113        ; Decrement count and loop if not zero
-0B102D B7                  A   114        OR	A,A
-0B102E ED42                A   115        SBC	HL,BC
-0B1030 20 E2               A   116        JR	NZ,$B
+0B0FDC B7                  A   114        OR	A,A
+0B0FDD ED42                A   115        SBC	HL,BC
+0B0FDF 20 E2               A   116        JR	NZ,$B
                            A   117    
-0B1032 D9                  A   118        EXX
-0B1033 7A                  A   119        LD  A, D
-0B1034 32 03 20 0B         A   120        LD  (crc32result+3), A
-0B1038 7B                  A   121        LD  A, E
-0B1039 32 02 20 0B         A   122        LD  (crc32result+2), A
-0B103D 78                  A   123        LD  A, B
-0B103E 32 01 20 0B         A   124        LD  (crc32result+1), A
-0B1042 79                  A   125        LD  A, C
-0B1043 32 00 20 0B         A   126        LD  (crc32result), A
-0B1047 D9                  A   127        EXX
+0B0FE1 D9                  A   118        EXX
+0B0FE2 7A                  A   119        LD  A, D
+0B0FE3 32 03 20 0B         A   120        LD  (crc32result+3), A
+0B0FE7 7B                  A   121        LD  A, E
+0B0FE8 32 02 20 0B         A   122        LD  (crc32result+2), A
+0B0FEC 78                  A   123        LD  A, B
+0B0FED 32 01 20 0B         A   124        LD  (crc32result+1), A
+0B0FF1 79                  A   125        LD  A, C
+0B0FF2 32 00 20 0B         A   126        LD  (crc32result), A
+0B0FF6 D9                  A   127        EXX
                            A   128    
                            A   129    	; Function epilogue
-0B1048 DDE1                A   130    	POP	IX
-0B104A C9                  A   131    	RET
+0B0FF7 DDE1                A   130    	POP	IX
+0B0FF9 C9                  A   131    	RET
                            A   132    
                            A   133    		SEGMENT	DATA
                            A   134    
