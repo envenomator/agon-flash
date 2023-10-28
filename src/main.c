@@ -63,7 +63,8 @@ bool vdp_ota_present(void) {
 	uint16_t n;
 
 	putch(23);
-	putch(29);
+	putch(0);
+	putch(0xA1);
 	putch(0);
 	printf("unlock");
 
@@ -98,7 +99,7 @@ bool containsESP32Header(uint8_t *filestart) {
 }
 
 void print_version(void) {
-	printf("Agon firmware upgrade utility v1.4\n\r\n\r");
+	printf("Agon firmware upgrade utility v1.5\n\r\n\r");
 }
 
 void usage(void) {

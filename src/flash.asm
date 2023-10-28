@@ -86,7 +86,9 @@ _startVDPupdate:
 sendstartsequence:
     LD  A, 23
     RST.LIL 10h
-    LD  A, 29
+    LD  A, 0
+    RST.LIL 10h
+    LD  A, A1h
     RST.LIL 10h
     LD  A, 1
     RST.LIL 10h
