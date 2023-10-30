@@ -10,7 +10,7 @@ Please follow the guide for your *current* MOS version:
 This version needs at least MOS version 1.03, which supports several enhancements to the MOS file API.
 ### Installation
 1. Make sure to create a 'mos' directory on the microSD card
-2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.03%20or%20higher/flash.bin) from in the 'mos' directory
+2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.03%20or%20higher/flash.bin) in the 'mos' directory
 3. Place the required (MOS or VDP) firmware file in the root directory of the microSD card
 
 ## Usage (version 1.4+)
