@@ -139,11 +139,8 @@ bool getResponse(void) {
 
 uint8_t update_vdp(char *filename) {
 	uint8_t file;
-	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
 	uint24_t filesize;
-	//uint32_t crcresult;
 	uint24_t size, n;
-	uint8_t response;
 
 	putch(12); // cls
 	print_version();	
@@ -154,197 +151,92 @@ uint8_t update_vdp(char *filename) {
 		beep(5);
 		return 0;
 	}
-	//vdp_ota_present();
 
 	file = mos_fopen(filename, fa_read);
-	if(!file) {
-		printf("Error opening \"%s\"\n\r",filename);
-		return EXIT_FILENOTFOUND;
-	}
-
-	mos_fread(file, (char *)buffer, ESP32_MAGICLENGTH + ESP32_MAGICSTART);
-	if(!containsESP32Header(buffer)) {
-		printf("File does not contain valid ESP32 code\r\n");
-		mos_fclose(file);
-		return EXIT_INVALIDPARAMETER;
-	}
-	//printf("\r\nValid ESP32 code\r\nCalculating CRC32");
-	printf("\r\nValid ESP32 code\r\n");
-	//crc32_initialize();
-	//mos_flseek(file, 0);
-	//while(1) {
-	//	size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
-	//	if(size == 0) break;
-	//	putch('.');
-		//crc32((char *)BUFFER1, size);
-	//}
-	//crcresult = crc32_finalize();
-
 	// Do actual work here
-	mos_flseek(file, 0); // reset to zero, because we read part of the header already
 	printf("Updating VDP firmware\r\n");
 	filesize = getFileSize(file);	
 	startVDPupdate(file, filesize);
 	mos_fclose(file);
-	//reset();
-	return 0; // will never return, but let's give the compiler a break
+	return 0;
 }
 
 uint8_t update_mos(char *filename) {
-	uint32_t crcexpected,crcresult;
-	uint24_t size = 0;
 	uint24_t got;
 	uint8_t file;
 	char* ptr = (char*)BUFFER1;
 	uint8_t value;
 	uint24_t counter,pagemax, lastpagebytes;
 	uint24_t addressto,addressfrom;
-	enum states state;
 	uint24_t filesize;
 
 	putch(12); // cls
 	print_version();	
 	
+	printf("\r\nReading MOS firmware");
 	file = mos_fopen(filename, fa_read);
-	if(!file)
-	{
-		printf("Error opening \"%s\"\n\r",filename);
-		return EXIT_FILENOTFOUND;
-	}
-
-	mos_fread(file, (char *)BUFFER1, MOS_MAGICLENGTH);
-	if(!containsMosHeader((uint8_t *)BUFFER1)) {
-		printf("File does not contain valid MOS ez80 startup code\r\n");
-		mos_fclose(file);
-		return EXIT_INVALIDPARAMETER;
-	}
-
 	filesize = getFileSize(file);
-	if(filesize > FLASHSIZE) {
-		printf("File too large for 128KB embedded flash\r\n");
-		mos_fclose(file);
-		return EXIT_INVALIDPARAMETER;
-	}
-
-	printf("\r\nValid ez80 code\r\nCalculating CRC32");
-
-	crc32_initialize();
-	mos_flseek(file, 0);
-	
 	// Read file to memory
 	while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
 		crc32(ptr, got);
 		ptr += got;
 		putch('.');
-	}		
-	crcresult = crc32_finalize();
+	}	
+	printf("\r\n");	
 	// Actual work here	
 	di();								// prohibit any access to the old MOS firmware
 
 	// start address in flash
 	addressto = FLASHSTART;
 	addressfrom = BUFFER1;
+
+	// Unprotect and erase flash
+	printf("Erasing flash... ");
+	enableFlashKeyRegister();	// unlock Flash Key Register, so we can write to the Flash Write/Erase protection registers
+	FLASH_PROT = 0;				// disable protection on all 8x16KB blocks in the flash
+	enableFlashKeyRegister();	// will need to unlock again after previous write to the flash protection register
+	FLASH_FDIV = 0x5F;			// Ceiling(18Mhz * 5,1us) = 95, or 0x5F
 	
-	crcexpected = crcresult;
-	state = firmware;
-	size = filesize;	
-	while(1)
+	for(counter = 0; counter < FLASHPAGES; counter++)
 	{
-		switch(state)
-		{
-			case firmware:
-				// start address in flash
-				addressfrom = BUFFER1;
-				crc32_initialize();
-				break;
-			case retry:
-				// start address in flash
-				addressfrom = BUFFER1;
-				crc32_initialize();
-				break;
-			default:
-				// RESET SYSTEM
-				printf("\r\n");
-				printf("Done\r\n");
-				//printf("Press reset button");
-				//while(1); // force cold boot for the user, so VDP will reset optimally
-				return 0;
-		}
+		FLASH_PAGE = counter;
+		FLASH_PGCTL = 0x02;			// Page erase bit enable, start erase
 
-		// Unprotect and erase flash
-		printf("Erasing flash... ");
-		enableFlashKeyRegister();	// unlock Flash Key Register, so we can write to the Flash Write/Erase protection registers
-		FLASH_PROT = 0;				// disable protection on all 8x16KB blocks in the flash
-		enableFlashKeyRegister();	// will need to unlock again after previous write to the flash protection register
-		FLASH_FDIV = 0x5F;			// Ceiling(18Mhz * 5,1us) = 95, or 0x5F
-		
-		for(counter = 0; counter < FLASHPAGES; counter++)
+		do
 		{
-			FLASH_PAGE = counter;
-			FLASH_PGCTL = 0x02;			// Page erase bit enable, start erase
-
-			do
-			{
-				value = FLASH_PGCTL;
-			}
-			while(value & 0x02);// wait for completion of erase			
+			value = FLASH_PGCTL;
 		}
+		while(value & 0x02);// wait for completion of erase			
+	}
+	
+	printf("\r\nWriting new firmware...\r\n");
+	
+	// determine number of pages to write
+	pagemax = filesize/PAGESIZE;
+	if(filesize%PAGESIZE) // last page has less than PAGESIZE bytes
+	{
+		pagemax += 1;
+		lastpagebytes = filesize%PAGESIZE;			
+	}
+	else lastpagebytes = PAGESIZE; // normal last page
+	
+	// write out each page to flash
+	for(counter = 0; counter < pagemax; counter++)
+	{
+		printf("\rWriting flash page %03d/%03d", counter+1, pagemax);
 		
-		printf("\r\nWriting new firmware...\r\n");
-		
-		// determine number of pages to write
-		pagemax = size/PAGESIZE;
-		if(size%PAGESIZE) // last page has less than PAGESIZE bytes
-		{
-			pagemax += 1;
-			lastpagebytes = size%PAGESIZE;			
-		}
-		else lastpagebytes = PAGESIZE; // normal last page
-		
-		// write out each page to flash
-		for(counter = 0; counter < pagemax; counter++)
-		{
-			printf("\rWriting flash page %03d/%03d", counter+1, pagemax);
-			
-			if(counter == (pagemax - 1)) // last page to write - might need to write less than PAGESIZE
-				fastmemcpy(addressto,addressfrom,lastpagebytes);				
-				//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, lastpagebytes);
-			else 
-				fastmemcpy(addressto,addressfrom,PAGESIZE);
-				//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, PAGESIZE);
-		
-			addressto += PAGESIZE;
-			addressfrom += PAGESIZE;
-		}
-		lockFlashKeyRegister();	// lock the flash before WARM reset
-		printf("\r\n");
-		
-		//Verify correct CRC in flash
-		printf("Verifying flash checksum... ");
-		crc32((char*)FLASHSTART, size);
-		crcresult = crc32_finalize();
-
-		if(crcresult == crcexpected)
-		{
-			printf("- OK\r\n");
-			state = systemreset;
-		}
-		else // CRC Failure - next action depends on current state
-		{	 // User interaction not possible without MOS handling interrupts
-			switch(state)
-			{
-				case firmware:
-					printf("\r\nError occured during flash write\r\nRetry...\r\n");
-					state = retry;
-					break;
-				case retry:
-					printf("\r\nRetry failed\r\n");
-					while(1); // no more options unfortunately, system needs a firmware programmer
-				default:
-					state = retry;
-			}
-		}
-	}		
+		if(counter == (pagemax - 1)) // last page to write - might need to write less than PAGESIZE
+			fastmemcpy(addressto,addressfrom,lastpagebytes);				
+			//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, lastpagebytes);
+		else 
+			fastmemcpy(addressto,addressfrom,PAGESIZE);
+			//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, PAGESIZE);
+	
+		addressto += PAGESIZE;
+		addressfrom += PAGESIZE;
+	}
+	lockFlashKeyRegister();	// lock the flash before WARM reset
+	printf("\r\n\r\nDone\r\n");
 	return 0;
 }
 
@@ -521,6 +413,7 @@ void showCRC32(void) {
 
 int main(int argc, char * argv[]) {	
 	sysvar_t *sysvars;
+	sysvars = getsysvars();
 
 	// All checks
 	if(argc == 1) {
@@ -536,9 +429,11 @@ int main(int argc, char * argv[]) {
 		return EXIT_INVALIDPARAMETER;
 	}
 
-	putch(12); // cls
+	// Banner
+	putch(12);
 	print_version();
 
+	// Skip CRC32 and user input when 'silent' is requested
 	if(!silent) {
 		showCRC32();
 		if(!getResponse()) return 0;
@@ -546,19 +441,18 @@ int main(int argc, char * argv[]) {
 
 	printf("Flashing firmware...\r\n");
 	delayms(750);
-	return 0;
 
-	sysvars = getsysvars();
-	while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
-	beep(1);
-	sysvars->scrheight = 0;
-
-	update_vdp("firmware.bin");
-	echoVDP(1);
-	while(sysvars->scrheight == 0);
-	beep(2);
-	update_mos("MOS.bin");
-	beep(3);
+	if(flashvdp) {
+		while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
+		//beep(1);
+		sysvars->scrheight = 0;
+		if(flashvdp) update_vdp(vdpfilename);
+		echoVDP(1);
+		while(sysvars->scrheight == 0);
+	}
+	//beep(2);
+	if(flashmos) update_mos(mosfilename);
+	//beep(3);
 	printf("Press reset button");
 	while(1);
 }
