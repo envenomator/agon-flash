@@ -445,6 +445,37 @@ bool filesExist(void) {
 	return filesexist;
 }
 
+bool firmwareContentOK(void) {
+	uint8_t file;
+	uint24_t filesize;
+	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
+	bool validfirmware = true;
+
+	if(flashmos) {
+		file = mos_fopen(mosfilename, fa_read);
+		mos_fread(file, (char *)BUFFER1, MOS_MAGICLENGTH);
+		if(!containsMosHeader((uint8_t *)BUFFER1)) {
+			printf("\"%s\" does not contain valid MOS ez80 startup code\r\n", mosfilename);
+			validfirmware = false;
+		}
+		filesize = getFileSize(file);
+		if(filesize > FLASHSIZE) {
+			printf("\"%s\" too large for 128KB embedded flash\r\n", mosfilename);
+			validfirmware = false;
+		}
+		mos_fclose(file);
+	}
+	if(flashvdp) {
+		file = mos_fopen(vdpfilename, fa_read);
+		mos_fread(file, (char *)buffer, ESP32_MAGICLENGTH + ESP32_MAGICSTART);
+		if(!containsESP32Header(buffer)) {
+			printf("\"%s\" does not contain valid ESP32 code\r\n", vdpfilename);
+			validfirmware = false;
+		}
+		mos_fclose(file);
+	}
+	return validfirmware;
+}
 void showCRC32(void) {
 	uint8_t file;
 	uint24_t got,size;
@@ -491,6 +522,7 @@ void showCRC32(void) {
 int main(int argc, char * argv[]) {	
 	sysvar_t *sysvars;
 
+	// All checks
 	if(argc == 1) {
 		usage();
 		return 0;
@@ -500,25 +532,21 @@ int main(int argc, char * argv[]) {
 		return EXIT_INVALIDPARAMETER;
 	}
 	if(!filesExist()) return EXIT_FILENOTFOUND;
+	if(!firmwareContentOK()) {
+		return EXIT_INVALIDPARAMETER;
+	}
 
 	putch(12); // cls
 	print_version();
-	showCRC32();
 
 	if(!silent) {
+		showCRC32();
 		if(!getResponse()) return 0;
 	}
 
-	printf("Flashing firmware...<dummy>...\r\n");
+	printf("Flashing firmware...\r\n");
+	delayms(750);
 	return 0;
-	printf("Result:\r\n");
-	printf("Flash MOS: %d\r\n", flashmos);
-	if(flashmos) printf("filename \"%s\"\r\n", mosfilename);
-	printf("Flash VDP: %d\r\n", flashvdp);
-	if(flashvdp) printf("filename \"%s\"\r\n", vdpfilename);
-	return 0;
-	//
-
 
 	sysvars = getsysvars();
 	while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
