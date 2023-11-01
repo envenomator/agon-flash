@@ -2185,7 +2185,7 @@ L_62:
 .LINE 238
 
 	CALL	_lockFlashKeyRegister
-;  239		printf("\r\n\r\nDone\r\n");
+;  239		printf("\r\n\r\nDone\r\n\r\n");
 .LINE 239
 
 	LD	BC,___print_uputch
@@ -2261,7 +2261,7 @@ L__43:
 L__46:
 	DB	13,10,13,10
 	DB	"Done"
-	DB	13,10,0
+	DB	13,10,13,10,0
 	SEGMENT CODE
 ;  242	
 ;  243	void echoVDP(uint8_t value) {
@@ -3981,11 +3981,21 @@ _main:
 
 .ENDEF
 
-.DEFINE "sysvars"
+.DEFINE "n"
 
 .CLASS 65
 
 .VALUE -3
+
+.TYPE 4
+
+.ENDEF
+
+.DEFINE "sysvars"
+
+.CLASS 65
+
+.VALUE -6
 
 .TAG "NONAME3"
 
@@ -3997,38 +4007,40 @@ _main:
 	LD	IX,0
 	ADD	IX,SP
 	PUSH	BC
+	PUSH	BC
 ;  415		sysvar_t *sysvars;
-;  416		sysvars = getsysvars();
-.LINE 416
+;  416		int n;
+;  417		sysvars = getsysvars();
+.LINE 417
 
 	CALL	_getsysvars
-	LD	(IX+%FFFFFFFD),HL
-;  417	
-;  418		// All checks
-;  419		if(argc == 1) {
-.LINE 419
+	LD	(IX+%FFFFFFFA),HL
+;  418	
+;  419		// All checks
+;  420		if(argc == 1) {
+.LINE 420
 
 	LD	BC,1
 	LD	HL,(IX+%6)
 	OR	A,A
 	SBC	HL,BC
 	JR	NZ,L_150
-;  420			usage();
-.LINE 420
+;  421			usage();
+.LINE 421
 
 	CALL	_usage
-;  421			return 0;
-.LINE 421
+;  422			return 0;
+.LINE 422
 
 	OR	A,A
 	SBC	HL,HL
-	JR	L_172
-;  422		}
+	JR	L_175
+;  423		}
 L_150:
-.LINE 422
-
-;  423		if(!parseCommands(argc, argv)) {
 .LINE 423
+
+;  424		if(!parseCommands(argc, argv)) {
+.LINE 424
 
 	LD	BC,(IX+%9)
 	PUSH	BC
@@ -4039,180 +4051,219 @@ L_150:
 	POP	BC
 	OR	A,A
 	JR	NZ,L_152
-;  424			usage();
-.LINE 424
-
-	CALL	_usage
-;  425			return EXIT_INVALIDPARAMETER;
+;  425			usage();
 .LINE 425
 
-	LD	HL,19
-	JR	L_172
-;  426		}
-L_152:
+	CALL	_usage
+;  426			return EXIT_INVALIDPARAMETER;
 .LINE 426
 
-;  427		if(!filesExist()) return EXIT_FILENOTFOUND;
+	LD	HL,19
+	JR	L_175
+;  427		}
+L_152:
 .LINE 427
+
+;  428		if(!filesExist()) return EXIT_FILENOTFOUND;
+.LINE 428
 
 	CALL	_filesExist
 	OR	A,A
 	JR	NZ,L_154
 	LD	HL,4
-	JR	L_172
+	JR	L_175
 L_154:
-;  428		if(!firmwareContentOK()) {
-.LINE 428
+;  429		if(!firmwareContentOK()) {
+.LINE 429
 
 	CALL	_firmwareContentOK
 	OR	A,A
-	JR	NZ,L_155
-;  429			return EXIT_INVALIDPARAMETER;
-.LINE 429
-
-	LD	HL,19
-	JR	L_172
-;  430		}
-L_155:
+	JR	NZ,L_157
+;  430			return EXIT_INVALIDPARAMETER;
 .LINE 430
 
-;  431	
-;  432		// Banner
-;  433		putch(12);
-.LINE 433
+	LD	HL,19
+	JR	L_175
+;  431		}
+L_157:
+.LINE 431
+
+;  432	
+;  433		// Skip CRC32 and user input when 'silent' is requested
+;  434		if(!silent) {
+.LINE 434
+
+	LD	A,(_silent)
+	OR	A,A
+	JR	NZ,L_166
+;  435			putch(12);
+.LINE 435
 
 	LD	BC,12
 	PUSH	BC
 	CALL	_putch
 	POP	BC
-;  434		print_version();
-.LINE 434
+;  436			print_version();
+.LINE 436
 
 	CALL	_print_version
-;  435	
-;  436		// Skip CRC32 and user input when 'silent' is requested
-;  437		if(!silent) {
+;  437			showCRC32();
 .LINE 437
 
-	LD	A,(_silent)
-	OR	A,A
-	JR	NZ,L_158
-;  438			showCRC32();
-.LINE 438
-
 	CALL	_showCRC32
-;  439			if(!getResponse()) return 0;
-.LINE 439
+;  438			if(!getResponse()) return 0;
+.LINE 438
 
 	CALL	_getResponse
 	OR	A,A
-	JR	NZ,L_158
+	JR	NZ,L_166
 	OR	A,A
 	SBC	HL,HL
-	JR	L_172
-;  440		}
-L_158:
-.LINE 440
+	JR	L_175
+;  439		}
+L_166:
+.LINE 439
 
-;  441	
-;  442		printf("Flashing firmware...\r\n");
+;  440	
+;  441		if(flashvdp) {
+.LINE 441
+
+	LD	A,(_flashvdp)
+	OR	A,A
+	JR	Z,L_173
+;  442			while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
+L_159:
 .LINE 442
 
-	LD	BC,___print_uputch
-	LD	(___print_xputch),BC
-	LD	BC,L__114
-	PUSH	BC
-	CALL	___print_sendstring
-	POP	BC
-;  443		delayms(750);
-.LINE 443
+	LD	IY,(IX+%FFFFFFFA)
+	LD	HL,(IY+%11)
+	CALL	__scmpzero
+	JR	Z,L_159
+;  443			//beep(1);
+;  444			sysvars->scrheight = 0;
+.LINE 444
 
-	LD	BC,750
-	PUSH	BC
-	CALL	_delayms
-	POP	BC
-;  444	
-;  445		if(flashvdp) {
+	LD	IY,(IX+%FFFFFFFA)
+	LD	(IY+%11),%0
+	LD	(IY+%12),%0
+;  445			if(flashvdp) update_vdp(vdpfilename);
 .LINE 445
 
 	LD	A,(_flashvdp)
 	OR	A,A
-	JR	Z,L_168
-;  446			while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
-L_160:
-.LINE 446
-
-	LD	IY,(IX+%FFFFFFFD)
-	LD	HL,(IY+%11)
-	CALL	__scmpzero
-	JR	Z,L_160
-;  447			//beep(1);
-;  448			sysvars->scrheight = 0;
-.LINE 448
-
-	LD	IY,(IX+%FFFFFFFD)
-	LD	(IY+%11),%0
-	LD	(IY+%12),%0
-;  449			if(flashvdp) update_vdp(vdpfilename);
-.LINE 449
-
-	LD	A,(_flashvdp)
-	OR	A,A
-	JR	Z,L_163
+	JR	Z,L_162
 	LD	BC,_vdpfilename
 	PUSH	BC
 	CALL	_update_vdp
 	POP	BC
-L_163:
-;  450			echoVDP(1);
-.LINE 450
+L_162:
+;  446			echoVDP(1);
+.LINE 446
 
 	LD	BC,1
 	PUSH	BC
 	CALL	_echoVDP
 	POP	BC
-;  451			while(sysvars->scrheight == 0);
-L_165:
-.LINE 451
+;  447			while(sysvars->scrheight == 0);
+L_164:
+.LINE 447
 
-	LD	IY,(IX+%FFFFFFFD)
+	LD	IY,(IX+%FFFFFFFA)
 	LD	HL,(IY+%11)
 	CALL	__scmpzero
-	JR	Z,L_165
-;  452		}
-L_168:
-.LINE 452
+	JR	Z,L_164
+;  448		}
+L_173:
+.LINE 448
 
-;  453		//beep(2);
-;  454		if(flashmos) update_mos(mosfilename);
-.LINE 454
+;  449		if(flashmos) {
+.LINE 449
 
 	LD	A,(_flashmos)
 	OR	A,A
-	JR	Z,L_169
+	JR	Z,L_174
+;  450			//beep(2);
+;  451			update_mos(mosfilename);
+.LINE 451
+
 	LD	BC,_mosfilename
 	PUSH	BC
 	CALL	_update_mos
 	POP	BC
-L_169:
-;  455		//beep(3);
-;  456		printf("Press reset button");
-.LINE 456
+;  452			//beep(3);
+;  453			//printf("Press reset button");
+;  454			//while(1);
+;  455			printf("System reset in ");
+.LINE 455
 
 	LD	BC,___print_uputch
 	LD	(___print_xputch),BC
+	LD	BC,L__119
+	PUSH	BC
+	CALL	___print_sendstring
+	POP	BC
+;  456			for(n = 3; n > 0; n--) {
+.LINE 456
+
+	LD	BC,3
+	LD	(IX+%FFFFFFFD),BC
+	JR	L_170
+L_168:
+;  457				printf("%d...", n);
+.LINE 457
+
+	LD	BC,___print_uputch
+	LD	(___print_xputch),BC
+	LD	BC,(IX+%FFFFFFFD)
+	CALL	__itol
+	LD	DE,BC
+	LD	C,A
+	LD	B,%0
+	PUSH	BC
+	PUSH	DE
+	CALL	__u_itoa
+	POP	BC
+	POP	BC
 	LD	BC,L__120
 	PUSH	BC
 	CALL	___print_sendstring
 	POP	BC
-;  457		while(1);
-L_171:
-.LINE 457
-
-	JR	L_171
-;  458	}
-L_172:
+;  458				delayms(1000);
 .LINE 458
+
+	LD	BC,1000
+	PUSH	BC
+	CALL	_delayms
+	POP	BC
+	LD	BC,(IX+%FFFFFFFD)
+	DEC	BC
+	LD	(IX+%FFFFFFFD),BC
+;  459			}
+L_170:
+.LINE 459
+
+	LD	BC,(IX+%FFFFFFFD)
+	OR	A,A
+	SBC	HL,HL
+	OR	A,A
+	SBC	HL,BC
+	JP	M,L_168
+;  460			reset();
+.LINE 460
+
+	CALL	_reset
+;  461		}
+L_174:
+.LINE 461
+
+;  462		return 0;
+.LINE 462
+
+	OR	A,A
+	SBC	HL,HL
+;  463	}
+L_175:
+.LINE 463
 
 	LD	SP,IX
 	POP	IX
@@ -4221,33 +4272,36 @@ L_172:
 
 ;**************************** _main ***************************
 ;Name                         Addr/Register   Size   Type
+;_reset                              IMPORT  -----   function
+;_delayms                            IMPORT  -----   function
+;__u_itoa                            IMPORT  -----   function
+;___print_sendstring                 IMPORT  -----   function
+;___print_xputch                     IMPORT      3   variable
+;___print_uputch                     IMPORT  -----   function
 ;_mosfilename                        STATIC    256   variable
 ;_flashmos                           STATIC      1   variable
 ;_vdpfilename                        STATIC    256   variable
 ;_flashvdp                           STATIC      1   variable
-;_delayms                            IMPORT  -----   function
-;___print_sendstring                 IMPORT  -----   function
-;___print_xputch                     IMPORT      3   variable
-;___print_uputch                     IMPORT  -----   function
-;_silent                             STATIC      1   variable
 ;_putch                              IMPORT  -----   function
+;_silent                             STATIC      1   variable
 ;_getsysvars                         IMPORT  -----   function
-;sysvars                               IX-3      3   variable
+;sysvars                               IX-6      3   variable
+;n                                     IX-3      3   variable
 ;argv                                  IX+9      3   parameter
 ;argc                                  IX+6      3   parameter
 
 
-; Stack Frame Size: 15 (bytes)
+; Stack Frame Size: 18 (bytes)
 ;       Spill Code: 0 (instruction)
 
 
-.ENDFUNC "main",458,"_main"
+.ENDFUNC "main",463,"_main"
 	SEGMENT STRSECT
-L__114:
-	DB	"Flashing firmware..."
-	DB	13,10,0
+L__119:
+	DB	"System reset in "
+	DB	0
 L__120:
-	DB	"Press reset button"
+	DB	"..."
 	DB	0
 	XREF _memcmp:ROM
 	XREF _strcpy:ROM
@@ -4257,6 +4311,7 @@ L__120:
 	XREF _crc32:ROM
 	XREF _delayms:ROM
 	XREF _startVDPupdate:ROM
+	XREF _reset:ROM
 	XREF _fastmemcpy:ROM
 	XREF _lockFlashKeyRegister:ROM
 	XREF _enableFlashKeyRegister:ROM
@@ -4274,6 +4329,7 @@ L__120:
 	XREF ___print_fmt:ROM
 	XREF __iand:ROM
 	XREF __stoiu:ROM
+	XREF __itol:ROM
 	XREF __scmpzero:ROM
 	XREF __icmpzero:ROM
 	XREF __seqcaseD:ROM

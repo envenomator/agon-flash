@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     22:02:20     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     22:19:39     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -416,8 +416,8 @@ PC     Object              I  Line    Source
                            A   412    .ENDEF
                            A   413    .ENDREC "NONAME6"
                            A   414    	SEGMENT BSS
-0B2745                     A   415    _errno:
-0B2745                     A   416    	DS	3
+0B2732                     A   415    _errno:
+0B2732                     A   416    	DS	3
                            A   417    .DEFINE "errno"
                            A   418    .ALIAS "_errno"
                            A   419    .CLASS 83
@@ -510,7 +510,7 @@ PC     Object              I  Line    Source
 0B00F1 E640                A   506    	AND	A,%40
 0B00F3 B7ED62              A   507    	UEXT	HL
 0B00F6 6F                  A   508    	LD	L,A
-0B00F7 CD F2 18 0B         A   509    	CALL	__icmpzero
+0B00F7 CD 29 19 0B         A   509    	CALL	__icmpzero
 0B00FB 28 F1               A   510    	JR	Z,L_1
                            A   511    ;   51		UART0_THR = c;
                            A   512    .LINE 51
@@ -586,7 +586,7 @@ PC     Object              I  Line    Source
                            A   582    
 0B0120 01FA0000            A   583    	LD	BC,250
 0B0124 C5                  A   584    	PUSH	BC
-0B0125 CD 61 10 0B         A   585    	CALL	_delayms
+0B0125 CD 98 10 0B         A   585    	CALL	_delayms
 0B0129 C1                  A   586    	POP	BC
                            A   587    ;   59		}
 0B012A                     A   588    L_5:
@@ -596,7 +596,7 @@ PC     Object              I  Line    Source
 0B012D DD3106              A   592    	LD	IY,(IX+%6)
 0B0130 ED33FF              A   593    	LEA	IY,IY+%FFFFFFFF
 0B0133 DD3E06              A   594    	LD	(IX+%6),IY
-0B0136 CD F2 18 0B         A   595    	CALL	__icmpzero
+0B0136 CD 29 19 0B         A   595    	CALL	__icmpzero
 0B013A 20 DA               A   596    	JR	NZ,L_6
                            A   597    ;   60	}
                            A   598    .LINE 60
@@ -674,14 +674,14 @@ PC     Object              I  Line    Source
                            A   670    ;   63		sysvar_t *sysvars = getsysvars();
                            A   671    .LINE 63
                            A   672    
-0B014B CD 85 0E 0B         A   673    	CALL	_getsysvars
+0B014B CD BC 0E 0B         A   673    	CALL	_getsysvars
 0B014F DD2FFD              A   674    	LD	(IX+%FFFFFFFD),HL
                            A   675    ;   64		delayms(20);
                            A   676    .LINE 64
                            A   677    
 0B0152 01140000            A   678    	LD	BC,20
 0B0156 C5                  A   679    	PUSH	BC
-0B0157 CD 61 10 0B         A   680    	CALL	_delayms
+0B0157 CD 98 10 0B         A   680    	CALL	_delayms
 0B015B C1                  A   681    	POP	BC
                            A   682    ;   65		putch(23);
                            A   683    .LINE 65
@@ -708,7 +708,7 @@ PC     Object              I  Line    Source
                            A   704    .LINE 68
                            A   705    
 0B017A DD0706              A   706    	LD	BC,(IX+%6)
-0B017D CD 2F 15 0B         A   707    	CALL	__stoiu
+0B017D CD 66 15 0B         A   707    	CALL	__stoiu
 0B0181 7D                  A   708    	LD	A,L
 0B0182 B7ED62              A   709    	UEXT	HL
 0B0185 6F                  A   710    	LD	L,A
@@ -719,9 +719,9 @@ PC     Object              I  Line    Source
                            A   715    .LINE 69
                            A   716    
 0B018C DD0706              A   717    	LD	BC,(IX+%6)
-0B018F CD 2F 15 0B         A   718    	CALL	__stoiu
+0B018F CD 66 15 0B         A   718    	CALL	__stoiu
 0B0193 3E08                A   719    	LD	A,%8
-0B0195 CD 64 13 0B         A   720    	CALL	__ishrs_b
+0B0195 CD 9B 13 0B         A   720    	CALL	__ishrs_b
 0B0199 7D                  A   721    	LD	A,L
 0B019A B7ED62              A   722    	UEXT	HL
 0B019D 6F                  A   723    	LD	L,A
@@ -732,7 +732,7 @@ PC     Object              I  Line    Source
                            A   728    .LINE 70
                            A   729    
 0B01A4 DD0709              A   730    	LD	BC,(IX+%9)
-0B01A7 CD 2F 15 0B         A   731    	CALL	__stoiu
+0B01A7 CD 66 15 0B         A   731    	CALL	__stoiu
 0B01AB 7D                  A   732    	LD	A,L
 0B01AC B7ED62              A   733    	UEXT	HL
 0B01AF 6F                  A   734    	LD	L,A
@@ -743,9 +743,9 @@ PC     Object              I  Line    Source
                            A   739    .LINE 71
                            A   740    
 0B01B6 DD0709              A   741    	LD	BC,(IX+%9)
-0B01B9 CD 2F 15 0B         A   742    	CALL	__stoiu
+0B01B9 CD 66 15 0B         A   742    	CALL	__stoiu
 0B01BD 3E08                A   743    	LD	A,%8
-0B01BF CD 64 13 0B         A   744    	CALL	__ishrs_b
+0B01BF CD 9B 13 0B         A   744    	CALL	__ishrs_b
 0B01C3 7D                  A   745    	LD	A,L
 0B01C4 B7ED62              A   746    	UEXT	HL
 0B01C7 6F                  A   747    	LD	L,A
@@ -757,7 +757,7 @@ PC     Object              I  Line    Source
                            A   753    
 0B01CE 01640000            A   754    	LD	BC,100
 0B01D2 C5                  A   755    	PUSH	BC
-0B01D3 CD 61 10 0B         A   756    	CALL	_delayms
+0B01D3 CD 98 10 0B         A   756    	CALL	_delayms
 0B01D7 C1                  A   757    	POP	BC
                            A   758    ;   73		return sysvars->scrchar;
                            A   759    .LINE 73
@@ -865,11 +865,11 @@ PC     Object              I  Line    Source
                            A   861    ;   84		printf("unlock");
                            A   862    .LINE 84
                            A   863    
-0B0218 01 35 15 0B         A   864    	LD	BC,___print_uputch
+0B0218 01 6C 15 0B         A   864    	LD	BC,___print_uputch
 0B021C ED43 04 24 0B       A   865    	LD	(___print_xputch),BC
 0B0221 01 87 24 0B         A   866    	LD	BC,L__5
 0B0225 C5                  A   867    	PUSH	BC
-0B0226 CD C4 13 0B         A   868    	CALL	___print_sendstring
+0B0226 CD FB 13 0B         A   868    	CALL	___print_sendstring
 0B022A C1                  A   869    	POP	BC
                            A   870    ;   85	
                            A   871    ;   86		for(n = 0; n < UNLOCKMATCHLENGTH+1;
@@ -888,7 +888,7 @@ PC     Object              I  Line    Source
 0B0245 C1                  A   884    	POP	BC
 0B0246 C1                  A   885    	POP	BC
 0B0247 DD07FE              A   886    	LD	BC,(IX+%FFFFFFFE)
-0B024A CD 2F 15 0B         A   887    	CALL	__stoiu
+0B024A CD 66 15 0B         A   887    	CALL	__stoiu
 0B024E E5C1                A   888    	LD	BC,HL
 0B0250 ED22F5              A   889    	LEA	HL,IX+%FFFFFFF5
 0B0253 09                  A   890    	ADD	HL,BC
@@ -912,11 +912,11 @@ PC     Object              I  Line    Source
 0B0271 01 8E 24 0B         A   908    	LD	BC,L__7
 0B0275 C5                  A   909    	PUSH	BC
 0B0276 ED65F5              A   910    	PEA	IX+%FFFFFFF5
-0B0279 CD C8 18 0B         A   911    	CALL	_memcmp
+0B0279 CD FF 18 0B         A   911    	CALL	_memcmp
 0B027D C1                  A   912    	POP	BC
 0B027E C1                  A   913    	POP	BC
 0B027F C1                  A   914    	POP	BC
-0B0280 CD F2 18 0B         A   915    	CALL	__icmpzero
+0B0280 CD 29 19 0B         A   915    	CALL	__icmpzero
 0B0284 20 04               A   916    	JR	NZ,L_14
 0B0286 3E01                A   917    	LD	A,%1
 0B0288 18 01               A   918    	JR	L_16
@@ -959,12 +959,12 @@ PC     Object              I  Line    Source
 0B2496 21 
 0B2497 00                  A   955    	DB	0
                            A   956    	SEGMENT DATA
-0B1F10                     A   957    _mos_magicnumbers:
-0B1F10 F3                  A   958    	DB	243
-0B1F11 ED                  A   959    	DB	237
-0B1F12 7D                  A   960    	DB	125
-0B1F13 5B                  A   961    	DB	91
-0B1F14 C3                  A   962    	DB	195
+0B1F47                     A   957    _mos_magicnumbers:
+0B1F47 F3                  A   958    	DB	243
+0B1F48 ED                  A   959    	DB	237
+0B1F49 7D                  A   960    	DB	125
+0B1F4A 5B                  A   961    	DB	91
+0B1F4B C3                  A   962    	DB	195
                            A   963    .DEFINE "mos_magicnumbers"
                            A   964    .ALIAS "_mos_magicnumbers"
                            A   965    .CLASS 69
@@ -1042,7 +1042,7 @@ PC     Object              I  Line    Source
 0B02A5 DD7EFF              A  1037    	LD	A,(IX+%FFFFFFFF)
 0B02A8 B7ED62              A  1038    	UEXT	HL
 0B02AB 6F                  A  1039    	LD	L,A
-0B02AC 01 10 1F 0B         A  1040    	LD	BC,_mos_magicnumbers
+0B02AC 01 47 1F 0B         A  1040    	LD	BC,_mos_magicnumbers
 0B02B0 09                  A  1041    	ADD	HL,BC
 0B02B1 E5FDE1              A  1042    	LD	IY,HL
 0B02B4 DD7EFF              A  1043    	LD	A,(IX+%FFFFFFFF)
@@ -1086,11 +1086,11 @@ PC     Object              I  Line    Source
                            A  1081    
                            A  1082    .ENDFUNC "containsMosHeader",100,"_containsMosH
                            A  1083    	SEGMENT DATA
-0B1F15                     A  1084    _esp32_magicnumbers:
-0B1F15 32                  A  1085    	DB	50
-0B1F16 54                  A  1086    	DB	84
-0B1F17 CD                  A  1087    	DB	205
-0B1F18 AB                  A  1088    	DB	171
+0B1F4C                     A  1084    _esp32_magicnumbers:
+0B1F4C 32                  A  1085    	DB	50
+0B1F4D 54                  A  1086    	DB	84
+0B1F4E CD                  A  1087    	DB	205
+0B1F4F AB                  A  1088    	DB	171
                            A  1089    .DEFINE "esp32_magicnumbers"
                            A  1090    .ALIAS "_esp32_magicnumbers"
                            A  1091    .CLASS 69
@@ -1178,7 +1178,7 @@ PC     Object              I  Line    Source
 0B02F9 DD7EFF              A  1173    	LD	A,(IX+%FFFFFFFF)
 0B02FC B7ED62              A  1174    	UEXT	HL
 0B02FF 6F                  A  1175    	LD	L,A
-0B0300 01 15 1F 0B         A  1176    	LD	BC,_esp32_magicnumbers
+0B0300 01 4C 1F 0B         A  1176    	LD	BC,_esp32_magicnumbers
 0B0304 09                  A  1177    	ADD	HL,BC
 0B0305 E5FDE1              A  1178    	LD	IY,HL
 0B0308 DD7EFF              A  1179    	LD	A,(IX+%FFFFFFFF)
@@ -1245,11 +1245,11 @@ PC     Object              I  Line    Source
                            A  1240    ;  117		printf("Agon firmware upgrade utili
                            A  1241    .LINE 117
                            A  1242    
-0B0338 01 35 15 0B         A  1243    	LD	BC,___print_uputch
+0B0338 01 6C 15 0B         A  1243    	LD	BC,___print_uputch
 0B033C ED43 04 24 0B       A  1244    	LD	(___print_xputch),BC
 0B0341 01 98 24 0B         A  1245    	LD	BC,L__16
 0B0345 C5                  A  1246    	PUSH	BC
-0B0346 CD C4 13 0B         A  1247    	CALL	___print_sendstring
+0B0346 CD FB 13 0B         A  1247    	CALL	___print_sendstring
 0B034A C1                  A  1248    	POP	BC
                            A  1249    ;  118	}
                            A  1250    .LINE 118
@@ -1305,11 +1305,11 @@ PC     Object              I  Line    Source
                            A  1296    ;  122		printf("Usage: FLASH [full | [mos <
                            A  1297    .LINE 122
                            A  1298    
-0B035D 01 35 15 0B         A  1299    	LD	BC,___print_uputch
+0B035D 01 6C 15 0B         A  1299    	LD	BC,___print_uputch
 0B0361 ED43 04 24 0B       A  1300    	LD	(___print_xputch),BC
 0B0366 01 BF 24 0B         A  1301    	LD	BC,L__18
 0B036A C5                  A  1302    	PUSH	BC
-0B036B CD C4 13 0B         A  1303    	CALL	___print_sendstring
+0B036B CD FB 13 0B         A  1303    	CALL	___print_sendstring
 0B036F C1                  A  1304    	POP	BC
                            A  1305    ;  123	}
                            A  1306    .LINE 123
@@ -1388,24 +1388,24 @@ PC     Object              I  Line    Source
                            A  1371    ;  133		printf("Flash firmware (y/n)?");
                            A  1372    .LINE 133
                            A  1373    
-0B0383 01 35 15 0B         A  1374    	LD	BC,___print_uputch
+0B0383 01 6C 15 0B         A  1374    	LD	BC,___print_uputch
 0B0387 ED43 04 24 0B       A  1375    	LD	(___print_xputch),BC
 0B038C 01 06 25 0B         A  1376    	LD	BC,L__20
 0B0390 C5                  A  1377    	PUSH	BC
-0B0391 CD C4 13 0B         A  1378    	CALL	___print_sendstring
+0B0391 CD FB 13 0B         A  1378    	CALL	___print_sendstring
 0B0395 C1                  A  1379    	POP	BC
                            A  1380    ;  134		while((response != 'y') && (respons
                            A  1381    .LINE 134
                            A  1382    
 0B0396 18 13               A  1383    	JR	L_34
 0B0398                     A  1384    L_35:
-0B0398 CD 5F 0E 0B         A  1385    	CALL	_getch
+0B0398 CD 96 0E 0B         A  1385    	CALL	_getch
 0B039C 47                  A  1386    	LD	B,A
 0B039D 78                  A  1387    	LD	A,B
 0B039E 17ED62              A  1388    	SEXT	HL
 0B03A1 68                  A  1389    	LD	L,B
 0B03A2 E5                  A  1390    	PUSH	HL
-0B03A3 CD 7F 1C 0B         A  1391    	CALL	_tolower
+0B03A3 CD B6 1C 0B         A  1391    	CALL	_tolower
 0B03A7 C1                  A  1392    	POP	BC
 0B03A8 DD75FF              A  1393    	LD	(IX+%FFFFFFFF),L
 0B03AB                     A  1394    L_34:
@@ -1422,22 +1422,22 @@ PC     Object              I  Line    Source
 0B03B9 DD7EFF              A  1405    	LD	A,(IX+%FFFFFFFF)
 0B03BC FE6E                A  1406    	CP	A,%6E
 0B03BE 20 15               A  1407    	JR	NZ,L_37
-0B03C0 01 35 15 0B         A  1408    	LD	BC,___print_uputch
+0B03C0 01 6C 15 0B         A  1408    	LD	BC,___print_uputch
 0B03C4 ED43 04 24 0B       A  1409    	LD	(___print_xputch),BC
 0B03C9 01 1C 25 0B         A  1410    	LD	BC,L__24
 0B03CD C5                  A  1411    	PUSH	BC
-0B03CE CD C4 13 0B         A  1412    	CALL	___print_sendstring
+0B03CE CD FB 13 0B         A  1412    	CALL	___print_sendstring
 0B03D2 C1                  A  1413    	POP	BC
                            A  1414    ;  136		else printf("\r\n\r\n");
                            A  1415    .LINE 136
                            A  1416    
 0B03D3 18 13               A  1417    	JR	L_39
 0B03D5                     A  1418    L_37:
-0B03D5 01 35 15 0B         A  1419    	LD	BC,___print_uputch
+0B03D5 01 6C 15 0B         A  1419    	LD	BC,___print_uputch
 0B03D9 ED43 04 24 0B       A  1420    	LD	(___print_xputch),BC
 0B03DE 01 2D 25 0B         A  1421    	LD	BC,L__25
 0B03E2 C5                  A  1422    	PUSH	BC
-0B03E3 CD C4 13 0B         A  1423    	CALL	___print_sendstring
+0B03E3 CD FB 13 0B         A  1423    	CALL	___print_sendstring
 0B03E7 C1                  A  1424    	POP	BC
 0B03E8                     A  1425    L_39:
                            A  1426    ;  137		return response == 'y';
@@ -1558,11 +1558,11 @@ PC     Object              I  Line    Source
                            A  1538    ;  147		printf("Unlocking VDP updater...\r\
                            A  1539    .LINE 147
                            A  1540    
-0B0412 01 35 15 0B         A  1541    	LD	BC,___print_uputch
+0B0412 01 6C 15 0B         A  1541    	LD	BC,___print_uputch
 0B0416 ED43 04 24 0B       A  1542    	LD	(___print_xputch),BC
 0B041B 01 32 25 0B         A  1543    	LD	BC,L__30
 0B041F C5                  A  1544    	PUSH	BC
-0B0420 CD C4 13 0B         A  1545    	CALL	___print_sendstring
+0B0420 CD FB 13 0B         A  1545    	CALL	___print_sendstring
 0B0424 C1                  A  1546    	POP	BC
                            A  1547    ;  148		
                            A  1548    ;  149		if(!vdp_ota_present()) {
@@ -1574,11 +1574,11 @@ PC     Object              I  Line    Source
                            A  1554    ;  150			printf(" failed - incompatible 
                            A  1555    .LINE 150
                            A  1556    
-0B042C 01 35 15 0B         A  1557    	LD	BC,___print_uputch
+0B042C 01 6C 15 0B         A  1557    	LD	BC,___print_uputch
 0B0430 ED43 04 24 0B       A  1558    	LD	(___print_xputch),BC
 0B0435 01 4D 25 0B         A  1559    	LD	BC,L__32
 0B0439 C5                  A  1560    	PUSH	BC
-0B043A CD C4 13 0B         A  1561    	CALL	___print_sendstring
+0B043A CD FB 13 0B         A  1561    	CALL	___print_sendstring
 0B043E C1                  A  1562    	POP	BC
                            A  1563    ;  151			beep(5);
                            A  1564    .LINE 151
@@ -1604,7 +1604,7 @@ PC     Object              I  Line    Source
 0B0450 C5                  A  1584    	PUSH	BC
 0B0451 DD0706              A  1585    	LD	BC,(IX+%6)
 0B0454 C5                  A  1586    	PUSH	BC
-0B0455 CD B5 0E 0B         A  1587    	CALL	_mos_fopen
+0B0455 CD EC 0E 0B         A  1587    	CALL	_mos_fopen
 0B0459 C1                  A  1588    	POP	BC
 0B045A C1                  A  1589    	POP	BC
 0B045B DD77FF              A  1590    	LD	(IX+%FFFFFFFF),A
@@ -1612,11 +1612,11 @@ PC     Object              I  Line    Source
                            A  1592    ;  157		printf("Updating VDP firmware\r\n")
                            A  1593    .LINE 157
                            A  1594    
-0B045E 01 35 15 0B         A  1595    	LD	BC,___print_uputch
+0B045E 01 6C 15 0B         A  1595    	LD	BC,___print_uputch
 0B0462 ED43 04 24 0B       A  1596    	LD	(___print_xputch),BC
 0B0467 01 6A 25 0B         A  1597    	LD	BC,L__33
 0B046B C5                  A  1598    	PUSH	BC
-0B046C CD C4 13 0B         A  1599    	CALL	___print_sendstring
+0B046C CD FB 13 0B         A  1599    	CALL	___print_sendstring
 0B0470 C1                  A  1600    	POP	BC
                            A  1601    ;  158		filesize = getFileSize(file);	
                            A  1602    .LINE 158
@@ -1624,7 +1624,7 @@ PC     Object              I  Line    Source
 0B0471 DD4EFF              A  1604    	LD	C,(IX+%FFFFFFFF)
 0B0474 0600                A  1605    	LD	B,%0
 0B0476 C5                  A  1606    	PUSH	BC
-0B0477 CD F9 12 0B         A  1607    	CALL	_getFileSize
+0B0477 CD 30 13 0B         A  1607    	CALL	_getFileSize
 0B047B C1                  A  1608    	POP	BC
 0B047C DD2FFC              A  1609    	LD	(IX+%FFFFFFFC),HL
                            A  1610    ;  159		startVDPupdate(file, filesize);
@@ -1635,7 +1635,7 @@ PC     Object              I  Line    Source
 0B0482 DD4EFF              A  1615    	LD	C,(IX+%FFFFFFFF)
 0B0485 0600                A  1616    	LD	B,%0
 0B0487 C5                  A  1617    	PUSH	BC
-0B0488 CD DC 0F 0B         A  1618    	CALL	_startVDPupdate
+0B0488 CD 13 10 0B         A  1618    	CALL	_startVDPupdate
 0B048C C1                  A  1619    	POP	BC
 0B048D C1                  A  1620    	POP	BC
                            A  1621    ;  160		mos_fclose(file);
@@ -1644,7 +1644,7 @@ PC     Object              I  Line    Source
 0B048E DD4EFF              A  1624    	LD	C,(IX+%FFFFFFFF)
 0B0491 0600                A  1625    	LD	B,%0
 0B0493 C5                  A  1626    	PUSH	BC
-0B0494 CD CD 0E 0B         A  1627    	CALL	_mos_fclose
+0B0494 CD 04 0F 0B         A  1627    	CALL	_mos_fclose
 0B0498 C1                  A  1628    	POP	BC
                            A  1629    ;  161		return 0;
                            A  1630    .LINE 161
@@ -1856,11 +1856,11 @@ PC     Object              I  Line    Source
                            A  1829    ;  176		printf("\r\nReading MOS firmware");
                            A  1830    .LINE 176
                            A  1831    
-0B04C1 01 35 15 0B         A  1832    	LD	BC,___print_uputch
+0B04C1 01 6C 15 0B         A  1832    	LD	BC,___print_uputch
 0B04C5 ED43 04 24 0B       A  1833    	LD	(___print_xputch),BC
 0B04CA 01 82 25 0B         A  1834    	LD	BC,L__35
 0B04CE C5                  A  1835    	PUSH	BC
-0B04CF CD C4 13 0B         A  1836    	CALL	___print_sendstring
+0B04CF CD FB 13 0B         A  1836    	CALL	___print_sendstring
 0B04D3 C1                  A  1837    	POP	BC
                            A  1838    ;  177		file = mos_fopen(filename, fa_read)
                            A  1839    .LINE 177
@@ -1869,7 +1869,7 @@ PC     Object              I  Line    Source
 0B04D8 C5                  A  1842    	PUSH	BC
 0B04D9 DD0706              A  1843    	LD	BC,(IX+%6)
 0B04DC C5                  A  1844    	PUSH	BC
-0B04DD CD B5 0E 0B         A  1845    	CALL	_mos_fopen
+0B04DD CD EC 0E 0B         A  1845    	CALL	_mos_fopen
 0B04E1 C1                  A  1846    	POP	BC
 0B04E2 C1                  A  1847    	POP	BC
 0B04E3 DD77F9              A  1848    	LD	(IX+%FFFFFFF9),A
@@ -1879,7 +1879,7 @@ PC     Object              I  Line    Source
 0B04E6 DD4EF9              A  1852    	LD	C,(IX+%FFFFFFF9)
 0B04E9 0600                A  1853    	LD	B,%0
 0B04EB C5                  A  1854    	PUSH	BC
-0B04EC CD F9 12 0B         A  1855    	CALL	_getFileSize
+0B04EC CD 30 13 0B         A  1855    	CALL	_getFileSize
 0B04F0 C1                  A  1856    	POP	BC
 0B04F1 DD2FE6              A  1857    	LD	(IX+%FFFFFFE6),HL
                            A  1858    ;  179		// Read file to memory
@@ -1895,7 +1895,7 @@ PC     Object              I  Line    Source
 0B04F9 C5                  A  1868    	PUSH	BC
 0B04FA DD07F6              A  1869    	LD	BC,(IX+%FFFFFFF6)
 0B04FD C5                  A  1870    	PUSH	BC
-0B04FE CD 99 12 0B         A  1871    	CALL	_crc32
+0B04FE CD D0 12 0B         A  1871    	CALL	_crc32
 0B0502 C1                  A  1872    	POP	BC
 0B0503 C1                  A  1873    	POP	BC
                            A  1874    ;  182			ptr += got;
@@ -1923,7 +1923,7 @@ PC     Object              I  Line    Source
 0B0521 DD4EF9              A  1896    	LD	C,(IX+%FFFFFFF9)
 0B0524 0600                A  1897    	LD	B,%0
 0B0526 C5                  A  1898    	PUSH	BC
-0B0527 CD F7 0E 0B         A  1899    	CALL	_mos_fread
+0B0527 CD 2E 0F 0B         A  1899    	CALL	_mos_fread
 0B052B C1                  A  1900    	POP	BC
 0B052C C1                  A  1901    	POP	BC
 0B052D C1                  A  1902    	POP	BC
@@ -1937,11 +1937,11 @@ PC     Object              I  Line    Source
                            A  1910    ;  185		printf("\r\n");	
                            A  1911    .LINE 185
                            A  1912    
-0B053B 01 35 15 0B         A  1913    	LD	BC,___print_uputch
+0B053B 01 6C 15 0B         A  1913    	LD	BC,___print_uputch
 0B053F ED43 04 24 0B       A  1914    	LD	(___print_xputch),BC
 0B0544 01 99 25 0B         A  1915    	LD	BC,L__37
 0B0548 C5                  A  1916    	PUSH	BC
-0B0549 CD C4 13 0B         A  1917    	CALL	___print_sendstring
+0B0549 CD FB 13 0B         A  1917    	CALL	___print_sendstring
 0B054D C1                  A  1918    	POP	BC
                            A  1919    ;  186		// Actual work here	
                            A  1920    ;  187		di();								
@@ -1965,16 +1965,16 @@ PC     Object              I  Line    Source
                            A  1938    ;  194		printf("Erasing flash... ");
                            A  1939    .LINE 194
                            A  1940    
-0B055D 01 35 15 0B         A  1941    	LD	BC,___print_uputch
+0B055D 01 6C 15 0B         A  1941    	LD	BC,___print_uputch
 0B0561 ED43 04 24 0B       A  1942    	LD	(___print_xputch),BC
 0B0566 01 9C 25 0B         A  1943    	LD	BC,L__38
 0B056A C5                  A  1944    	PUSH	BC
-0B056B CD C4 13 0B         A  1945    	CALL	___print_sendstring
+0B056B CD FB 13 0B         A  1945    	CALL	___print_sendstring
 0B056F C1                  A  1946    	POP	BC
                            A  1947    ;  195		enableFlashKeyRegister();	// unlo
                            A  1948    .LINE 195
                            A  1949    
-0B0570 CD 90 0F 0B         A  1950    	CALL	_enableFlashKeyRegister
+0B0570 CD C7 0F 0B         A  1950    	CALL	_enableFlashKeyRegister
                            A  1951    ;  196		FLASH_PROT = 0;				// disa
                            A  1952    .LINE 196
                            A  1953    
@@ -1983,7 +1983,7 @@ PC     Object              I  Line    Source
                            A  1956    ;  197		enableFlashKeyRegister();	// will
                            A  1957    .LINE 197
                            A  1958    
-0B0578 CD 90 0F 0B         A  1959    	CALL	_enableFlashKeyRegister
+0B0578 CD C7 0F 0B         A  1959    	CALL	_enableFlashKeyRegister
                            A  1960    ;  198		FLASH_FDIV = 0x5F;			// Ceil
                            A  1961    .LINE 198
                            A  1962    
@@ -2041,11 +2041,11 @@ PC     Object              I  Line    Source
                            A  2014    ;  212		printf("\r\nWriting new firmware...
                            A  2015    .LINE 212
                            A  2016    
-0B05B2 01 35 15 0B         A  2017    	LD	BC,___print_uputch
+0B05B2 01 6C 15 0B         A  2017    	LD	BC,___print_uputch
 0B05B6 ED43 04 24 0B       A  2018    	LD	(___print_xputch),BC
 0B05BB 01 AE 25 0B         A  2019    	LD	BC,L__41
 0B05BF C5                  A  2020    	PUSH	BC
-0B05C0 CD C4 13 0B         A  2021    	CALL	___print_sendstring
+0B05C0 CD FB 13 0B         A  2021    	CALL	___print_sendstring
 0B05C4 C1                  A  2022    	POP	BC
                            A  2023    ;  213		
                            A  2024    ;  214		// determine number of pages to wri
@@ -2054,16 +2054,16 @@ PC     Object              I  Line    Source
                            A  2027    
 0B05C5 DD27E6              A  2028    	LD	HL,(IX+%FFFFFFE6)
 0B05C8 3E0A                A  2029    	LD	A,%A
-0B05CA CD A8 1B 0B         A  2030    	CALL	__ishru_b
+0B05CA CD DF 1B 0B         A  2030    	CALL	__ishru_b
 0B05CE DD2FFA              A  2031    	LD	(IX+%FFFFFFFA),HL
                            A  2032    ;  216		if(filesize%PAGESIZE) // last page 
                            A  2033    .LINE 216
                            A  2034    
 0B05D1 01FF0300            A  2035    	LD	BC,1023
 0B05D5 DD27E6              A  2036    	LD	HL,(IX+%FFFFFFE6)
-0B05D8 CD 54 1C 0B         A  2037    	CALL	__iand
+0B05D8 CD 8B 1C 0B         A  2037    	CALL	__iand
 0B05DC DD2FE3              A  2038    	LD	(IX+%FFFFFFE3),HL
-0B05DF CD F2 18 0B         A  2039    	CALL	__icmpzero
+0B05DF CD 29 19 0B         A  2039    	CALL	__icmpzero
 0B05E3 28 0F               A  2040    	JR	Z,L_55
                            A  2041    ;  217		{
                            A  2042    ;  218			pagemax += 1;
@@ -2099,16 +2099,16 @@ PC     Object              I  Line    Source
                            A  2072    ;  226			printf("\rWriting flash page %0
                            A  2073    .LINE 226
                            A  2074    
-0B0606 01 35 15 0B         A  2075    	LD	BC,___print_uputch
+0B0606 01 6C 15 0B         A  2075    	LD	BC,___print_uputch
 0B060A ED43 04 24 0B       A  2076    	LD	(___print_xputch),BC
 0B060F 01 CA 25 0B         A  2077    	LD	BC,L__43
 0B0613 C5                  A  2078    	PUSH	BC
-0B0614 CD C4 13 0B         A  2079    	CALL	___print_sendstring
+0B0614 CD FB 13 0B         A  2079    	CALL	___print_sendstring
 0B0618 C1                  A  2080    	POP	BC
 0B0619 3E03                A  2081    	LD	A,%3
-0B061B 32 5B 29 0B         A  2082    	LD	(___print_fmt+5),A
+0B061B 32 48 29 0B         A  2082    	LD	(___print_fmt+5),A
 0B061F 3E40                A  2083    	LD	A,%40
-0B0621 32 57 29 0B         A  2084    	LD	(___print_fmt+1),A
+0B0621 32 44 29 0B         A  2084    	LD	(___print_fmt+1),A
 0B0625 DD07FD              A  2085    	LD	BC,(IX+%FFFFFFFD)
 0B0628 03                  A  2086    	INC	BC
 0B0629 AF                  A  2087    	XOR	A,A
@@ -2117,17 +2117,17 @@ PC     Object              I  Line    Source
 0B062D 0600                A  2090    	LD	B,%0
 0B062F C5                  A  2091    	PUSH	BC
 0B0630 D5                  A  2092    	PUSH	DE
-0B0631 CD BB 15 0B         A  2093    	CALL	__u_itoa
+0B0631 CD F2 15 0B         A  2093    	CALL	__u_itoa
 0B0635 C1                  A  2094    	POP	BC
 0B0636 C1                  A  2095    	POP	BC
 0B0637 012F0000            A  2096    	LD	BC,47
 0B063B C5                  A  2097    	PUSH	BC
-0B063C CD 35 15 0B         A  2098    	CALL	___print_uputch
+0B063C CD 6C 15 0B         A  2098    	CALL	___print_uputch
 0B0640 C1                  A  2099    	POP	BC
 0B0641 3E03                A  2100    	LD	A,%3
-0B0643 32 5B 29 0B         A  2101    	LD	(___print_fmt+5),A
+0B0643 32 48 29 0B         A  2101    	LD	(___print_fmt+5),A
 0B0647 3E40                A  2102    	LD	A,%40
-0B0649 32 57 29 0B         A  2103    	LD	(___print_fmt+1),A
+0B0649 32 44 29 0B         A  2103    	LD	(___print_fmt+1),A
 0B064D DD07FA              A  2104    	LD	BC,(IX+%FFFFFFFA)
 0B0650 AF                  A  2105    	XOR	A,A
 0B0651 C5D1                A  2106    	LD	DE,BC
@@ -2135,7 +2135,7 @@ PC     Object              I  Line    Source
 0B0654 0600                A  2108    	LD	B,%0
 0B0656 C5                  A  2109    	PUSH	BC
 0B0657 D5                  A  2110    	PUSH	DE
-0B0658 CD BB 15 0B         A  2111    	CALL	__u_itoa
+0B0658 CD F2 15 0B         A  2111    	CALL	__u_itoa
 0B065C C1                  A  2112    	POP	BC
 0B065D C1                  A  2113    	POP	BC
                            A  2114    ;  227			
@@ -2157,7 +2157,7 @@ PC     Object              I  Line    Source
 0B0673 C5                  A  2130    	PUSH	BC
 0B0674 DD07F3              A  2131    	LD	BC,(IX+%FFFFFFF3)
 0B0677 C5                  A  2132    	PUSH	BC
-0B0678 CD BD 0F 0B         A  2133    	CALL	_fastmemcpy
+0B0678 CD F4 0F 0B         A  2133    	CALL	_fastmemcpy
 0B067C C1                  A  2134    	POP	BC
 0B067D C1                  A  2135    	POP	BC
 0B067E C1                  A  2136    	POP	BC
@@ -2176,7 +2176,7 @@ PC     Object              I  Line    Source
 0B0689 C5                  A  2149    	PUSH	BC
 0B068A DD07F3              A  2150    	LD	BC,(IX+%FFFFFFF3)
 0B068D C5                  A  2151    	PUSH	BC
-0B068E CD BD 0F 0B         A  2152    	CALL	_fastmemcpy
+0B068E CD F4 0F 0B         A  2152    	CALL	_fastmemcpy
 0B0692 C1                  A  2153    	POP	BC
 0B0693 C1                  A  2154    	POP	BC
 0B0694 C1                  A  2155    	POP	BC
@@ -2211,15 +2211,15 @@ PC     Object              I  Line    Source
                            A  2184    ;  238		lockFlashKeyRegister();	// lock the
                            A  2185    .LINE 238
                            A  2186    
-0B06BB CD A8 0F 0B         A  2187    	CALL	_lockFlashKeyRegister
-                           A  2188    ;  239		printf("\r\n\r\nDone\r\n");
+0B06BB CD DF 0F 0B         A  2187    	CALL	_lockFlashKeyRegister
+                           A  2188    ;  239		printf("\r\n\r\nDone\r\n\r\n");
                            A  2189    .LINE 239
                            A  2190    
-0B06BF 01 35 15 0B         A  2191    	LD	BC,___print_uputch
+0B06BF 01 6C 15 0B         A  2191    	LD	BC,___print_uputch
 0B06C3 ED43 04 24 0B       A  2192    	LD	(___print_xputch),BC
 0B06C8 01 DF 25 0B         A  2193    	LD	BC,L__46
 0B06CC C5                  A  2194    	PUSH	BC
-0B06CD CD C4 13 0B         A  2195    	CALL	___print_sendstring
+0B06CD CD FB 13 0B         A  2195    	CALL	___print_sendstring
 0B06D1 C1                  A  2196    	POP	BC
                            A  2197    ;  240		return 0;
                            A  2198    .LINE 240
@@ -2296,7 +2296,7 @@ PC     Object              I  Line    Source
 0B25DF                     A  2261    L__46:
 0B25DF 0D0A0D0A            A  2262    	DB	13,10,13,10
 0B25E3 446F6E65            A  2263    	DB	"Done"
-0B25E7 0D0A00              A  2264    	DB	13,10,0
+0B25E7 0D0A0D0A 00         A  2264    	DB	13,10,13,10,0
                            A  2265    	SEGMENT CODE
                            A  2266    ;  242	
                            A  2267    ;  243	void echoVDP(uint8_t value) {
@@ -2363,7 +2363,7 @@ PC     Object              I  Line    Source
                            A  2328    
 0B070C 01640000            A  2329    	LD	BC,100
 0B0710 C5                  A  2330    	PUSH	BC
-0B0711 CD 61 10 0B         A  2331    	CALL	_delayms
+0B0711 CD 98 10 0B         A  2331    	CALL	_delayms
 0B0715 C1                  A  2332    	POP	BC
                            A  2333    ;  249	}
                            A  2334    .LINE 249
@@ -2420,15 +2420,15 @@ PC     Object              I  Line    Source
                            A  2385    
 0B0724 01040000            A  2386    	LD	BC,4
 0B0728 C5                  A  2387    	PUSH	BC
-0B0729 01 EA 25 0B         A  2388    	LD	BC,L__49
+0B0729 01 EC 25 0B         A  2388    	LD	BC,L__49
 0B072D C5                  A  2389    	PUSH	BC
 0B072E DD0706              A  2390    	LD	BC,(IX+%6)
 0B0731 C5                  A  2391    	PUSH	BC
-0B0732 CD C8 18 0B         A  2392    	CALL	_memcmp
+0B0732 CD FF 18 0B         A  2392    	CALL	_memcmp
 0B0736 C1                  A  2393    	POP	BC
 0B0737 C1                  A  2394    	POP	BC
 0B0738 C1                  A  2395    	POP	BC
-0B0739 CD F2 18 0B         A  2396    	CALL	__icmpzero
+0B0739 CD 29 19 0B         A  2396    	CALL	__icmpzero
 0B073D 20 06               A  2397    	JR	NZ,L_69
 0B073F 21010000            A  2398    	LD	HL,1
 0B0743 18 66               A  2399    	JR	L_75
@@ -2438,15 +2438,15 @@ PC     Object              I  Line    Source
                            A  2403    
 0B0745 01030000            A  2404    	LD	BC,3
 0B0749 C5                  A  2405    	PUSH	BC
-0B074A 01 EE 25 0B         A  2406    	LD	BC,L__51
+0B074A 01 F0 25 0B         A  2406    	LD	BC,L__51
 0B074E C5                  A  2407    	PUSH	BC
 0B074F DD0706              A  2408    	LD	BC,(IX+%6)
 0B0752 C5                  A  2409    	PUSH	BC
-0B0753 CD C8 18 0B         A  2410    	CALL	_memcmp
+0B0753 CD FF 18 0B         A  2410    	CALL	_memcmp
 0B0757 C1                  A  2411    	POP	BC
 0B0758 C1                  A  2412    	POP	BC
 0B0759 C1                  A  2413    	POP	BC
-0B075A CD F2 18 0B         A  2414    	CALL	__icmpzero
+0B075A CD 29 19 0B         A  2414    	CALL	__icmpzero
 0B075E 20 06               A  2415    	JR	NZ,L_71
 0B0760 21020000            A  2416    	LD	HL,2
 0B0764 18 45               A  2417    	JR	L_75
@@ -2456,15 +2456,15 @@ PC     Object              I  Line    Source
                            A  2421    
 0B0766 01030000            A  2422    	LD	BC,3
 0B076A C5                  A  2423    	PUSH	BC
-0B076B 01 F2 25 0B         A  2424    	LD	BC,L__53
+0B076B 01 F4 25 0B         A  2424    	LD	BC,L__53
 0B076F C5                  A  2425    	PUSH	BC
 0B0770 DD0706              A  2426    	LD	BC,(IX+%6)
 0B0773 C5                  A  2427    	PUSH	BC
-0B0774 CD C8 18 0B         A  2428    	CALL	_memcmp
+0B0774 CD FF 18 0B         A  2428    	CALL	_memcmp
 0B0778 C1                  A  2429    	POP	BC
 0B0779 C1                  A  2430    	POP	BC
 0B077A C1                  A  2431    	POP	BC
-0B077B CD F2 18 0B         A  2432    	CALL	__icmpzero
+0B077B CD 29 19 0B         A  2432    	CALL	__icmpzero
 0B077F 20 06               A  2433    	JR	NZ,L_73
 0B0781 21030000            A  2434    	LD	HL,3
 0B0785 18 24               A  2435    	JR	L_75
@@ -2474,15 +2474,15 @@ PC     Object              I  Line    Source
                            A  2439    
 0B0787 01060000            A  2440    	LD	BC,6
 0B078B C5                  A  2441    	PUSH	BC
-0B078C 01 F6 25 0B         A  2442    	LD	BC,L__55
+0B078C 01 F8 25 0B         A  2442    	LD	BC,L__55
 0B0790 C5                  A  2443    	PUSH	BC
 0B0791 DD0706              A  2444    	LD	BC,(IX+%6)
 0B0794 C5                  A  2445    	PUSH	BC
-0B0795 CD C8 18 0B         A  2446    	CALL	_memcmp
+0B0795 CD FF 18 0B         A  2446    	CALL	_memcmp
 0B0799 C1                  A  2447    	POP	BC
 0B079A C1                  A  2448    	POP	BC
 0B079B C1                  A  2449    	POP	BC
-0B079C CD F2 18 0B         A  2450    	CALL	__icmpzero
+0B079C CD 29 19 0B         A  2450    	CALL	__icmpzero
 0B07A0 20 06               A  2451    	JR	NZ,L_74
 0B07A2 21040000            A  2452    	LD	HL,4
 0B07A6 18 03               A  2453    	JR	L_75
@@ -2513,21 +2513,21 @@ PC     Object              I  Line    Source
                            A  2478    
                            A  2479    .ENDFUNC "getCommand",257,"_getCommand"
                            A  2480    	SEGMENT STRSECT
-0B25EA                     A  2481    L__49:
-0B25EA 616C6C              A  2482    	DB	"all"
-0B25ED 00                  A  2483    	DB	0
-0B25EE                     A  2484    L__51:
-0B25EE 6D6F73              A  2485    	DB	"mos"
-0B25F1 00                  A  2486    	DB	0
-0B25F2                     A  2487    L__53:
-0B25F2 766470              A  2488    	DB	"vdp"
-0B25F5 00                  A  2489    	DB	0
-0B25F6                     A  2490    L__55:
-0B25F6 73696C65 6E74       A  2491    	DB	"silent"
-0B25FC 00                  A  2492    	DB	0
+0B25EC                     A  2481    L__49:
+0B25EC 616C6C              A  2482    	DB	"all"
+0B25EF 00                  A  2483    	DB	0
+0B25F0                     A  2484    L__51:
+0B25F0 6D6F73              A  2485    	DB	"mos"
+0B25F3 00                  A  2486    	DB	0
+0B25F4                     A  2487    L__53:
+0B25F4 766470              A  2488    	DB	"vdp"
+0B25F7 00                  A  2489    	DB	0
+0B25F8                     A  2490    L__55:
+0B25F8 73696C65 6E74       A  2491    	DB	"silent"
+0B25FE 00                  A  2492    	DB	0
                            A  2493    	SEGMENT DATA
-0B1F19                     A  2494    _flashmos:
-0B1F19 00                  A  2495    	DB	0
+0B1F50                     A  2494    _flashmos:
+0B1F50 00                  A  2495    	DB	0
                            A  2496    .DEFINE "flashmos"
                            A  2497    .ALIAS "_flashmos"
                            A  2498    .CLASS 69
@@ -2535,8 +2535,8 @@ PC     Object              I  Line    Source
                            A  2500    .TYPE 12
                            A  2501    .ENDEF
                            A  2502    	SEGMENT BSS
-0B2748                     A  2503    _mosfilename:
-0B2748                     A  2504    	DS	256
+0B2735                     A  2503    _mosfilename:
+0B2735                     A  2504    	DS	256
                            A  2505    .DEFINE "mosfilename"
                            A  2506    .ALIAS "_mosfilename"
                            A  2507    .CLASS 83
@@ -2545,8 +2545,8 @@ PC     Object              I  Line    Source
                            A  2510    .TYPE 98
                            A  2511    .ENDEF
                            A  2512    	SEGMENT DATA
-0B1F1A                     A  2513    _flashvdp:
-0B1F1A 00                  A  2514    	DB	0
+0B1F51                     A  2513    _flashvdp:
+0B1F51 00                  A  2514    	DB	0
                            A  2515    .DEFINE "flashvdp"
                            A  2516    .ALIAS "_flashvdp"
                            A  2517    .CLASS 69
@@ -2554,8 +2554,8 @@ PC     Object              I  Line    Source
                            A  2519    .TYPE 12
                            A  2520    .ENDEF
                            A  2521    	SEGMENT BSS
-0B2848                     A  2522    _vdpfilename:
-0B2848                     A  2523    	DS	256
+0B2835                     A  2522    _vdpfilename:
+0B2835                     A  2523    	DS	256
                            A  2524    .DEFINE "vdpfilename"
                            A  2525    .ALIAS "_vdpfilename"
                            A  2526    .CLASS 83
@@ -2564,8 +2564,8 @@ PC     Object              I  Line    Source
                            A  2529    .TYPE 98
                            A  2530    .ENDEF
                            A  2531    	SEGMENT DATA
-0B1F1B                     A  2532    _silent:
-0B1F1B 00                  A  2533    	DB	0
+0B1F52                     A  2532    _silent:
+0B1F52 00                  A  2533    	DB	0
                            A  2534    .DEFINE "silent"
                            A  2535    .ALIAS "_silent"
                            A  2536    .CLASS 69
@@ -2671,7 +2671,7 @@ PC     Object              I  Line    Source
                            A  2636    ;  272			switch(command) {
                            A  2637    .LINE 272
                            A  2638    
-0B07DE CD 89 13 0B         A  2639    	CALL	__seqcaseD
+0B07DE CD C0 13 0B         A  2639    	CALL	__seqcaseD
 0B07E2 E9                  A  2640    	JP	(HL)
 0B07E3                     A  2641    L__58:
 0B07E3 0500                A  2642    	DW	5
@@ -2706,10 +2706,10 @@ PC     Object              I  Line    Source
                            A  2671    ;  277					if(flashmos || flashvdp
                            A  2672    .LINE 277
                            A  2673    
-0B07FF 3A 19 1F 0B         A  2674    	LD	A,(_flashmos)
+0B07FF 3A 50 1F 0B         A  2674    	LD	A,(_flashmos)
 0B0803 B7                  A  2675    	OR	A,A
 0B0804 20 07               A  2676    	JR	NZ,L_79
-0B0806 3A 1A 1F 0B         A  2677    	LD	A,(_flashvdp)
+0B0806 3A 51 1F 0B         A  2677    	LD	A,(_flashvdp)
 0B080A B7                  A  2678    	OR	A,A
 0B080B 28 05               A  2679    	JR	Z,L_80
 0B080D                     A  2680    L_79:
@@ -2719,32 +2719,32 @@ PC     Object              I  Line    Source
                            A  2684    ;  278					strcpy(mosfilename, DEF
                            A  2685    .LINE 278
                            A  2686    
-0B0812 01 FD 25 0B         A  2687    	LD	BC,L__61
+0B0812 01 FF 25 0B         A  2687    	LD	BC,L__61
 0B0816 C5                  A  2688    	PUSH	BC
-0B0817 01 48 27 0B         A  2689    	LD	BC,_mosfilename
+0B0817 01 35 27 0B         A  2689    	LD	BC,_mosfilename
 0B081B C5                  A  2690    	PUSH	BC
-0B081C CD 2D 1C 0B         A  2691    	CALL	_strcpy
+0B081C CD 64 1C 0B         A  2691    	CALL	_strcpy
 0B0820 C1                  A  2692    	POP	BC
 0B0821 C1                  A  2693    	POP	BC
                            A  2694    ;  279					strcpy(vdpfilename, DEF
                            A  2695    .LINE 279
                            A  2696    
-0B0822 01 05 26 0B         A  2697    	LD	BC,L__62
+0B0822 01 07 26 0B         A  2697    	LD	BC,L__62
 0B0826 C5                  A  2698    	PUSH	BC
-0B0827 01 48 28 0B         A  2699    	LD	BC,_vdpfilename
+0B0827 01 35 28 0B         A  2699    	LD	BC,_vdpfilename
 0B082B C5                  A  2700    	PUSH	BC
-0B082C CD 2D 1C 0B         A  2701    	CALL	_strcpy
+0B082C CD 64 1C 0B         A  2701    	CALL	_strcpy
 0B0830 C1                  A  2702    	POP	BC
 0B0831 C1                  A  2703    	POP	BC
                            A  2704    ;  280					flashmos = true;
                            A  2705    .LINE 280
                            A  2706    
 0B0832 3E01                A  2707    	LD	A,%1
-0B0834 32 19 1F 0B         A  2708    	LD	(_flashmos),A
+0B0834 32 50 1F 0B         A  2708    	LD	(_flashmos),A
                            A  2709    ;  281					flashvdp = true;
                            A  2710    .LINE 281
                            A  2711    
-0B0838 32 1A 1F 0B         A  2712    	LD	(_flashvdp),A
+0B0838 32 51 1F 0B         A  2712    	LD	(_flashvdp),A
                            A  2713    ;  282					break;
                            A  2714    .LINE 282
                            A  2715    
@@ -2756,7 +2756,7 @@ PC     Object              I  Line    Source
                            A  2721    ;  284					if(flashmos) return fal
                            A  2722    .LINE 284
                            A  2723    
-0B0840 3A 19 1F 0B         A  2724    	LD	A,(_flashmos)
+0B0840 3A 50 1F 0B         A  2724    	LD	A,(_flashmos)
 0B0844 B7                  A  2725    	OR	A,A
 0B0845 28 05               A  2726    	JR	Z,L_87
 0B0847 AF                  A  2727    	XOR	A,A
@@ -2783,7 +2783,7 @@ PC     Object              I  Line    Source
 0B086D C5                  A  2748    	PUSH	BC
 0B086E CD 1B 07 0B         A  2749    	CALL	_getCommand
 0B0872 C1                  A  2750    	POP	BC
-0B0873 CD F2 18 0B         A  2751    	CALL	__icmpzero
+0B0873 CD 29 19 0B         A  2751    	CALL	__icmpzero
 0B0877 20 21               A  2752    	JR	NZ,L_86
                            A  2753    ;  286						strcpy(mosfilename,
                            A  2754    .LINE 286
@@ -2796,9 +2796,9 @@ PC     Object              I  Line    Source
 0B0883 09                  A  2761    	ADD	HL,BC
 0B0884 ED07                A  2762    	LD	BC,(HL)
 0B0886 C5                  A  2763    	PUSH	BC
-0B0887 01 48 27 0B         A  2764    	LD	BC,_mosfilename
+0B0887 01 35 27 0B         A  2764    	LD	BC,_mosfilename
 0B088B C5                  A  2765    	PUSH	BC
-0B088C CD 2D 1C 0B         A  2766    	CALL	_strcpy
+0B088C CD 64 1C 0B         A  2766    	CALL	_strcpy
 0B0890 C1                  A  2767    	POP	BC
 0B0891 C1                  A  2768    	POP	BC
                            A  2769    ;  287						argcounter++;
@@ -2815,11 +2815,11 @@ PC     Object              I  Line    Source
                            A  2780    ;  290						strcpy(mosfilename,
                            A  2781    .LINE 290
                            A  2782    
-0B089A 01 12 26 0B         A  2783    	LD	BC,L__66
+0B089A 01 14 26 0B         A  2783    	LD	BC,L__66
 0B089E C5                  A  2784    	PUSH	BC
-0B089F 01 48 27 0B         A  2785    	LD	BC,_mosfilename
+0B089F 01 35 27 0B         A  2785    	LD	BC,_mosfilename
 0B08A3 C5                  A  2786    	PUSH	BC
-0B08A4 CD 2D 1C 0B         A  2787    	CALL	_strcpy
+0B08A4 CD 64 1C 0B         A  2787    	CALL	_strcpy
 0B08A8 C1                  A  2788    	POP	BC
 0B08A9 C1                  A  2789    	POP	BC
                            A  2790    ;  291					}
@@ -2830,7 +2830,7 @@ PC     Object              I  Line    Source
                            A  2795    .LINE 292
                            A  2796    
 0B08AA 3E01                A  2797    	LD	A,%1
-0B08AC 32 19 1F 0B         A  2798    	LD	(_flashmos),A
+0B08AC 32 50 1F 0B         A  2798    	LD	(_flashmos),A
                            A  2799    ;  293					break;
                            A  2800    .LINE 293
                            A  2801    
@@ -2842,7 +2842,7 @@ PC     Object              I  Line    Source
                            A  2807    ;  295					if(flashvdp) return fal
                            A  2808    .LINE 295
                            A  2809    
-0B08B4 3A 1A 1F 0B         A  2810    	LD	A,(_flashvdp)
+0B08B4 3A 51 1F 0B         A  2810    	LD	A,(_flashvdp)
 0B08B8 B7                  A  2811    	OR	A,A
 0B08B9 28 05               A  2812    	JR	Z,L_95
 0B08BB AF                  A  2813    	XOR	A,A
@@ -2869,7 +2869,7 @@ PC     Object              I  Line    Source
 0B08E1 C5                  A  2834    	PUSH	BC
 0B08E2 CD 1B 07 0B         A  2835    	CALL	_getCommand
 0B08E6 C1                  A  2836    	POP	BC
-0B08E7 CD F2 18 0B         A  2837    	CALL	__icmpzero
+0B08E7 CD 29 19 0B         A  2837    	CALL	__icmpzero
 0B08EB 20 21               A  2838    	JR	NZ,L_94
                            A  2839    ;  297						strcpy(vdpfilename,
                            A  2840    .LINE 297
@@ -2882,9 +2882,9 @@ PC     Object              I  Line    Source
 0B08F7 09                  A  2847    	ADD	HL,BC
 0B08F8 ED07                A  2848    	LD	BC,(HL)
 0B08FA C5                  A  2849    	PUSH	BC
-0B08FB 01 48 28 0B         A  2850    	LD	BC,_vdpfilename
+0B08FB 01 35 28 0B         A  2850    	LD	BC,_vdpfilename
 0B08FF C5                  A  2851    	PUSH	BC
-0B0900 CD 2D 1C 0B         A  2852    	CALL	_strcpy
+0B0900 CD 64 1C 0B         A  2852    	CALL	_strcpy
 0B0904 C1                  A  2853    	POP	BC
 0B0905 C1                  A  2854    	POP	BC
                            A  2855    ;  298						argcounter++;
@@ -2901,11 +2901,11 @@ PC     Object              I  Line    Source
                            A  2866    ;  301						strcpy(vdpfilename,
                            A  2867    .LINE 301
                            A  2868    
-0B090E 01 1A 26 0B         A  2869    	LD	BC,L__70
+0B090E 01 1C 26 0B         A  2869    	LD	BC,L__70
 0B0912 C5                  A  2870    	PUSH	BC
-0B0913 01 48 28 0B         A  2871    	LD	BC,_vdpfilename
+0B0913 01 35 28 0B         A  2871    	LD	BC,_vdpfilename
 0B0917 C5                  A  2872    	PUSH	BC
-0B0918 CD 2D 1C 0B         A  2873    	CALL	_strcpy
+0B0918 CD 64 1C 0B         A  2873    	CALL	_strcpy
 0B091C C1                  A  2874    	POP	BC
 0B091D C1                  A  2875    	POP	BC
                            A  2876    ;  302					}
@@ -2916,7 +2916,7 @@ PC     Object              I  Line    Source
                            A  2881    .LINE 303
                            A  2882    
 0B091E 3E01                A  2883    	LD	A,%1
-0B0920 32 1A 1F 0B         A  2884    	LD	(_flashvdp),A
+0B0920 32 51 1F 0B         A  2884    	LD	(_flashvdp),A
                            A  2885    ;  304					break;
                            A  2886    .LINE 304
                            A  2887    
@@ -2928,7 +2928,7 @@ PC     Object              I  Line    Source
                            A  2893    ;  306					if(silent) return false
                            A  2894    .LINE 306
                            A  2895    
-0B0926 3A 1B 1F 0B         A  2896    	LD	A,(_silent)
+0B0926 3A 52 1F 0B         A  2896    	LD	A,(_silent)
 0B092A B7                  A  2897    	OR	A,A
 0B092B 28 03               A  2898    	JR	Z,L_99
 0B092D AF                  A  2899    	XOR	A,A
@@ -2938,7 +2938,7 @@ PC     Object              I  Line    Source
                            A  2903    .LINE 307
                            A  2904    
 0B0930 3E01                A  2905    	LD	A,%1
-0B0932 32 1B 1F 0B         A  2906    	LD	(_silent),A
+0B0932 32 52 1F 0B         A  2906    	LD	(_silent),A
                            A  2907    ;  308					break;
                            A  2908    ;  309			}
 0B0936                     A  2909    L_101:
@@ -2962,10 +2962,10 @@ PC     Object              I  Line    Source
                            A  2927    ;  312		return (flashvdp || flashmos);
                            A  2928    .LINE 312
                            A  2929    
-0B094A 3A 1A 1F 0B         A  2930    	LD	A,(_flashvdp)
+0B094A 3A 51 1F 0B         A  2930    	LD	A,(_flashvdp)
 0B094E B7                  A  2931    	OR	A,A
 0B094F 20 07               A  2932    	JR	NZ,L_105
-0B0951 3A 19 1F 0B         A  2933    	LD	A,(_flashmos)
+0B0951 3A 50 1F 0B         A  2933    	LD	A,(_flashmos)
 0B0955 B7                  A  2934    	OR	A,A
 0B0956 28 09               A  2935    	JR	Z,L_106
 0B0958                     A  2936    L_105:
@@ -3009,20 +3009,20 @@ PC     Object              I  Line    Source
                            A  2974    
                            A  2975    .ENDFUNC "parseCommands",313,"_parseCommands"
                            A  2976    	SEGMENT STRSECT
-0B25FD                     A  2977    L__61:
-0B25FD 4D4F532E 62696E     A  2978    	DB	"MOS.bin"
-0B2604 00                  A  2979    	DB	0
-0B2605                     A  2980    L__62:
-0B2605 6669726D 77617265   A  2981    	DB	"firmware.bin"
-0B260D 2E62696E 
-0B2611 00                  A  2982    	DB	0
-0B2612                     A  2983    L__66:
-0B2612 4D4F532E 62696E     A  2984    	DB	"MOS.bin"
-0B2619 00                  A  2985    	DB	0
-0B261A                     A  2986    L__70:
-0B261A 6669726D 77617265   A  2987    	DB	"firmware.bin"
-0B2622 2E62696E 
-0B2626 00                  A  2988    	DB	0
+0B25FF                     A  2977    L__61:
+0B25FF 4D4F532E 62696E     A  2978    	DB	"MOS.bin"
+0B2606 00                  A  2979    	DB	0
+0B2607                     A  2980    L__62:
+0B2607 6669726D 77617265   A  2981    	DB	"firmware.bin"
+0B260F 2E62696E 
+0B2613 00                  A  2982    	DB	0
+0B2614                     A  2983    L__66:
+0B2614 4D4F532E 62696E     A  2984    	DB	"MOS.bin"
+0B261B 00                  A  2985    	DB	0
+0B261C                     A  2986    L__70:
+0B261C 6669726D 77617265   A  2987    	DB	"firmware.bin"
+0B2624 2E62696E 
+0B2628 00                  A  2988    	DB	0
                            A  2989    	SEGMENT CODE
                            A  2990    ;  314	
                            A  2991    ;  315	bool filesExist(void) {
@@ -3075,7 +3075,7 @@ PC     Object              I  Line    Source
                            A  3038    ;  319		if(flashmos) {
                            A  3039    .LINE 319
                            A  3040    
-0B097F 3A 19 1F 0B         A  3041    	LD	A,(_flashmos)
+0B097F 3A 50 1F 0B         A  3041    	LD	A,(_flashmos)
 0B0983 B7                  A  3042    	OR	A,A
 0B0984 28 4C               A  3043    	JR	Z,L_117
                            A  3044    ;  320			file = mos_fopen(mosfilename, f
@@ -3083,9 +3083,9 @@ PC     Object              I  Line    Source
                            A  3046    
 0B0986 01010000            A  3047    	LD	BC,1
 0B098A C5                  A  3048    	PUSH	BC
-0B098B 01 48 27 0B         A  3049    	LD	BC,_mosfilename
+0B098B 01 35 27 0B         A  3049    	LD	BC,_mosfilename
 0B098F C5                  A  3050    	PUSH	BC
-0B0990 CD B5 0E 0B         A  3051    	CALL	_mos_fopen
+0B0990 CD EC 0E 0B         A  3051    	CALL	_mos_fopen
 0B0994 C1                  A  3052    	POP	BC
 0B0995 C1                  A  3053    	POP	BC
 0B0996 DD77FF              A  3054    	LD	(IX+%FFFFFFFF),A
@@ -3097,19 +3097,19 @@ PC     Object              I  Line    Source
                            A  3060    ;  322				printf("Error opening MOS f
                            A  3061    .LINE 322
                            A  3062    
-0B099C 01 35 15 0B         A  3063    	LD	BC,___print_uputch
+0B099C 01 6C 15 0B         A  3063    	LD	BC,___print_uputch
 0B09A0 ED43 04 24 0B       A  3064    	LD	(___print_xputch),BC
-0B09A5 01 27 26 0B         A  3065    	LD	BC,L__78
+0B09A5 01 29 26 0B         A  3065    	LD	BC,L__78
 0B09A9 C5                  A  3066    	PUSH	BC
-0B09AA CD C4 13 0B         A  3067    	CALL	___print_sendstring
+0B09AA CD FB 13 0B         A  3067    	CALL	___print_sendstring
 0B09AE C1                  A  3068    	POP	BC
-0B09AF 01 48 27 0B         A  3069    	LD	BC,_mosfilename
+0B09AF 01 35 27 0B         A  3069    	LD	BC,_mosfilename
 0B09B3 C5                  A  3070    	PUSH	BC
-0B09B4 CD C4 13 0B         A  3071    	CALL	___print_sendstring
+0B09B4 CD FB 13 0B         A  3071    	CALL	___print_sendstring
 0B09B8 C1                  A  3072    	POP	BC
-0B09B9 01 44 26 0B         A  3073    	LD	BC,L__79
+0B09B9 01 46 26 0B         A  3073    	LD	BC,L__79
 0B09BD C5                  A  3074    	PUSH	BC
-0B09BE CD C4 13 0B         A  3075    	CALL	___print_sendstring
+0B09BE CD FB 13 0B         A  3075    	CALL	___print_sendstring
 0B09C2 C1                  A  3076    	POP	BC
                            A  3077    ;  323				filesexist = false;
                            A  3078    .LINE 323
@@ -3125,7 +3125,7 @@ PC     Object              I  Line    Source
 0B09C7 DD4EFF              A  3088    	LD	C,(IX+%FFFFFFFF)
 0B09CA 0600                A  3089    	LD	B,%0
 0B09CC C5                  A  3090    	PUSH	BC
-0B09CD CD CD 0E 0B         A  3091    	CALL	_mos_fclose
+0B09CD CD 04 0F 0B         A  3091    	CALL	_mos_fclose
 0B09D1 C1                  A  3092    	POP	BC
                            A  3093    ;  326		}
 0B09D2                     A  3094    L_117:
@@ -3135,7 +3135,7 @@ PC     Object              I  Line    Source
                            A  3098    ;  328		if(flashvdp) {
                            A  3099    .LINE 328
                            A  3100    
-0B09D2 3A 1A 1F 0B         A  3101    	LD	A,(_flashvdp)
+0B09D2 3A 51 1F 0B         A  3101    	LD	A,(_flashvdp)
 0B09D6 B7                  A  3102    	OR	A,A
 0B09D7 28 4C               A  3103    	JR	Z,L_118
                            A  3104    ;  329			file = mos_fopen(vdpfilename, f
@@ -3143,9 +3143,9 @@ PC     Object              I  Line    Source
                            A  3106    
 0B09D9 01010000            A  3107    	LD	BC,1
 0B09DD C5                  A  3108    	PUSH	BC
-0B09DE 01 48 28 0B         A  3109    	LD	BC,_vdpfilename
+0B09DE 01 35 28 0B         A  3109    	LD	BC,_vdpfilename
 0B09E2 C5                  A  3110    	PUSH	BC
-0B09E3 CD B5 0E 0B         A  3111    	CALL	_mos_fopen
+0B09E3 CD EC 0E 0B         A  3111    	CALL	_mos_fopen
 0B09E7 C1                  A  3112    	POP	BC
 0B09E8 C1                  A  3113    	POP	BC
 0B09E9 DD77FF              A  3114    	LD	(IX+%FFFFFFFF),A
@@ -3157,19 +3157,19 @@ PC     Object              I  Line    Source
                            A  3120    ;  331				printf("Error opening VDP f
                            A  3121    .LINE 331
                            A  3122    
-0B09EF 01 35 15 0B         A  3123    	LD	BC,___print_uputch
+0B09EF 01 6C 15 0B         A  3123    	LD	BC,___print_uputch
 0B09F3 ED43 04 24 0B       A  3124    	LD	(___print_xputch),BC
-0B09F8 01 48 26 0B         A  3125    	LD	BC,L__82
+0B09F8 01 4A 26 0B         A  3125    	LD	BC,L__82
 0B09FC C5                  A  3126    	PUSH	BC
-0B09FD CD C4 13 0B         A  3127    	CALL	___print_sendstring
+0B09FD CD FB 13 0B         A  3127    	CALL	___print_sendstring
 0B0A01 C1                  A  3128    	POP	BC
-0B0A02 01 48 28 0B         A  3129    	LD	BC,_vdpfilename
+0B0A02 01 35 28 0B         A  3129    	LD	BC,_vdpfilename
 0B0A06 C5                  A  3130    	PUSH	BC
-0B0A07 CD C4 13 0B         A  3131    	CALL	___print_sendstring
+0B0A07 CD FB 13 0B         A  3131    	CALL	___print_sendstring
 0B0A0B C1                  A  3132    	POP	BC
-0B0A0C 01 65 26 0B         A  3133    	LD	BC,L__83
+0B0A0C 01 67 26 0B         A  3133    	LD	BC,L__83
 0B0A10 C5                  A  3134    	PUSH	BC
-0B0A11 CD C4 13 0B         A  3135    	CALL	___print_sendstring
+0B0A11 CD FB 13 0B         A  3135    	CALL	___print_sendstring
 0B0A15 C1                  A  3136    	POP	BC
                            A  3137    ;  332				filesexist = false;
                            A  3138    .LINE 332
@@ -3185,7 +3185,7 @@ PC     Object              I  Line    Source
 0B0A1A DD4EFF              A  3148    	LD	C,(IX+%FFFFFFFF)
 0B0A1D 0600                A  3149    	LD	B,%0
 0B0A1F C5                  A  3150    	PUSH	BC
-0B0A20 CD CD 0E 0B         A  3151    	CALL	_mos_fclose
+0B0A20 CD 04 0F 0B         A  3151    	CALL	_mos_fclose
 0B0A24 C1                  A  3152    	POP	BC
                            A  3153    ;  335		}
 0B0A25                     A  3154    L_118:
@@ -3225,24 +3225,24 @@ PC     Object              I  Line    Source
                            A  3188    
                            A  3189    .ENDFUNC "filesExist",338,"_filesExist"
                            A  3190    	SEGMENT STRSECT
-0B2627                     A  3191    L__78:
-0B2627 4572726F 72206F70   A  3192    	DB	"Error opening MOS firmware \""
-0B262F 656E696E 67204D4F 
-0B2637 53206669 726D7761 
-0B263F 72652022 
-0B2643 00                  A  3193    	DB	0
-0B2644                     A  3194    L__79:
-0B2644 22                  A  3195    	DB	"\""
-0B2645 0A0D00              A  3196    	DB	10,13,0
-0B2648                     A  3197    L__82:
-0B2648 4572726F 72206F70   A  3198    	DB	"Error opening VDP firmware \""
-0B2650 656E696E 67205644 
-0B2658 50206669 726D7761 
-0B2660 72652022 
-0B2664 00                  A  3199    	DB	0
-0B2665                     A  3200    L__83:
-0B2665 22                  A  3201    	DB	"\""
-0B2666 0A0D00              A  3202    	DB	10,13,0
+0B2629                     A  3191    L__78:
+0B2629 4572726F 72206F70   A  3192    	DB	"Error opening MOS firmware \""
+0B2631 656E696E 67204D4F 
+0B2639 53206669 726D7761 
+0B2641 72652022 
+0B2645 00                  A  3193    	DB	0
+0B2646                     A  3194    L__79:
+0B2646 22                  A  3195    	DB	"\""
+0B2647 0A0D00              A  3196    	DB	10,13,0
+0B264A                     A  3197    L__82:
+0B264A 4572726F 72206F70   A  3198    	DB	"Error opening VDP firmware \""
+0B2652 656E696E 67205644 
+0B265A 50206669 726D7761 
+0B2662 72652022 
+0B2666 00                  A  3199    	DB	0
+0B2667                     A  3200    L__83:
+0B2667 22                  A  3201    	DB	"\""
+0B2668 0A0D00              A  3202    	DB	10,13,0
                            A  3203    	SEGMENT CODE
                            A  3204    ;  339	
                            A  3205    ;  340	bool firmwareContentOK(void) {
@@ -3319,7 +3319,7 @@ PC     Object              I  Line    Source
                            A  3276    ;  346		if(flashmos) {
                            A  3277    .LINE 346
                            A  3278    
-0B0A3E 3A 19 1F 0B         A  3279    	LD	A,(_flashmos)
+0B0A3E 3A 50 1F 0B         A  3279    	LD	A,(_flashmos)
 0B0A42 B7                  A  3280    	OR	A,A
 0B0A43 CA F8 0A 0B         A  3281    	JR	Z,L_128
                            A  3282    ;  347			file = mos_fopen(mosfilename, f
@@ -3327,9 +3327,9 @@ PC     Object              I  Line    Source
                            A  3284    
 0B0A47 01010000            A  3285    	LD	BC,1
 0B0A4B C5                  A  3286    	PUSH	BC
-0B0A4C 01 48 27 0B         A  3287    	LD	BC,_mosfilename
+0B0A4C 01 35 27 0B         A  3287    	LD	BC,_mosfilename
 0B0A50 C5                  A  3288    	PUSH	BC
-0B0A51 CD B5 0E 0B         A  3289    	CALL	_mos_fopen
+0B0A51 CD EC 0E 0B         A  3289    	CALL	_mos_fopen
 0B0A55 C1                  A  3290    	POP	BC
 0B0A56 C1                  A  3291    	POP	BC
 0B0A57 DD77FF              A  3292    	LD	(IX+%FFFFFFFF),A
@@ -3343,7 +3343,7 @@ PC     Object              I  Line    Source
 0B0A64 DD4EFF              A  3300    	LD	C,(IX+%FFFFFFFF)
 0B0A67 0600                A  3301    	LD	B,%0
 0B0A69 C5                  A  3302    	PUSH	BC
-0B0A6A CD F7 0E 0B         A  3303    	CALL	_mos_fread
+0B0A6A CD 2E 0F 0B         A  3303    	CALL	_mos_fread
 0B0A6E C1                  A  3304    	POP	BC
 0B0A6F C1                  A  3305    	POP	BC
 0B0A70 C1                  A  3306    	POP	BC
@@ -3359,19 +3359,19 @@ PC     Object              I  Line    Source
                            A  3316    ;  350				printf("\"%s\" does not con
                            A  3317    .LINE 350
                            A  3318    
-0B0A7E 01 35 15 0B         A  3319    	LD	BC,___print_uputch
+0B0A7E 01 6C 15 0B         A  3319    	LD	BC,___print_uputch
 0B0A82 ED43 04 24 0B       A  3320    	LD	(___print_xputch),BC
 0B0A87 01220000            A  3321    	LD	BC,34
 0B0A8B C5                  A  3322    	PUSH	BC
-0B0A8C CD 35 15 0B         A  3323    	CALL	___print_uputch
+0B0A8C CD 6C 15 0B         A  3323    	CALL	___print_uputch
 0B0A90 C1                  A  3324    	POP	BC
-0B0A91 01 48 27 0B         A  3325    	LD	BC,_mosfilename
+0B0A91 01 35 27 0B         A  3325    	LD	BC,_mosfilename
 0B0A95 C5                  A  3326    	PUSH	BC
-0B0A96 CD C4 13 0B         A  3327    	CALL	___print_sendstring
+0B0A96 CD FB 13 0B         A  3327    	CALL	___print_sendstring
 0B0A9A C1                  A  3328    	POP	BC
-0B0A9B 01 69 26 0B         A  3329    	LD	BC,L__87
+0B0A9B 01 6B 26 0B         A  3329    	LD	BC,L__87
 0B0A9F C5                  A  3330    	PUSH	BC
-0B0AA0 CD C4 13 0B         A  3331    	CALL	___print_sendstring
+0B0AA0 CD FB 13 0B         A  3331    	CALL	___print_sendstring
 0B0AA4 C1                  A  3332    	POP	BC
                            A  3333    ;  351				validfirmware = false;
                            A  3334    .LINE 351
@@ -3387,7 +3387,7 @@ PC     Object              I  Line    Source
 0B0AA9 DD4EFF              A  3344    	LD	C,(IX+%FFFFFFFF)
 0B0AAC 0600                A  3345    	LD	B,%0
 0B0AAE C5                  A  3346    	PUSH	BC
-0B0AAF CD F9 12 0B         A  3347    	CALL	_getFileSize
+0B0AAF CD 30 13 0B         A  3347    	CALL	_getFileSize
 0B0AB3 C1                  A  3348    	POP	BC
 0B0AB4 DD2FFB              A  3349    	LD	(IX+%FFFFFFFB),HL
                            A  3350    ;  354			if(filesize > FLASHSIZE) {
@@ -3401,19 +3401,19 @@ PC     Object              I  Line    Source
                            A  3358    ;  355				printf("\"%s\" too large fo
                            A  3359    .LINE 355
                            A  3360    
-0B0AC2 01 35 15 0B         A  3361    	LD	BC,___print_uputch
+0B0AC2 01 6C 15 0B         A  3361    	LD	BC,___print_uputch
 0B0AC6 ED43 04 24 0B       A  3362    	LD	(___print_xputch),BC
 0B0ACB 01220000            A  3363    	LD	BC,34
 0B0ACF C5                  A  3364    	PUSH	BC
-0B0AD0 CD 35 15 0B         A  3365    	CALL	___print_uputch
+0B0AD0 CD 6C 15 0B         A  3365    	CALL	___print_uputch
 0B0AD4 C1                  A  3366    	POP	BC
-0B0AD5 01 48 27 0B         A  3367    	LD	BC,_mosfilename
+0B0AD5 01 35 27 0B         A  3367    	LD	BC,_mosfilename
 0B0AD9 C5                  A  3368    	PUSH	BC
-0B0ADA CD C4 13 0B         A  3369    	CALL	___print_sendstring
+0B0ADA CD FB 13 0B         A  3369    	CALL	___print_sendstring
 0B0ADE C1                  A  3370    	POP	BC
-0B0ADF 01 9A 26 0B         A  3371    	LD	BC,L__89
+0B0ADF 01 9C 26 0B         A  3371    	LD	BC,L__89
 0B0AE3 C5                  A  3372    	PUSH	BC
-0B0AE4 CD C4 13 0B         A  3373    	CALL	___print_sendstring
+0B0AE4 CD FB 13 0B         A  3373    	CALL	___print_sendstring
 0B0AE8 C1                  A  3374    	POP	BC
                            A  3375    ;  356				validfirmware = false;
                            A  3376    .LINE 356
@@ -3429,7 +3429,7 @@ PC     Object              I  Line    Source
 0B0AED DD4EFF              A  3386    	LD	C,(IX+%FFFFFFFF)
 0B0AF0 0600                A  3387    	LD	B,%0
 0B0AF2 C5                  A  3388    	PUSH	BC
-0B0AF3 CD CD 0E 0B         A  3389    	CALL	_mos_fclose
+0B0AF3 CD 04 0F 0B         A  3389    	CALL	_mos_fclose
 0B0AF7 C1                  A  3390    	POP	BC
                            A  3391    ;  359		}
 0B0AF8                     A  3392    L_128:
@@ -3438,7 +3438,7 @@ PC     Object              I  Line    Source
                            A  3395    ;  360		if(flashvdp) {
                            A  3396    .LINE 360
                            A  3397    
-0B0AF8 3A 1A 1F 0B         A  3398    	LD	A,(_flashvdp)
+0B0AF8 3A 51 1F 0B         A  3398    	LD	A,(_flashvdp)
 0B0AFC B7                  A  3399    	OR	A,A
 0B0AFD 28 69               A  3400    	JR	Z,L_129
                            A  3401    ;  361			file = mos_fopen(vdpfilename, f
@@ -3446,9 +3446,9 @@ PC     Object              I  Line    Source
                            A  3403    
 0B0AFF 01010000            A  3404    	LD	BC,1
 0B0B03 C5                  A  3405    	PUSH	BC
-0B0B04 01 48 28 0B         A  3406    	LD	BC,_vdpfilename
+0B0B04 01 35 28 0B         A  3406    	LD	BC,_vdpfilename
 0B0B08 C5                  A  3407    	PUSH	BC
-0B0B09 CD B5 0E 0B         A  3408    	CALL	_mos_fopen
+0B0B09 CD EC 0E 0B         A  3408    	CALL	_mos_fopen
 0B0B0D C1                  A  3409    	POP	BC
 0B0B0E C1                  A  3410    	POP	BC
 0B0B0F DD77FF              A  3411    	LD	(IX+%FFFFFFFF),A
@@ -3461,7 +3461,7 @@ PC     Object              I  Line    Source
 0B0B1A DD4EFF              A  3418    	LD	C,(IX+%FFFFFFFF)
 0B0B1D 0600                A  3419    	LD	B,%0
 0B0B1F C5                  A  3420    	PUSH	BC
-0B0B20 CD F7 0E 0B         A  3421    	CALL	_mos_fread
+0B0B20 CD 2E 0F 0B         A  3421    	CALL	_mos_fread
 0B0B24 C1                  A  3422    	POP	BC
 0B0B25 C1                  A  3423    	POP	BC
 0B0B26 C1                  A  3424    	POP	BC
@@ -3476,19 +3476,19 @@ PC     Object              I  Line    Source
                            A  3433    ;  364				printf("\"%s\" does not con
                            A  3434    .LINE 364
                            A  3435    
-0B0B32 01 35 15 0B         A  3436    	LD	BC,___print_uputch
+0B0B32 01 6C 15 0B         A  3436    	LD	BC,___print_uputch
 0B0B36 ED43 04 24 0B       A  3437    	LD	(___print_xputch),BC
 0B0B3B 01220000            A  3438    	LD	BC,34
 0B0B3F C5                  A  3439    	PUSH	BC
-0B0B40 CD 35 15 0B         A  3440    	CALL	___print_uputch
+0B0B40 CD 6C 15 0B         A  3440    	CALL	___print_uputch
 0B0B44 C1                  A  3441    	POP	BC
-0B0B45 01 48 28 0B         A  3442    	LD	BC,_vdpfilename
+0B0B45 01 35 28 0B         A  3442    	LD	BC,_vdpfilename
 0B0B49 C5                  A  3443    	PUSH	BC
-0B0B4A CD C4 13 0B         A  3444    	CALL	___print_sendstring
+0B0B4A CD FB 13 0B         A  3444    	CALL	___print_sendstring
 0B0B4E C1                  A  3445    	POP	BC
-0B0B4F 01 C1 26 0B         A  3446    	LD	BC,L__92
+0B0B4F 01 C3 26 0B         A  3446    	LD	BC,L__92
 0B0B53 C5                  A  3447    	PUSH	BC
-0B0B54 CD C4 13 0B         A  3448    	CALL	___print_sendstring
+0B0B54 CD FB 13 0B         A  3448    	CALL	___print_sendstring
 0B0B58 C1                  A  3449    	POP	BC
                            A  3450    ;  365				validfirmware = false;
                            A  3451    .LINE 365
@@ -3504,7 +3504,7 @@ PC     Object              I  Line    Source
 0B0B5D DD4EFF              A  3461    	LD	C,(IX+%FFFFFFFF)
 0B0B60 0600                A  3462    	LD	B,%0
 0B0B62 C5                  A  3463    	PUSH	BC
-0B0B63 CD CD 0E 0B         A  3464    	CALL	_mos_fclose
+0B0B63 CD 04 0F 0B         A  3464    	CALL	_mos_fclose
 0B0B67 C1                  A  3465    	POP	BC
                            A  3466    ;  368		}
 0B0B68                     A  3467    L_129:
@@ -3547,28 +3547,28 @@ PC     Object              I  Line    Source
                            A  3504    
                            A  3505    .ENDFUNC "firmwareContentOK",370,"_firmwareCont
                            A  3506    	SEGMENT STRSECT
-0B2669                     A  3507    L__87:
-0B2669 2220646F 6573206E   A  3508    	DB	"\" does not contain valid MOS ez80 sta
-0B2671 6F742063 6F6E7461 
-0B2679 696E2076 616C6964 
-0B2681 204D4F53 20657A38 
-0B2689 30207374 61727475 
-0B2691 7020636F 6465 
-0B2697 0D0A00              A  3509    	DB	13,10,0
-0B269A                     A  3510    L__89:
-0B269A 2220746F 6F206C61   A  3511    	DB	"\" too large for 128KB embedded flash"
-0B26A2 72676520 666F7220 
-0B26AA 3132384B 4220656D 
-0B26B2 62656464 65642066 
-0B26BA 6C617368 
-0B26BE 0D0A00              A  3512    	DB	13,10,0
-0B26C1                     A  3513    L__92:
-0B26C1 2220646F 6573206E   A  3514    	DB	"\" does not contain valid ESP32 code"
-0B26C9 6F742063 6F6E7461 
-0B26D1 696E2076 616C6964 
-0B26D9 20455350 33322063 
-0B26E1 6F6465 
-0B26E4 0D0A00              A  3515    	DB	13,10,0
+0B266B                     A  3507    L__87:
+0B266B 2220646F 6573206E   A  3508    	DB	"\" does not contain valid MOS ez80 sta
+0B2673 6F742063 6F6E7461 
+0B267B 696E2076 616C6964 
+0B2683 204D4F53 20657A38 
+0B268B 30207374 61727475 
+0B2693 7020636F 6465 
+0B2699 0D0A00              A  3509    	DB	13,10,0
+0B269C                     A  3510    L__89:
+0B269C 2220746F 6F206C61   A  3511    	DB	"\" too large for 128KB embedded flash"
+0B26A4 72676520 666F7220 
+0B26AC 3132384B 4220656D 
+0B26B4 62656464 65642066 
+0B26BC 6C617368 
+0B26C0 0D0A00              A  3512    	DB	13,10,0
+0B26C3                     A  3513    L__92:
+0B26C3 2220646F 6573206E   A  3514    	DB	"\" does not contain valid ESP32 code"
+0B26CB 6F742063 6F6E7461 
+0B26D3 696E2076 616C6964 
+0B26DB 20455350 33322063 
+0B26E3 6F6465 
+0B26E6 0D0A00              A  3515    	DB	13,10,0
                            A  3516    	SEGMENT CODE
                            A  3517    ;  371	void showCRC32(void) {
 0B0B70                     A  3518    _showCRC32:
@@ -3673,17 +3673,17 @@ PC     Object              I  Line    Source
                            A  3617    ;  380		printf("Calculating CRC");
                            A  3618    .LINE 380
                            A  3619    
-0B0B8F 01 35 15 0B         A  3620    	LD	BC,___print_uputch
+0B0B8F 01 6C 15 0B         A  3620    	LD	BC,___print_uputch
 0B0B93 ED43 04 24 0B       A  3621    	LD	(___print_xputch),BC
-0B0B98 01 E7 26 0B         A  3622    	LD	BC,L__94
+0B0B98 01 E9 26 0B         A  3622    	LD	BC,L__94
 0B0B9C C5                  A  3623    	PUSH	BC
-0B0B9D CD C4 13 0B         A  3624    	CALL	___print_sendstring
+0B0B9D CD FB 13 0B         A  3624    	CALL	___print_sendstring
 0B0BA1 C1                  A  3625    	POP	BC
                            A  3626    ;  381	
                            A  3627    ;  382		if(flashmos) {
                            A  3628    .LINE 382
                            A  3629    
-0B0BA2 3A 19 1F 0B         A  3630    	LD	A,(_flashmos)
+0B0BA2 3A 50 1F 0B         A  3630    	LD	A,(_flashmos)
 0B0BA6 B7                  A  3631    	OR	A,A
 0B0BA7 28 7A               A  3632    	JR	Z,L_141
                            A  3633    ;  383			ptr = (char*)BUFFER1;
@@ -3696,16 +3696,16 @@ PC     Object              I  Line    Source
                            A  3640    
 0B0BB0 01010000            A  3641    	LD	BC,1
 0B0BB4 C5                  A  3642    	PUSH	BC
-0B0BB5 01 48 27 0B         A  3643    	LD	BC,_mosfilename
+0B0BB5 01 35 27 0B         A  3643    	LD	BC,_mosfilename
 0B0BB9 C5                  A  3644    	PUSH	BC
-0B0BBA CD B5 0E 0B         A  3645    	CALL	_mos_fopen
+0B0BBA CD EC 0E 0B         A  3645    	CALL	_mos_fopen
 0B0BBE C1                  A  3646    	POP	BC
 0B0BBF C1                  A  3647    	POP	BC
 0B0BC0 DD77FF              A  3648    	LD	(IX+%FFFFFFFF),A
                            A  3649    ;  385			crc32_initialize();
                            A  3650    .LINE 385
                            A  3651    
-0B0BC3 CD 47 12 0B         A  3652    	CALL	_crc32_initialize
+0B0BC3 CD 7E 12 0B         A  3652    	CALL	_crc32_initialize
                            A  3653    ;  386			
                            A  3654    ;  387			// Read file to memory
                            A  3655    ;  388			while((got = mos_fread(file, pt
@@ -3720,7 +3720,7 @@ PC     Object              I  Line    Source
 0B0BCC C5                  A  3664    	PUSH	BC
 0B0BCD DD07FC              A  3665    	LD	BC,(IX+%FFFFFFFC)
 0B0BD0 C5                  A  3666    	PUSH	BC
-0B0BD1 CD 99 12 0B         A  3667    	CALL	_crc32
+0B0BD1 CD D0 12 0B         A  3667    	CALL	_crc32
 0B0BD5 C1                  A  3668    	POP	BC
 0B0BD6 C1                  A  3669    	POP	BC
                            A  3670    ;  390				ptr += got;
@@ -3748,7 +3748,7 @@ PC     Object              I  Line    Source
 0B0BF4 DD4EFF              A  3692    	LD	C,(IX+%FFFFFFFF)
 0B0BF7 0600                A  3693    	LD	B,%0
 0B0BF9 C5                  A  3694    	PUSH	BC
-0B0BFA CD F7 0E 0B         A  3695    	CALL	_mos_fread
+0B0BFA CD 2E 0F 0B         A  3695    	CALL	_mos_fread
 0B0BFE C1                  A  3696    	POP	BC
 0B0BFF C1                  A  3697    	POP	BC
 0B0C00 C1                  A  3698    	POP	BC
@@ -3762,7 +3762,7 @@ PC     Object              I  Line    Source
                            A  3706    ;  393			moscrc = crc32_finalize();
                            A  3707    .LINE 393
                            A  3708    
-0B0C0E CD 5C 12 0B         A  3709    	CALL	_crc32_finalize
+0B0C0E CD 93 12 0B         A  3709    	CALL	_crc32_finalize
 0B0C12 DD2FEE              A  3710    	LD	(IX+%FFFFFFEE),HL
 0B0C15 DD73F1              A  3711    	LD	(IX+%FFFFFFF1),E
                            A  3712    ;  394			mos_fclose(file);
@@ -3771,7 +3771,7 @@ PC     Object              I  Line    Source
 0B0C18 DD4EFF              A  3715    	LD	C,(IX+%FFFFFFFF)
 0B0C1B 0600                A  3716    	LD	B,%0
 0B0C1D C5                  A  3717    	PUSH	BC
-0B0C1E CD CD 0E 0B         A  3718    	CALL	_mos_fclose
+0B0C1E CD 04 0F 0B         A  3718    	CALL	_mos_fclose
 0B0C22 C1                  A  3719    	POP	BC
                            A  3720    ;  395		}
 0B0C23                     A  3721    L_141:
@@ -3780,7 +3780,7 @@ PC     Object              I  Line    Source
                            A  3724    ;  396		if(flashvdp) {
                            A  3725    .LINE 396
                            A  3726    
-0B0C23 3A 1A 1F 0B         A  3727    	LD	A,(_flashvdp)
+0B0C23 3A 51 1F 0B         A  3727    	LD	A,(_flashvdp)
 0B0C27 B7                  A  3728    	OR	A,A
 0B0C28 28 67               A  3729    	JR	Z,L_142
                            A  3730    ;  397			file = mos_fopen(vdpfilename, f
@@ -3788,16 +3788,16 @@ PC     Object              I  Line    Source
                            A  3732    
 0B0C2A 01010000            A  3733    	LD	BC,1
 0B0C2E C5                  A  3734    	PUSH	BC
-0B0C2F 01 48 28 0B         A  3735    	LD	BC,_vdpfilename
+0B0C2F 01 35 28 0B         A  3735    	LD	BC,_vdpfilename
 0B0C33 C5                  A  3736    	PUSH	BC
-0B0C34 CD B5 0E 0B         A  3737    	CALL	_mos_fopen
+0B0C34 CD EC 0E 0B         A  3737    	CALL	_mos_fopen
 0B0C38 C1                  A  3738    	POP	BC
 0B0C39 C1                  A  3739    	POP	BC
 0B0C3A DD77FF              A  3740    	LD	(IX+%FFFFFFFF),A
                            A  3741    ;  398			crc32_initialize();
                            A  3742    .LINE 398
                            A  3743    
-0B0C3D CD 47 12 0B         A  3744    	CALL	_crc32_initialize
+0B0C3D CD 7E 12 0B         A  3744    	CALL	_crc32_initialize
                            A  3745    ;  399			while(1) {
 0B0C41                     A  3746    L_138:
                            A  3747    .LINE 399
@@ -3812,7 +3812,7 @@ PC     Object              I  Line    Source
 0B0C4B DD4EFF              A  3756    	LD	C,(IX+%FFFFFFFF)
 0B0C4E 0600                A  3757    	LD	B,%0
 0B0C50 C5                  A  3758    	PUSH	BC
-0B0C51 CD F7 0E 0B         A  3759    	CALL	_mos_fread
+0B0C51 CD 2E 0F 0B         A  3759    	CALL	_mos_fread
 0B0C55 C1                  A  3760    	POP	BC
 0B0C56 C1                  A  3761    	POP	BC
 0B0C57 C1                  A  3762    	POP	BC
@@ -3820,7 +3820,7 @@ PC     Object              I  Line    Source
                            A  3764    ;  401				if(size == 0) break;
                            A  3765    .LINE 401
                            A  3766    
-0B0C5B CD F2 18 0B         A  3767    	CALL	__icmpzero
+0B0C5B CD 29 19 0B         A  3767    	CALL	__icmpzero
 0B0C5F 28 1B               A  3768    	JR	Z,L_139
                            A  3769    ;  402				putch('.');
                            A  3770    .LINE 402
@@ -3836,7 +3836,7 @@ PC     Object              I  Line    Source
 0B0C6E C5                  A  3780    	PUSH	BC
 0B0C6F 01000005            A  3781    	LD	BC,327680
 0B0C73 C5                  A  3782    	PUSH	BC
-0B0C74 CD 99 12 0B         A  3783    	CALL	_crc32
+0B0C74 CD D0 12 0B         A  3783    	CALL	_crc32
 0B0C78 C1                  A  3784    	POP	BC
 0B0C79 C1                  A  3785    	POP	BC
 0B0C7A 18 C5               A  3786    	JR	L_138
@@ -3847,7 +3847,7 @@ PC     Object              I  Line    Source
                            A  3791    ;  405			vdpcrc = crc32_finalize();
                            A  3792    .LINE 405
                            A  3793    
-0B0C7C CD 5C 12 0B         A  3794    	CALL	_crc32_finalize
+0B0C7C CD 93 12 0B         A  3794    	CALL	_crc32_finalize
 0B0C80 DD2FF2              A  3795    	LD	(IX+%FFFFFFF2),HL
 0B0C83 DD73F5              A  3796    	LD	(IX+%FFFFFFF5),E
                            A  3797    ;  406			mos_fclose(file);
@@ -3856,7 +3856,7 @@ PC     Object              I  Line    Source
 0B0C86 DD4EFF              A  3800    	LD	C,(IX+%FFFFFFFF)
 0B0C89 0600                A  3801    	LD	B,%0
 0B0C8B C5                  A  3802    	PUSH	BC
-0B0C8C CD CD 0E 0B         A  3803    	CALL	_mos_fclose
+0B0C8C CD 04 0F 0B         A  3803    	CALL	_mos_fclose
 0B0C90 C1                  A  3804    	POP	BC
                            A  3805    ;  407		}
 0B0C91                     A  3806    L_142:
@@ -3865,82 +3865,82 @@ PC     Object              I  Line    Source
                            A  3809    ;  408		printf("\r\n\r\n");
                            A  3810    .LINE 408
                            A  3811    
-0B0C91 01 35 15 0B         A  3812    	LD	BC,___print_uputch
+0B0C91 01 6C 15 0B         A  3812    	LD	BC,___print_uputch
 0B0C95 ED43 04 24 0B       A  3813    	LD	(___print_xputch),BC
-0B0C9A 01 F7 26 0B         A  3814    	LD	BC,L__99
+0B0C9A 01 F9 26 0B         A  3814    	LD	BC,L__99
 0B0C9E C5                  A  3815    	PUSH	BC
-0B0C9F CD C4 13 0B         A  3816    	CALL	___print_sendstring
+0B0C9F CD FB 13 0B         A  3816    	CALL	___print_sendstring
 0B0CA3 C1                  A  3817    	POP	BC
                            A  3818    ;  409		if(flashmos) printf("MOS CRC 0x%04l
                            A  3819    .LINE 409
                            A  3820    
-0B0CA4 3A 19 1F 0B         A  3821    	LD	A,(_flashmos)
+0B0CA4 3A 50 1F 0B         A  3821    	LD	A,(_flashmos)
 0B0CA8 B7                  A  3822    	OR	A,A
 0B0CA9 28 3F               A  3823    	JR	Z,L_145
-0B0CAB 01 35 15 0B         A  3824    	LD	BC,___print_uputch
+0B0CAB 01 6C 15 0B         A  3824    	LD	BC,___print_uputch
 0B0CAF ED43 04 24 0B       A  3825    	LD	(___print_xputch),BC
-0B0CB4 01 FC 26 0B         A  3826    	LD	BC,L__101
+0B0CB4 01 FE 26 0B         A  3826    	LD	BC,L__101
 0B0CB8 C5                  A  3827    	PUSH	BC
-0B0CB9 CD C4 13 0B         A  3828    	CALL	___print_sendstring
+0B0CB9 CD FB 13 0B         A  3828    	CALL	___print_sendstring
 0B0CBD C1                  A  3829    	POP	BC
 0B0CBE 3E04                A  3830    	LD	A,%4
-0B0CC0 32 5B 29 0B         A  3831    	LD	(___print_fmt+5),A
+0B0CC0 32 48 29 0B         A  3831    	LD	(___print_fmt+5),A
 0B0CC4 3E60                A  3832    	LD	A,%60
-0B0CC6 32 57 29 0B         A  3833    	LD	(___print_fmt+1),A
+0B0CC6 32 44 29 0B         A  3833    	LD	(___print_fmt+1),A
 0B0CCA 3E78                A  3834    	LD	A,%78
-0B0CCC 32 5A 29 0B         A  3835    	LD	(___print_fmt+4),A
+0B0CCC 32 47 29 0B         A  3835    	LD	(___print_fmt+4),A
 0B0CD0 DD4EF1              A  3836    	LD	C,(IX+%FFFFFFF1)
 0B0CD3 0600                A  3837    	LD	B,%0
 0B0CD5 C5                  A  3838    	PUSH	BC
 0B0CD6 DD07EE              A  3839    	LD	BC,(IX+%FFFFFFEE)
 0B0CD9 C5                  A  3840    	PUSH	BC
-0B0CDA CD DA 1C 0B         A  3841    	CALL	__u_ultoa
+0B0CDA CD 11 1D 0B         A  3841    	CALL	__u_ultoa
 0B0CDE C1                  A  3842    	POP	BC
 0B0CDF C1                  A  3843    	POP	BC
-0B0CE0 01 07 27 0B         A  3844    	LD	BC,L__102
+0B0CE0 01 09 27 0B         A  3844    	LD	BC,L__102
 0B0CE4 C5                  A  3845    	PUSH	BC
-0B0CE5 CD C4 13 0B         A  3846    	CALL	___print_sendstring
+0B0CE5 CD FB 13 0B         A  3846    	CALL	___print_sendstring
 0B0CE9 C1                  A  3847    	POP	BC
 0B0CEA                     A  3848    L_145:
                            A  3849    ;  410		if(flashvdp) printf("VDP CRC 0x%04l
                            A  3850    .LINE 410
                            A  3851    
-0B0CEA 3A 1A 1F 0B         A  3852    	LD	A,(_flashvdp)
+0B0CEA 3A 51 1F 0B         A  3852    	LD	A,(_flashvdp)
 0B0CEE B7                  A  3853    	OR	A,A
 0B0CEF 28 3F               A  3854    	JR	Z,L_146
-0B0CF1 01 35 15 0B         A  3855    	LD	BC,___print_uputch
+0B0CF1 01 6C 15 0B         A  3855    	LD	BC,___print_uputch
 0B0CF5 ED43 04 24 0B       A  3856    	LD	(___print_xputch),BC
-0B0CFA 01 0A 27 0B         A  3857    	LD	BC,L__104
+0B0CFA 01 0C 27 0B         A  3857    	LD	BC,L__104
 0B0CFE C5                  A  3858    	PUSH	BC
-0B0CFF CD C4 13 0B         A  3859    	CALL	___print_sendstring
+0B0CFF CD FB 13 0B         A  3859    	CALL	___print_sendstring
 0B0D03 C1                  A  3860    	POP	BC
 0B0D04 3E04                A  3861    	LD	A,%4
-0B0D06 32 5B 29 0B         A  3862    	LD	(___print_fmt+5),A
+0B0D06 32 48 29 0B         A  3862    	LD	(___print_fmt+5),A
 0B0D0A 3E60                A  3863    	LD	A,%60
-0B0D0C 32 57 29 0B         A  3864    	LD	(___print_fmt+1),A
+0B0D0C 32 44 29 0B         A  3864    	LD	(___print_fmt+1),A
 0B0D10 3E78                A  3865    	LD	A,%78
-0B0D12 32 5A 29 0B         A  3866    	LD	(___print_fmt+4),A
+0B0D12 32 47 29 0B         A  3866    	LD	(___print_fmt+4),A
 0B0D16 DD4EF5              A  3867    	LD	C,(IX+%FFFFFFF5)
 0B0D19 0600                A  3868    	LD	B,%0
 0B0D1B C5                  A  3869    	PUSH	BC
 0B0D1C DD07F2              A  3870    	LD	BC,(IX+%FFFFFFF2)
 0B0D1F C5                  A  3871    	PUSH	BC
-0B0D20 CD DA 1C 0B         A  3872    	CALL	__u_ultoa
+0B0D20 CD 11 1D 0B         A  3872    	CALL	__u_ultoa
 0B0D24 C1                  A  3873    	POP	BC
 0B0D25 C1                  A  3874    	POP	BC
-0B0D26 01 15 27 0B         A  3875    	LD	BC,L__105
+0B0D26 01 17 27 0B         A  3875    	LD	BC,L__105
 0B0D2A C5                  A  3876    	PUSH	BC
-0B0D2B CD C4 13 0B         A  3877    	CALL	___print_sendstring
+0B0D2B CD FB 13 0B         A  3877    	CALL	___print_sendstring
 0B0D2F C1                  A  3878    	POP	BC
 0B0D30                     A  3879    L_146:
                            A  3880    ;  411		printf("\r\n");
                            A  3881    .LINE 411
                            A  3882    
-0B0D30 01 35 15 0B         A  3883    	LD	BC,___print_uputch
+0B0D30 01 6C 15 0B         A  3883    	LD	BC,___print_uputch
 0B0D34 ED43 04 24 0B       A  3884    	LD	(___print_xputch),BC
-0B0D39 01 18 27 0B         A  3885    	LD	BC,L__106
+0B0D39 01 1A 27 0B         A  3885    	LD	BC,L__106
 0B0D3D C5                  A  3886    	PUSH	BC
-0B0D3E CD C4 13 0B         A  3887    	CALL	___print_sendstring
+0B0D3E CD FB 13 0B         A  3887    	CALL	___print_sendstring
 0B0D42 C1                  A  3888    	POP	BC
                            A  3889    ;  412	}
                            A  3890    .LINE 412
@@ -3982,26 +3982,26 @@ PC     Object              I  Line    Source
                            A  3926    
                            A  3927    .ENDFUNC "showCRC32",412,"_showCRC32"
                            A  3928    	SEGMENT STRSECT
-0B26E7                     A  3929    L__94:
-0B26E7 43616C63 756C6174   A  3930    	DB	"Calculating CRC"
-0B26EF 696E6720 435243 
-0B26F6 00                  A  3931    	DB	0
-0B26F7                     A  3932    L__99:
-0B26F7 0D0A0D0A 00         A  3933    	DB	13,10,13,10,0
-0B26FC                     A  3934    L__101:
-0B26FC 4D4F5320 43524320   A  3935    	DB	"MOS CRC 0x"
-0B2704 3078 
-0B2706 00                  A  3936    	DB	0
-0B2707                     A  3937    L__102:
-0B2707 0D0A00              A  3938    	DB	13,10,0
-0B270A                     A  3939    L__104:
-0B270A 56445020 43524320   A  3940    	DB	"VDP CRC 0x"
-0B2712 3078 
-0B2714 00                  A  3941    	DB	0
-0B2715                     A  3942    L__105:
-0B2715 0D0A00              A  3943    	DB	13,10,0
-0B2718                     A  3944    L__106:
-0B2718 0D0A00              A  3945    	DB	13,10,0
+0B26E9                     A  3929    L__94:
+0B26E9 43616C63 756C6174   A  3930    	DB	"Calculating CRC"
+0B26F1 696E6720 435243 
+0B26F8 00                  A  3931    	DB	0
+0B26F9                     A  3932    L__99:
+0B26F9 0D0A0D0A 00         A  3933    	DB	13,10,13,10,0
+0B26FE                     A  3934    L__101:
+0B26FE 4D4F5320 43524320   A  3935    	DB	"MOS CRC 0x"
+0B2706 3078 
+0B2708 00                  A  3936    	DB	0
+0B2709                     A  3937    L__102:
+0B2709 0D0A00              A  3938    	DB	13,10,0
+0B270C                     A  3939    L__104:
+0B270C 56445020 43524320   A  3940    	DB	"VDP CRC 0x"
+0B2714 3078 
+0B2716 00                  A  3941    	DB	0
+0B2717                     A  3942    L__105:
+0B2717 0D0A00              A  3943    	DB	13,10,0
+0B271A                     A  3944    L__106:
+0B271A 0D0A00              A  3945    	DB	13,10,0
                            A  3946    	SEGMENT CODE
                            A  3947    ;  413	
                            A  3948    ;  414	int main(int argc, char * argv[]) {	
@@ -4040,337 +4040,390 @@ PC     Object              I  Line    Source
                            A  3981    
                            A  3982    .ENDEF
                            A  3983    
-                           A  3984    .DEFINE "sysvars"
+                           A  3984    .DEFINE "n"
                            A  3985    
                            A  3986    .CLASS 65
                            A  3987    
                            A  3988    .VALUE -3
                            A  3989    
-                           A  3990    .TAG "NONAME3"
+                           A  3990    .TYPE 4
                            A  3991    
-                           A  3992    .TYPE 40
+                           A  3992    .ENDEF
                            A  3993    
-                           A  3994    .ENDEF
+                           A  3994    .DEFINE "sysvars"
                            A  3995    
-0B0D48 DDE5                A  3996    	PUSH	IX
-0B0D4A DD210000 00         A  3997    	LD	IX,0
-0B0D4F DD39                A  3998    	ADD	IX,SP
-0B0D51 C5                  A  3999    	PUSH	BC
-                           A  4000    ;  415		sysvar_t *sysvars;
-                           A  4001    ;  416		sysvars = getsysvars();
-                           A  4002    .LINE 416
+                           A  3996    .CLASS 65
+                           A  3997    
+                           A  3998    .VALUE -6
+                           A  3999    
+                           A  4000    .TAG "NONAME3"
+                           A  4001    
+                           A  4002    .TYPE 40
                            A  4003    
-0B0D52 CD 85 0E 0B         A  4004    	CALL	_getsysvars
-0B0D56 DD2FFD              A  4005    	LD	(IX+%FFFFFFFD),HL
-                           A  4006    ;  417	
-                           A  4007    ;  418		// All checks
-                           A  4008    ;  419		if(argc == 1) {
-                           A  4009    .LINE 419
-                           A  4010    
-0B0D59 01010000            A  4011    	LD	BC,1
-0B0D5D DD2706              A  4012    	LD	HL,(IX+%6)
-0B0D60 B7                  A  4013    	OR	A,A
-0B0D61 ED42                A  4014    	SBC	HL,BC
-0B0D63 20 0B               A  4015    	JR	NZ,L_150
-                           A  4016    ;  420			usage();
-                           A  4017    .LINE 420
-                           A  4018    
-0B0D65 CD 50 03 0B         A  4019    	CALL	_usage
-                           A  4020    ;  421			return 0;
-                           A  4021    .LINE 421
+                           A  4004    .ENDEF
+                           A  4005    
+0B0D48 DDE5                A  4006    	PUSH	IX
+0B0D4A DD210000 00         A  4007    	LD	IX,0
+0B0D4F DD39                A  4008    	ADD	IX,SP
+0B0D51 C5                  A  4009    	PUSH	BC
+0B0D52 C5                  A  4010    	PUSH	BC
+                           A  4011    ;  415		sysvar_t *sysvars;
+                           A  4012    ;  416		int n;
+                           A  4013    ;  417		sysvars = getsysvars();
+                           A  4014    .LINE 417
+                           A  4015    
+0B0D53 CD BC 0E 0B         A  4016    	CALL	_getsysvars
+0B0D57 DD2FFA              A  4017    	LD	(IX+%FFFFFFFA),HL
+                           A  4018    ;  418	
+                           A  4019    ;  419		// All checks
+                           A  4020    ;  420		if(argc == 1) {
+                           A  4021    .LINE 420
                            A  4022    
-0B0D69 B7                  A  4023    	OR	A,A
-0B0D6A ED62                A  4024    	SBC	HL,HL
-0B0D6C C3 5A 0E 0B         A  4025    	JR	L_172
-                           A  4026    ;  422		}
-0B0D70                     A  4027    L_150:
-                           A  4028    .LINE 422
-                           A  4029    
-                           A  4030    ;  423		if(!parseCommands(argc, argv)) {
-                           A  4031    .LINE 423
-                           A  4032    
-0B0D70 DD0709              A  4033    	LD	BC,(IX+%9)
-0B0D73 C5                  A  4034    	PUSH	BC
-0B0D74 DD0706              A  4035    	LD	BC,(IX+%6)
-0B0D77 C5                  A  4036    	PUSH	BC
-0B0D78 CD B0 07 0B         A  4037    	CALL	_parseCommands
-0B0D7C C1                  A  4038    	POP	BC
-0B0D7D C1                  A  4039    	POP	BC
-0B0D7E B7                  A  4040    	OR	A,A
-0B0D7F 20 0C               A  4041    	JR	NZ,L_152
-                           A  4042    ;  424			usage();
+0B0D5A 01010000            A  4023    	LD	BC,1
+0B0D5E DD2706              A  4024    	LD	HL,(IX+%6)
+0B0D61 B7                  A  4025    	OR	A,A
+0B0D62 ED42                A  4026    	SBC	HL,BC
+0B0D64 20 0B               A  4027    	JR	NZ,L_150
+                           A  4028    ;  421			usage();
+                           A  4029    .LINE 421
+                           A  4030    
+0B0D66 CD 50 03 0B         A  4031    	CALL	_usage
+                           A  4032    ;  422			return 0;
+                           A  4033    .LINE 422
+                           A  4034    
+0B0D6A B7                  A  4035    	OR	A,A
+0B0D6B ED62                A  4036    	SBC	HL,HL
+0B0D6D C3 91 0E 0B         A  4037    	JR	L_175
+                           A  4038    ;  423		}
+0B0D71                     A  4039    L_150:
+                           A  4040    .LINE 423
+                           A  4041    
+                           A  4042    ;  424		if(!parseCommands(argc, argv)) {
                            A  4043    .LINE 424
                            A  4044    
-0B0D81 CD 50 03 0B         A  4045    	CALL	_usage
-                           A  4046    ;  425			return EXIT_INVALIDPARAMETER;
-                           A  4047    .LINE 425
-                           A  4048    
-0B0D85 21130000            A  4049    	LD	HL,19
-0B0D89 C3 5A 0E 0B         A  4050    	JR	L_172
-                           A  4051    ;  426		}
-0B0D8D                     A  4052    L_152:
-                           A  4053    .LINE 426
-                           A  4054    
-                           A  4055    ;  427		if(!filesExist()) return EXIT_FILEN
-                           A  4056    .LINE 427
-                           A  4057    
-0B0D8D CD 70 09 0B         A  4058    	CALL	_filesExist
-0B0D91 B7                  A  4059    	OR	A,A
-0B0D92 20 08               A  4060    	JR	NZ,L_154
-0B0D94 21040000            A  4061    	LD	HL,4
-0B0D98 C3 5A 0E 0B         A  4062    	JR	L_172
-0B0D9C                     A  4063    L_154:
-                           A  4064    ;  428		if(!firmwareContentOK()) {
-                           A  4065    .LINE 428
+0B0D71 DD0709              A  4045    	LD	BC,(IX+%9)
+0B0D74 C5                  A  4046    	PUSH	BC
+0B0D75 DD0706              A  4047    	LD	BC,(IX+%6)
+0B0D78 C5                  A  4048    	PUSH	BC
+0B0D79 CD B0 07 0B         A  4049    	CALL	_parseCommands
+0B0D7D C1                  A  4050    	POP	BC
+0B0D7E C1                  A  4051    	POP	BC
+0B0D7F B7                  A  4052    	OR	A,A
+0B0D80 20 0C               A  4053    	JR	NZ,L_152
+                           A  4054    ;  425			usage();
+                           A  4055    .LINE 425
+                           A  4056    
+0B0D82 CD 50 03 0B         A  4057    	CALL	_usage
+                           A  4058    ;  426			return EXIT_INVALIDPARAMETER;
+                           A  4059    .LINE 426
+                           A  4060    
+0B0D86 21130000            A  4061    	LD	HL,19
+0B0D8A C3 91 0E 0B         A  4062    	JR	L_175
+                           A  4063    ;  427		}
+0B0D8E                     A  4064    L_152:
+                           A  4065    .LINE 427
                            A  4066    
-0B0D9C CD 2D 0A 0B         A  4067    	CALL	_firmwareContentOK
-0B0DA0 B7                  A  4068    	OR	A,A
-0B0DA1 20 08               A  4069    	JR	NZ,L_155
-                           A  4070    ;  429			return EXIT_INVALIDPARAMETER;
-                           A  4071    .LINE 429
-                           A  4072    
-0B0DA3 21130000            A  4073    	LD	HL,19
-0B0DA7 C3 5A 0E 0B         A  4074    	JR	L_172
-                           A  4075    ;  430		}
-0B0DAB                     A  4076    L_155:
-                           A  4077    .LINE 430
+                           A  4067    ;  428		if(!filesExist()) return EXIT_FILEN
+                           A  4068    .LINE 428
+                           A  4069    
+0B0D8E CD 70 09 0B         A  4070    	CALL	_filesExist
+0B0D92 B7                  A  4071    	OR	A,A
+0B0D93 20 08               A  4072    	JR	NZ,L_154
+0B0D95 21040000            A  4073    	LD	HL,4
+0B0D99 C3 91 0E 0B         A  4074    	JR	L_175
+0B0D9D                     A  4075    L_154:
+                           A  4076    ;  429		if(!firmwareContentOK()) {
+                           A  4077    .LINE 429
                            A  4078    
-                           A  4079    ;  431	
-                           A  4080    ;  432		// Banner
-                           A  4081    ;  433		putch(12);
-                           A  4082    .LINE 433
-                           A  4083    
-0B0DAB 010C0000            A  4084    	LD	BC,12
-0B0DAF C5                  A  4085    	PUSH	BC
-0B0DB0 CD E5 00 0B         A  4086    	CALL	_putch
-0B0DB4 C1                  A  4087    	POP	BC
-                           A  4088    ;  434		print_version();
-                           A  4089    .LINE 434
+0B0D9D CD 2D 0A 0B         A  4079    	CALL	_firmwareContentOK
+0B0DA1 B7                  A  4080    	OR	A,A
+0B0DA2 20 08               A  4081    	JR	NZ,L_157
+                           A  4082    ;  430			return EXIT_INVALIDPARAMETER;
+                           A  4083    .LINE 430
+                           A  4084    
+0B0DA4 21130000            A  4085    	LD	HL,19
+0B0DA8 C3 91 0E 0B         A  4086    	JR	L_175
+                           A  4087    ;  431		}
+0B0DAC                     A  4088    L_157:
+                           A  4089    .LINE 431
                            A  4090    
-0B0DB5 CD 2F 03 0B         A  4091    	CALL	_print_version
-                           A  4092    ;  435	
-                           A  4093    ;  436		// Skip CRC32 and user input when '
-                           A  4094    ;  437		if(!silent) {
-                           A  4095    .LINE 437
-                           A  4096    
-0B0DB9 3A 1B 1F 0B         A  4097    	LD	A,(_silent)
-0B0DBD B7                  A  4098    	OR	A,A
-0B0DBE 20 12               A  4099    	JR	NZ,L_158
-                           A  4100    ;  438			showCRC32();
-                           A  4101    .LINE 438
-                           A  4102    
-0B0DC0 CD 70 0B 0B         A  4103    	CALL	_showCRC32
-                           A  4104    ;  439			if(!getResponse()) return 0;
-                           A  4105    .LINE 439
-                           A  4106    
-0B0DC4 CD 75 03 0B         A  4107    	CALL	_getResponse
-0B0DC8 B7                  A  4108    	OR	A,A
-0B0DC9 20 07               A  4109    	JR	NZ,L_158
-0B0DCB B7                  A  4110    	OR	A,A
-0B0DCC ED62                A  4111    	SBC	HL,HL
-0B0DCE C3 5A 0E 0B         A  4112    	JR	L_172
-                           A  4113    ;  440		}
-0B0DD2                     A  4114    L_158:
-                           A  4115    .LINE 440
+                           A  4091    ;  432	
+                           A  4092    ;  433		// Skip CRC32 and user input when '
+                           A  4093    ;  434		if(!silent) {
+                           A  4094    .LINE 434
+                           A  4095    
+0B0DAC 3A 52 1F 0B         A  4096    	LD	A,(_silent)
+0B0DB0 B7                  A  4097    	OR	A,A
+0B0DB1 20 20               A  4098    	JR	NZ,L_166
+                           A  4099    ;  435			putch(12);
+                           A  4100    .LINE 435
+                           A  4101    
+0B0DB3 010C0000            A  4102    	LD	BC,12
+0B0DB7 C5                  A  4103    	PUSH	BC
+0B0DB8 CD E5 00 0B         A  4104    	CALL	_putch
+0B0DBC C1                  A  4105    	POP	BC
+                           A  4106    ;  436			print_version();
+                           A  4107    .LINE 436
+                           A  4108    
+0B0DBD CD 2F 03 0B         A  4109    	CALL	_print_version
+                           A  4110    ;  437			showCRC32();
+                           A  4111    .LINE 437
+                           A  4112    
+0B0DC1 CD 70 0B 0B         A  4113    	CALL	_showCRC32
+                           A  4114    ;  438			if(!getResponse()) return 0;
+                           A  4115    .LINE 438
                            A  4116    
-                           A  4117    ;  441	
-                           A  4118    ;  442		printf("Flashing firmware...\r\n");
-                           A  4119    .LINE 442
-                           A  4120    
-0B0DD2 01 35 15 0B         A  4121    	LD	BC,___print_uputch
-0B0DD6 ED43 04 24 0B       A  4122    	LD	(___print_xputch),BC
-0B0DDB 01 1B 27 0B         A  4123    	LD	BC,L__114
-0B0DDF C5                  A  4124    	PUSH	BC
-0B0DE0 CD C4 13 0B         A  4125    	CALL	___print_sendstring
-0B0DE4 C1                  A  4126    	POP	BC
-                           A  4127    ;  443		delayms(750);
-                           A  4128    .LINE 443
-                           A  4129    
-0B0DE5 01EE0200            A  4130    	LD	BC,750
-0B0DE9 C5                  A  4131    	PUSH	BC
-0B0DEA CD 61 10 0B         A  4132    	CALL	_delayms
-0B0DEE C1                  A  4133    	POP	BC
-                           A  4134    ;  444	
-                           A  4135    ;  445		if(flashvdp) {
-                           A  4136    .LINE 445
+0B0DC5 CD 75 03 0B         A  4117    	CALL	_getResponse
+0B0DC9 B7                  A  4118    	OR	A,A
+0B0DCA 20 07               A  4119    	JR	NZ,L_166
+0B0DCC B7                  A  4120    	OR	A,A
+0B0DCD ED62                A  4121    	SBC	HL,HL
+0B0DCF C3 91 0E 0B         A  4122    	JR	L_175
+                           A  4123    ;  439		}
+0B0DD3                     A  4124    L_166:
+                           A  4125    .LINE 439
+                           A  4126    
+                           A  4127    ;  440	
+                           A  4128    ;  441		if(flashvdp) {
+                           A  4129    .LINE 441
+                           A  4130    
+0B0DD3 3A 51 1F 0B         A  4131    	LD	A,(_flashvdp)
+0B0DD7 B7                  A  4132    	OR	A,A
+0B0DD8 28 3E               A  4133    	JR	Z,L_173
+                           A  4134    ;  442			while(sysvars->scrheight == 0);
+0B0DDA                     A  4135    L_159:
+                           A  4136    .LINE 442
                            A  4137    
-0B0DEF 3A 1A 1F 0B         A  4138    	LD	A,(_flashvdp)
-0B0DF3 B7                  A  4139    	OR	A,A
-0B0DF4 28 3E               A  4140    	JR	Z,L_168
-                           A  4141    ;  446			while(sysvars->scrheight == 0);
-0B0DF6                     A  4142    L_160:
-                           A  4143    .LINE 446
-                           A  4144    
-0B0DF6 DD31FD              A  4145    	LD	IY,(IX+%FFFFFFFD)
-0B0DF9 FD2711              A  4146    	LD	HL,(IY+%11)
-0B0DFC CD 47 1C 0B         A  4147    	CALL	__scmpzero
-0B0E00 28 F4               A  4148    	JR	Z,L_160
-                           A  4149    ;  447			//beep(1);
-                           A  4150    ;  448			sysvars->scrheight = 0;
-                           A  4151    .LINE 448
-                           A  4152    
-0B0E02 DD31FD              A  4153    	LD	IY,(IX+%FFFFFFFD)
-0B0E05 FD361100            A  4154    	LD	(IY+%11),%0
-0B0E09 FD361200            A  4155    	LD	(IY+%12),%0
-                           A  4156    ;  449			if(flashvdp) update_vdp(vdpfile
-                           A  4157    .LINE 449
-                           A  4158    
-0B0E0D 3A 1A 1F 0B         A  4159    	LD	A,(_flashvdp)
-0B0E11 B7                  A  4160    	OR	A,A
-0B0E12 28 0A               A  4161    	JR	Z,L_163
-0B0E14 01 48 28 0B         A  4162    	LD	BC,_vdpfilename
-0B0E18 C5                  A  4163    	PUSH	BC
-0B0E19 CD F9 03 0B         A  4164    	CALL	_update_vdp
-0B0E1D C1                  A  4165    	POP	BC
-0B0E1E                     A  4166    L_163:
-                           A  4167    ;  450			echoVDP(1);
-                           A  4168    .LINE 450
-                           A  4169    
-0B0E1E 01010000            A  4170    	LD	BC,1
-0B0E22 C5                  A  4171    	PUSH	BC
-0B0E23 CD D8 06 0B         A  4172    	CALL	_echoVDP
-0B0E27 C1                  A  4173    	POP	BC
-                           A  4174    ;  451			while(sysvars->scrheight == 0);
-0B0E28                     A  4175    L_165:
-                           A  4176    .LINE 451
-                           A  4177    
-0B0E28 DD31FD              A  4178    	LD	IY,(IX+%FFFFFFFD)
-0B0E2B FD2711              A  4179    	LD	HL,(IY+%11)
-0B0E2E CD 47 1C 0B         A  4180    	CALL	__scmpzero
-0B0E32 28 F4               A  4181    	JR	Z,L_165
-                           A  4182    ;  452		}
-0B0E34                     A  4183    L_168:
-                           A  4184    .LINE 452
-                           A  4185    
-                           A  4186    ;  453		//beep(2);
-                           A  4187    ;  454		if(flashmos) update_mos(mosfilename
-                           A  4188    .LINE 454
-                           A  4189    
-0B0E34 3A 19 1F 0B         A  4190    	LD	A,(_flashmos)
-0B0E38 B7                  A  4191    	OR	A,A
-0B0E39 28 0A               A  4192    	JR	Z,L_169
-0B0E3B 01 48 27 0B         A  4193    	LD	BC,_mosfilename
-0B0E3F C5                  A  4194    	PUSH	BC
-0B0E40 CD 9F 04 0B         A  4195    	CALL	_update_mos
-0B0E44 C1                  A  4196    	POP	BC
-0B0E45                     A  4197    L_169:
-                           A  4198    ;  455		//beep(3);
-                           A  4199    ;  456		printf("Press reset button");
-                           A  4200    .LINE 456
-                           A  4201    
-0B0E45 01 35 15 0B         A  4202    	LD	BC,___print_uputch
-0B0E49 ED43 04 24 0B       A  4203    	LD	(___print_xputch),BC
-0B0E4E 01 32 27 0B         A  4204    	LD	BC,L__120
-0B0E52 C5                  A  4205    	PUSH	BC
-0B0E53 CD C4 13 0B         A  4206    	CALL	___print_sendstring
-0B0E57 C1                  A  4207    	POP	BC
-                           A  4208    ;  457		while(1);
-0B0E58                     A  4209    L_171:
-                           A  4210    .LINE 457
-                           A  4211    
-0B0E58 18 FE               A  4212    	JR	L_171
-                           A  4213    ;  458	}
-0B0E5A                     A  4214    L_172:
-                           A  4215    .LINE 458
-                           A  4216    
-0B0E5A DDF9                A  4217    	LD	SP,IX
-0B0E5C DDE1                A  4218    	POP	IX
-0B0E5E C9                  A  4219    	RET	
-                           A  4220    
-                           A  4221    
-                           A  4222    ;**************************** _main ***********
-                           A  4223    ;Name                         Addr/Register   S
-                           A  4224    ;_mosfilename                        STATIC    
-                           A  4225    ;_flashmos                           STATIC    
-                           A  4226    ;_vdpfilename                        STATIC    
-                           A  4227    ;_flashvdp                           STATIC    
-                           A  4228    ;_delayms                            IMPORT  --
-                           A  4229    ;___print_sendstring                 IMPORT  --
-                           A  4230    ;___print_xputch                     IMPORT    
-                           A  4231    ;___print_uputch                     IMPORT  --
-                           A  4232    ;_silent                             STATIC    
-                           A  4233    ;_putch                              IMPORT  --
-                           A  4234    ;_getsysvars                         IMPORT  --
-                           A  4235    ;sysvars                               IX-3    
-                           A  4236    ;argv                                  IX+9    
-                           A  4237    ;argc                                  IX+6    
-                           A  4238    
-                           A  4239    
-                           A  4240    ; Stack Frame Size: 15 (bytes)
-                           A  4241    ;       Spill Code: 0 (instruction)
-                           A  4242    
-                           A  4243    
-                           A  4244    .ENDFUNC "main",458,"_main"
-                           A  4245    	SEGMENT STRSECT
-0B271B                     A  4246    L__114:
-0B271B 466C6173 68696E67   A  4247    	DB	"Flashing firmware..."
-0B2723 20666972 6D776172 
-0B272B 652E2E2E 
-0B272F 0D0A00              A  4248    	DB	13,10,0
-0B2732                     A  4249    L__120:
-0B2732 50726573 73207265   A  4250    	DB	"Press reset button"
-0B273A 73657420 62757474 
-0B2742 6F6E 
-0B2744 00                  A  4251    	DB	0
-                           A  4252    	XREF _memcmp:ROM
-                           A  4253    	XREF _strcpy:ROM
-                           A  4254    	XREF _getFileSize:ROM
-                           A  4255    	XREF _crc32_finalize:ROM
-                           A  4256    	XREF _crc32_initialize:ROM
-                           A  4257    	XREF _crc32:ROM
-                           A  4258    	XREF _delayms:ROM
-                           A  4259    	XREF _startVDPupdate:ROM
-                           A  4260    	XREF _fastmemcpy:ROM
-                           A  4261    	XREF _lockFlashKeyRegister:ROM
-                           A  4262    	XREF _enableFlashKeyRegister:ROM
-                           A  4263    	XREF _mos_fread:ROM
-                           A  4264    	XREF _mos_fclose:ROM
-                           A  4265    	XREF _mos_fopen:ROM
-                           A  4266    	XREF _getsysvars:ROM
-                           A  4267    	XREF _getch:ROM
-                           A  4268    	XREF _tolower:ROM
-                           A  4269    	XREF __u_ultoa:ROM
-                           A  4270    	XREF __u_itoa:ROM
-                           A  4271    	XREF ___print_sendstring:ROM
-                           A  4272    	XREF ___print_xputch:ROM
-                           A  4273    	XREF ___print_uputch:ROM
-                           A  4274    	XREF ___print_fmt:ROM
-                           A  4275    	XREF __iand:ROM
-                           A  4276    	XREF __stoiu:ROM
-                           A  4277    	XREF __scmpzero:ROM
-                           A  4278    	XREF __icmpzero:ROM
-                           A  4279    	XREF __seqcaseD:ROM
-                           A  4280    	XREF __ishru_b:ROM
-                           A  4281    	XREF __ishrs_b:ROM
-                           A  4282    	XDEF _main
-                           A  4283    	XDEF _showCRC32
-                           A  4284    	XDEF _firmwareContentOK
-                           A  4285    	XDEF _filesExist
-                           A  4286    	XDEF _parseCommands
-                           A  4287    	XDEF _silent
-                           A  4288    	XDEF _vdpfilename
-                           A  4289    	XDEF _flashvdp
-                           A  4290    	XDEF _mosfilename
-                           A  4291    	XDEF _flashmos
-                           A  4292    	XDEF _getCommand
-                           A  4293    	XDEF _echoVDP
-                           A  4294    	XDEF _update_mos
-                           A  4295    	XDEF _update_vdp
-                           A  4296    	XDEF _getResponse
-                           A  4297    	XDEF _usage
-                           A  4298    	XDEF _print_version
-                           A  4299    	XDEF _containsESP32Header
-                           A  4300    	XDEF _esp32_magicnumbers
-                           A  4301    	XDEF _containsMosHeader
-                           A  4302    	XDEF _mos_magicnumbers
-                           A  4303    	XDEF _vdp_ota_present
-                           A  4304    	XDEF _getCharAt
-                           A  4305    	XDEF _beep
-                           A  4306    	XDEF _putch
-                           A  4307    	XDEF _errno
-                           A  4308    	END
+0B0DDA DD31FA              A  4138    	LD	IY,(IX+%FFFFFFFA)
+0B0DDD FD2711              A  4139    	LD	HL,(IY+%11)
+0B0DE0 CD 7E 1C 0B         A  4140    	CALL	__scmpzero
+0B0DE4 28 F4               A  4141    	JR	Z,L_159
+                           A  4142    ;  443			//beep(1);
+                           A  4143    ;  444			sysvars->scrheight = 0;
+                           A  4144    .LINE 444
+                           A  4145    
+0B0DE6 DD31FA              A  4146    	LD	IY,(IX+%FFFFFFFA)
+0B0DE9 FD361100            A  4147    	LD	(IY+%11),%0
+0B0DED FD361200            A  4148    	LD	(IY+%12),%0
+                           A  4149    ;  445			if(flashvdp) update_vdp(vdpfile
+                           A  4150    .LINE 445
+                           A  4151    
+0B0DF1 3A 51 1F 0B         A  4152    	LD	A,(_flashvdp)
+0B0DF5 B7                  A  4153    	OR	A,A
+0B0DF6 28 0A               A  4154    	JR	Z,L_162
+0B0DF8 01 35 28 0B         A  4155    	LD	BC,_vdpfilename
+0B0DFC C5                  A  4156    	PUSH	BC
+0B0DFD CD F9 03 0B         A  4157    	CALL	_update_vdp
+0B0E01 C1                  A  4158    	POP	BC
+0B0E02                     A  4159    L_162:
+                           A  4160    ;  446			echoVDP(1);
+                           A  4161    .LINE 446
+                           A  4162    
+0B0E02 01010000            A  4163    	LD	BC,1
+0B0E06 C5                  A  4164    	PUSH	BC
+0B0E07 CD D8 06 0B         A  4165    	CALL	_echoVDP
+0B0E0B C1                  A  4166    	POP	BC
+                           A  4167    ;  447			while(sysvars->scrheight == 0);
+0B0E0C                     A  4168    L_164:
+                           A  4169    .LINE 447
+                           A  4170    
+0B0E0C DD31FA              A  4171    	LD	IY,(IX+%FFFFFFFA)
+0B0E0F FD2711              A  4172    	LD	HL,(IY+%11)
+0B0E12 CD 7E 1C 0B         A  4173    	CALL	__scmpzero
+0B0E16 28 F4               A  4174    	JR	Z,L_164
+                           A  4175    ;  448		}
+0B0E18                     A  4176    L_173:
+                           A  4177    .LINE 448
+                           A  4178    
+                           A  4179    ;  449		if(flashmos) {
+                           A  4180    .LINE 449
+                           A  4181    
+0B0E18 3A 50 1F 0B         A  4182    	LD	A,(_flashmos)
+0B0E1C B7                  A  4183    	OR	A,A
+0B0E1D 28 6F               A  4184    	JR	Z,L_174
+                           A  4185    ;  450			//beep(2);
+                           A  4186    ;  451			update_mos(mosfilename);
+                           A  4187    .LINE 451
+                           A  4188    
+0B0E1F 01 35 27 0B         A  4189    	LD	BC,_mosfilename
+0B0E23 C5                  A  4190    	PUSH	BC
+0B0E24 CD 9F 04 0B         A  4191    	CALL	_update_mos
+0B0E28 C1                  A  4192    	POP	BC
+                           A  4193    ;  452			//beep(3);
+                           A  4194    ;  453			//printf("Press reset button");
+                           A  4195    ;  454			//while(1);
+                           A  4196    ;  455			printf("System reset in ");
+                           A  4197    .LINE 455
+                           A  4198    
+0B0E29 01 6C 15 0B         A  4199    	LD	BC,___print_uputch
+0B0E2D ED43 04 24 0B       A  4200    	LD	(___print_xputch),BC
+0B0E32 01 1D 27 0B         A  4201    	LD	BC,L__119
+0B0E36 C5                  A  4202    	PUSH	BC
+0B0E37 CD FB 13 0B         A  4203    	CALL	___print_sendstring
+0B0E3B C1                  A  4204    	POP	BC
+                           A  4205    ;  456			for(n = 3; n > 0; n--) {
+                           A  4206    .LINE 456
+                           A  4207    
+0B0E3C 01030000            A  4208    	LD	BC,3
+0B0E40 DD0FFD              A  4209    	LD	(IX+%FFFFFFFD),BC
+0B0E43 18 38               A  4210    	JR	L_170
+0B0E45                     A  4211    L_168:
+                           A  4212    ;  457				printf("%d...", n);
+                           A  4213    .LINE 457
+                           A  4214    
+0B0E45 01 6C 15 0B         A  4215    	LD	BC,___print_uputch
+0B0E49 ED43 04 24 0B       A  4216    	LD	(___print_xputch),BC
+0B0E4E DD07FD              A  4217    	LD	BC,(IX+%FFFFFFFD)
+0B0E51 CD 04 1C 0B         A  4218    	CALL	__itol
+0B0E55 C5D1                A  4219    	LD	DE,BC
+0B0E57 4F                  A  4220    	LD	C,A
+0B0E58 0600                A  4221    	LD	B,%0
+0B0E5A C5                  A  4222    	PUSH	BC
+0B0E5B D5                  A  4223    	PUSH	DE
+0B0E5C CD F2 15 0B         A  4224    	CALL	__u_itoa
+0B0E60 C1                  A  4225    	POP	BC
+0B0E61 C1                  A  4226    	POP	BC
+0B0E62 01 2E 27 0B         A  4227    	LD	BC,L__120
+0B0E66 C5                  A  4228    	PUSH	BC
+0B0E67 CD FB 13 0B         A  4229    	CALL	___print_sendstring
+0B0E6B C1                  A  4230    	POP	BC
+                           A  4231    ;  458				delayms(1000);
+                           A  4232    .LINE 458
+                           A  4233    
+0B0E6C 01E80300            A  4234    	LD	BC,1000
+0B0E70 C5                  A  4235    	PUSH	BC
+0B0E71 CD 98 10 0B         A  4236    	CALL	_delayms
+0B0E75 C1                  A  4237    	POP	BC
+0B0E76 DD07FD              A  4238    	LD	BC,(IX+%FFFFFFFD)
+0B0E79 0B                  A  4239    	DEC	BC
+0B0E7A DD0FFD              A  4240    	LD	(IX+%FFFFFFFD),BC
+                           A  4241    ;  459			}
+0B0E7D                     A  4242    L_170:
+                           A  4243    .LINE 459
+                           A  4244    
+0B0E7D DD07FD              A  4245    	LD	BC,(IX+%FFFFFFFD)
+0B0E80 B7                  A  4246    	OR	A,A
+0B0E81 ED62                A  4247    	SBC	HL,HL
+0B0E83 B7                  A  4248    	OR	A,A
+0B0E84 ED42                A  4249    	SBC	HL,BC
+0B0E86 FA 45 0E 0B         A  4250    	JP	M,L_168
+                           A  4251    ;  460			reset();
+                           A  4252    .LINE 460
+                           A  4253    
+0B0E8A CD F2 0F 0B         A  4254    	CALL	_reset
+                           A  4255    ;  461		}
+0B0E8E                     A  4256    L_174:
+                           A  4257    .LINE 461
+                           A  4258    
+                           A  4259    ;  462		return 0;
+                           A  4260    .LINE 462
+                           A  4261    
+0B0E8E B7                  A  4262    	OR	A,A
+0B0E8F ED62                A  4263    	SBC	HL,HL
+                           A  4264    ;  463	}
+0B0E91                     A  4265    L_175:
+                           A  4266    .LINE 463
+                           A  4267    
+0B0E91 DDF9                A  4268    	LD	SP,IX
+0B0E93 DDE1                A  4269    	POP	IX
+0B0E95 C9                  A  4270    	RET	
+                           A  4271    
+                           A  4272    
+                           A  4273    ;**************************** _main ***********
+                           A  4274    ;Name                         Addr/Register   S
+                           A  4275    ;_reset                              IMPORT  --
+                           A  4276    ;_delayms                            IMPORT  --
+                           A  4277    ;__u_itoa                            IMPORT  --
+                           A  4278    ;___print_sendstring                 IMPORT  --
+                           A  4279    ;___print_xputch                     IMPORT    
+                           A  4280    ;___print_uputch                     IMPORT  --
+                           A  4281    ;_mosfilename                        STATIC    
+                           A  4282    ;_flashmos                           STATIC    
+                           A  4283    ;_vdpfilename                        STATIC    
+                           A  4284    ;_flashvdp                           STATIC    
+                           A  4285    ;_putch                              IMPORT  --
+                           A  4286    ;_silent                             STATIC    
+                           A  4287    ;_getsysvars                         IMPORT  --
+                           A  4288    ;sysvars                               IX-6    
+                           A  4289    ;n                                     IX-3    
+                           A  4290    ;argv                                  IX+9    
+                           A  4291    ;argc                                  IX+6    
+                           A  4292    
+                           A  4293    
+                           A  4294    ; Stack Frame Size: 18 (bytes)
+                           A  4295    ;       Spill Code: 0 (instruction)
+                           A  4296    
+                           A  4297    
+                           A  4298    .ENDFUNC "main",463,"_main"
+                           A  4299    	SEGMENT STRSECT
+0B271D                     A  4300    L__119:
+0B271D 53797374 656D2072   A  4301    	DB	"System reset in "
+0B2725 65736574 20696E20 
+0B272D 00                  A  4302    	DB	0
+0B272E                     A  4303    L__120:
+0B272E 2E2E2E              A  4304    	DB	"..."
+0B2731 00                  A  4305    	DB	0
+                           A  4306    	XREF _memcmp:ROM
+                           A  4307    	XREF _strcpy:ROM
+                           A  4308    	XREF _getFileSize:ROM
+                           A  4309    	XREF _crc32_finalize:ROM
+                           A  4310    	XREF _crc32_initialize:ROM
+                           A  4311    	XREF _crc32:ROM
+                           A  4312    	XREF _delayms:ROM
+                           A  4313    	XREF _startVDPupdate:ROM
+                           A  4314    	XREF _reset:ROM
+                           A  4315    	XREF _fastmemcpy:ROM
+                           A  4316    	XREF _lockFlashKeyRegister:ROM
+                           A  4317    	XREF _enableFlashKeyRegister:ROM
+                           A  4318    	XREF _mos_fread:ROM
+                           A  4319    	XREF _mos_fclose:ROM
+                           A  4320    	XREF _mos_fopen:ROM
+                           A  4321    	XREF _getsysvars:ROM
+                           A  4322    	XREF _getch:ROM
+                           A  4323    	XREF _tolower:ROM
+                           A  4324    	XREF __u_ultoa:ROM
+                           A  4325    	XREF __u_itoa:ROM
+                           A  4326    	XREF ___print_sendstring:ROM
+                           A  4327    	XREF ___print_xputch:ROM
+                           A  4328    	XREF ___print_uputch:ROM
+                           A  4329    	XREF ___print_fmt:ROM
+                           A  4330    	XREF __iand:ROM
+                           A  4331    	XREF __stoiu:ROM
+                           A  4332    	XREF __itol:ROM
+                           A  4333    	XREF __scmpzero:ROM
+                           A  4334    	XREF __icmpzero:ROM
+                           A  4335    	XREF __seqcaseD:ROM
+                           A  4336    	XREF __ishru_b:ROM
+                           A  4337    	XREF __ishrs_b:ROM
+                           A  4338    	XDEF _main
+                           A  4339    	XDEF _showCRC32
+                           A  4340    	XDEF _firmwareContentOK
+                           A  4341    	XDEF _filesExist
+                           A  4342    	XDEF _parseCommands
+                           A  4343    	XDEF _silent
+                           A  4344    	XDEF _vdpfilename
+                           A  4345    	XDEF _flashvdp
+                           A  4346    	XDEF _mosfilename
+                           A  4347    	XDEF _flashmos
+                           A  4348    	XDEF _getCommand
+                           A  4349    	XDEF _echoVDP
+                           A  4350    	XDEF _update_mos
+                           A  4351    	XDEF _update_vdp
+                           A  4352    	XDEF _getResponse
+                           A  4353    	XDEF _usage
+                           A  4354    	XDEF _print_version
+                           A  4355    	XDEF _containsESP32Header
+                           A  4356    	XDEF _esp32_magicnumbers
+                           A  4357    	XDEF _containsMosHeader
+                           A  4358    	XDEF _mos_magicnumbers
+                           A  4359    	XDEF _vdp_ota_present
+                           A  4360    	XDEF _getCharAt
+                           A  4361    	XDEF _beep
+                           A  4362    	XDEF _putch
+                           A  4363    	XDEF _errno
+                           A  4364    	END
 
 
 Errors: 0
 Warnings: 0
-Lines Assembled: 4309
+Lines Assembled: 4365

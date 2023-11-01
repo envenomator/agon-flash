@@ -236,7 +236,7 @@ uint8_t update_mos(char *filename) {
 		addressfrom += PAGESIZE;
 	}
 	lockFlashKeyRegister();	// lock the flash before WARM reset
-	printf("\r\n\r\nDone\r\n");
+	printf("\r\n\r\nDone\r\n\r\n");
 	return 0;
 }
 
@@ -413,6 +413,7 @@ void showCRC32(void) {
 
 int main(int argc, char * argv[]) {	
 	sysvar_t *sysvars;
+	int n;
 	sysvars = getsysvars();
 
 	// All checks
@@ -429,18 +430,13 @@ int main(int argc, char * argv[]) {
 		return EXIT_INVALIDPARAMETER;
 	}
 
-	// Banner
-	putch(12);
-	print_version();
-
 	// Skip CRC32 and user input when 'silent' is requested
 	if(!silent) {
+		putch(12);
+		print_version();
 		showCRC32();
 		if(!getResponse()) return 0;
 	}
-
-	printf("Flashing firmware...\r\n");
-	delayms(750);
 
 	if(flashvdp) {
 		while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
@@ -450,10 +446,19 @@ int main(int argc, char * argv[]) {
 		echoVDP(1);
 		while(sysvars->scrheight == 0);
 	}
-	//beep(2);
-	if(flashmos) update_mos(mosfilename);
-	//beep(3);
-	printf("Press reset button");
-	while(1);
+	if(flashmos) {
+		//beep(2);
+		update_mos(mosfilename);
+		//beep(3);
+		//printf("Press reset button");
+		//while(1);
+		printf("System reset in ");
+		for(n = 3; n > 0; n--) {
+			printf("%d...", n);
+			delayms(1000);
+		}
+		reset();
+	}
+	return 0;
 }
 
