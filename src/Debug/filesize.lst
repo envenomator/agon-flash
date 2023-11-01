@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     20:16:42     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     21:15:57     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -16,24 +16,24 @@ PC     Object              I  Line    Source
                            A    12    ; Input: A - MOS filehandle
                            A    13    ; Output: HL - 24bit filesize
                            A    14    
-0B126A                     A    15    _getFileSize:
-0B126A DDE5                A    16    	PUSH IX
-0B126C DD210000 00         A    17    	LD	 IX, 0h
-0B1271 DD39                A    18    	ADD	 IX, SP
+0B141B                     A    15    _getFileSize:
+0B141B DDE5                A    16    	PUSH IX
+0B141D DD210000 00         A    17    	LD	 IX, 0h
+0B1422 DD39                A    18    	ADD	 IX, SP
                            A    19    
                            A    20        ; get pointer to FIL structure in MOS memor
-0B1273 DD7E06              A    21    	LD	A, (IX+6)
-0B1276 4F                  A    22        LD  C, A
-0B1277 3E19                A    23        LD  A, mos_getfil
-0B1279 5BCF                A    24        RST.LIL 08h
+0B1424 DD7E06              A    21    	LD	A, (IX+6)
+0B1427 4F                  A    22        LD  C, A
+0B1428 3E19                A    23        LD  A, mos_getfil
+0B142A 5BCF                A    24        RST.LIL 08h
                            A    25    
-0B127B 110B0000            A    26        LD  DE, fil_obj + ffobjid_objsize    ; offs
-0B127F 19                  A    27        ADD HL, DE
-0B1280 ED27                A    28        LD  HL, (HL)     ; load actual FSIZE_t valu
+0B142C 110B0000            A    26        LD  DE, fil_obj + ffobjid_objsize    ; offs
+0B1430 19                  A    27        ADD HL, DE
+0B1431 ED27                A    28        LD  HL, (HL)     ; load actual FSIZE_t valu
                            A    29    
-0B1282 DDF9                A    30    	LD	SP, IX
-0B1284 DDE1                A    31    	POP	IX
-0B1286 C9                  A    32    	RET
+0B1433 DDF9                A    30    	LD	SP, IX
+0B1435 DDE1                A    31    	POP	IX
+0B1437 C9                  A    32    	RET
                            A    33    end
 
 

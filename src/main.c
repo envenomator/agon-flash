@@ -35,6 +35,7 @@
 #define CMDALL		1
 #define CMDMOS		2
 #define CMDVDP		3
+#define CMDSILENT	4
 
 int errno; // needed by standard library
 enum states{firmware,retry,systemreset};
@@ -126,18 +127,10 @@ typedef enum {
 	VDP
 } flashtype;
 
-bool getResponse(flashtype t, uint32_t crc) {
+bool getResponse(void) {
 	uint8_t response = 0;
 
-	switch(t) {
-		case MOS:
-			printf("\r\n\r\n0x%04lX - flash to MOS (y/n)?", crc);
-			break;
-		case VDP:
-			printf("\r\n\r\n0x%04lX - flash to VDP (y/n)?", crc);
-			break;
-	}
-
+	printf("Flash firmware (y/n)?");
 	while((response != 'y') && (response != 'n')) response = tolower(getch());
 	if(response == 'n') printf("\r\nUser abort\n\r\n\r");
 	else printf("\r\n\r\n");
@@ -367,6 +360,7 @@ int getCommand(const char *command) {
 	if(memcmp(command, "all", 4) == 0) return CMDALL;
 	if(memcmp(command, "mos", 3) == 0) return CMDMOS;
 	if(memcmp(command, "vdp", 3) == 0) return CMDVDP;
+	if(memcmp(command, "silent", 6) == 0) return CMDSILENT;
 	return CMDUNKNOWN;
 }
 
@@ -374,6 +368,7 @@ bool flashmos = false;
 char mosfilename[256];
 bool flashvdp = false;
 char vdpfilename[256];
+bool silent = false;
 
 bool parseCommands(int argc, char *argv[]) {
 	int argcounter;
@@ -415,25 +410,107 @@ bool parseCommands(int argc, char *argv[]) {
 				}
 				flashvdp = true;
 				break;
+			case CMDSILENT:
+				if(silent) return false;
+				silent = true;
+				break;
 		}
 		argcounter++;
 	}
 	return (flashvdp || flashmos);
 }
+
+bool filesExist(void) {
+	uint8_t file;
+	bool filesexist = true;
+
+	if(flashmos) {
+		file = mos_fopen(mosfilename, fa_read);
+		if(!file) {
+			printf("Error opening MOS firmware \"%s\"\n\r",mosfilename);
+			filesexist = false;
+		}
+		mos_fclose(file);
+	}
+
+	if(flashvdp) {
+		file = mos_fopen(vdpfilename, fa_read);
+		if(!file) {
+			printf("Error opening VDP firmware \"%s\"\n\r",vdpfilename);
+			filesexist = false;
+		}
+		mos_fclose(file);
+	}
+
+	return filesexist;
+}
+
+void showCRC32(void) {
+	uint8_t file;
+	uint24_t got,size;
+	uint32_t moscrc,vdpcrc;
+	char* ptr;
+
+	moscrc = 0;
+	vdpcrc = 0;
+
+	printf("Calculating CRC");
+
+	if(flashmos) {
+		ptr = (char*)BUFFER1;
+		file = mos_fopen(mosfilename, fa_read);
+		crc32_initialize();
+		
+		// Read file to memory
+		while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
+			crc32(ptr, got);
+			ptr += got;
+			putch('.');
+		}		
+		moscrc = crc32_finalize();
+		mos_fclose(file);
+	}
+	if(flashvdp) {
+		file = mos_fopen(vdpfilename, fa_read);
+		crc32_initialize();
+		while(1) {
+			size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
+			if(size == 0) break;
+			putch('.');
+			crc32((char *)BUFFER1, size);
+		}
+		vdpcrc = crc32_finalize();
+		mos_fclose(file);
+	}
+	printf("\r\n\r\n");
+	if(flashmos) printf("MOS CRC 0x%04lX\r\n", moscrc);
+	if(flashvdp) printf("VDP CRC 0x%04lX\r\n", vdpcrc);
+	printf("\r\n");
+}
+
 int main(int argc, char * argv[]) {	
-	uint8_t *gp, gpvalue;
 	sysvar_t *sysvars;
 
 	if(argc == 1) {
 		usage();
 		return 0;
 	}
-
 	if(!parseCommands(argc, argv)) {
 		usage();
 		return EXIT_INVALIDPARAMETER;
 	}
+	if(!filesExist()) return EXIT_FILENOTFOUND;
 
+	putch(12); // cls
+	print_version();
+	showCRC32();
+
+	if(!silent) {
+		if(!getResponse()) return 0;
+	}
+
+	printf("Flashing firmware...<dummy>...\r\n");
+	return 0;
 	printf("Result:\r\n");
 	printf("Flash MOS: %d\r\n", flashmos);
 	if(flashmos) printf("filename \"%s\"\r\n", mosfilename);
