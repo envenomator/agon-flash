@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     17:40:14     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     20:16:42     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -87,7 +87,7 @@ PC     Object              I  Line    Source
                            A    83    ;   26	UINT32
                            A    84    ;   27	strtoll(const char *nptr)
                            A    85    ;   28	{
-0B0D02                     A    86    _strtoll:
+0B1034                     A    86    _strtoll:
                            A    87    .DEFINE "_strtoll"
                            A    88    
                            A    89    .VALUE _strtoll
@@ -152,246 +152,246 @@ PC     Object              I  Line    Source
                            A   148    
                            A   149    .ENDEF
                            A   150    
-0B0D02 DDE5                A   151    	PUSH	IX
-0B0D04 DD210000 00         A   152    	LD	IX,0
-0B0D09 DD39                A   153    	ADD	IX,SP
-0B0D0B ED22E9              A   154    	LEA	HL,IX+%FFFFFFE9
-0B0D0E F9                  A   155    	LD	SP,HL
+0B1034 DDE5                A   151    	PUSH	IX
+0B1036 DD210000 00         A   152    	LD	IX,0
+0B103B DD39                A   153    	ADD	IX,SP
+0B103D ED22E9              A   154    	LEA	HL,IX+%FFFFFFE9
+0B1040 F9                  A   155    	LD	SP,HL
                            A   156    ;   29		const char *s = nptr;
                            A   157    .LINE 29
                            A   158    
-0B0D0F DD0706              A   159    	LD	BC,(IX+%6)
-0B0D12 DD0FFA              A   160    	LD	(IX+%FFFFFFFA),BC
+0B1041 DD0706              A   159    	LD	BC,(IX+%6)
+0B1044 DD0FFA              A   160    	LD	(IX+%FFFFFFFA),BC
                            A   161    ;   30		UINT32 acc;
                            A   162    ;   31		int c;
                            A   163    ;   32		int digits = 0;
                            A   164    .LINE 32
                            A   165    
-0B0D15 01000000            A   166    	LD	BC,0
-0B0D19 DD0FF3              A   167    	LD	(IX+%FFFFFFF3),BC
+0B1047 01000000            A   166    	LD	BC,0
+0B104B DD0FF3              A   167    	LD	(IX+%FFFFFFF3),BC
                            A   168    ;   33	
                            A   169    ;   34		do {
-0B0D1C                     A   170    L_1:
+0B104E                     A   170    L_1:
                            A   171    .LINE 34
                            A   172    
                            A   173    ;   35			c = *s++;
                            A   174    .LINE 35
                            A   175    
-0B0D1C DD07FA              A   176    	LD	BC,(IX+%FFFFFFFA)
-0B0D1F DD0FED              A   177    	LD	(IX+%FFFFFFED),BC
-0B0D22 C5E1                A   178    	LD	HL,BC
-0B0D24 7E                  A   179    	LD	A,(HL)
-0B0D25 47                  A   180    	LD	B,A
-0B0D26 17ED62              A   181    	SEXT	HL
-0B0D29 68                  A   182    	LD	L,B
-0B0D2A DD2FFD              A   183    	LD	(IX+%FFFFFFFD),HL
-0B0D2D DD07FA              A   184    	LD	BC,(IX+%FFFFFFFA)
-0B0D30 03                  A   185    	INC	BC
-0B0D31 DD0FFA              A   186    	LD	(IX+%FFFFFFFA),BC
+0B104E DD07FA              A   176    	LD	BC,(IX+%FFFFFFFA)
+0B1051 DD0FED              A   177    	LD	(IX+%FFFFFFED),BC
+0B1054 C5E1                A   178    	LD	HL,BC
+0B1056 7E                  A   179    	LD	A,(HL)
+0B1057 47                  A   180    	LD	B,A
+0B1058 17ED62              A   181    	SEXT	HL
+0B105B 68                  A   182    	LD	L,B
+0B105C DD2FFD              A   183    	LD	(IX+%FFFFFFFD),HL
+0B105F DD07FA              A   184    	LD	BC,(IX+%FFFFFFFA)
+0B1062 03                  A   185    	INC	BC
+0B1063 DD0FFA              A   186    	LD	(IX+%FFFFFFFA),BC
                            A   187    ;   36		} while (isspace(c));
                            A   188    .LINE 36
                            A   189    
-0B0D34 DD07FD              A   190    	LD	BC,(IX+%FFFFFFFD)
-0B0D37 C5                  A   191    	PUSH	BC
-0B0D38 DD77E9              A   192    	LD	(IX+%FFFFFFE9),A
-0B0D3B CD 2B 15 0B         A   193    	CALL	_isspace
-0B0D3F DD7EE9              A   194    	LD	A,(IX+%FFFFFFE9)
-0B0D42 C1                  A   195    	POP	BC
-0B0D43 CD F6 14 0B         A   196    	CALL	__icmpzero
-0B0D47 20 D3               A   197    	JR	NZ,L_1
+0B1066 DD07FD              A   190    	LD	BC,(IX+%FFFFFFFD)
+0B1069 C5                  A   191    	PUSH	BC
+0B106A DD77E9              A   192    	LD	(IX+%FFFFFFE9),A
+0B106D CD 98 18 0B         A   193    	CALL	_isspace
+0B1071 DD7EE9              A   194    	LD	A,(IX+%FFFFFFE9)
+0B1074 C1                  A   195    	POP	BC
+0B1075 CD 63 18 0B         A   196    	CALL	__icmpzero
+0B1079 20 D3               A   197    	JR	NZ,L_1
                            A   198    ;   37		if (
                            A   199    ;   38		    c == '0' && (*s == 'x' || *s ==
                            A   200    .LINE 38
                            A   201    
-0B0D49 01300000            A   202    	LD	BC,48
-0B0D4D DD27FD              A   203    	LD	HL,(IX+%FFFFFFFD)
-0B0D50 B7                  A   204    	OR	A,A
-0B0D51 ED42                A   205    	SBC	HL,BC
-0B0D53 20 3A               A   206    	JR	NZ,L_22
-0B0D55 DD27FA              A   207    	LD	HL,(IX+%FFFFFFFA)
-0B0D58 7E                  A   208    	LD	A,(HL)
-0B0D59 47                  A   209    	LD	B,A
-0B0D5A 17ED62              A   210    	SEXT	HL
-0B0D5D 68                  A   211    	LD	L,B
-0B0D5E 01780000            A   212    	LD	BC,120
-0B0D62 B7                  A   213    	OR	A,A
-0B0D63 ED42                A   214    	SBC	HL,BC
-0B0D65 28 12               A   215    	JR	Z,L_5
-0B0D67 DD27FA              A   216    	LD	HL,(IX+%FFFFFFFA)
-0B0D6A 7E                  A   217    	LD	A,(HL)
-0B0D6B 47                  A   218    	LD	B,A
-0B0D6C 17ED62              A   219    	SEXT	HL
-0B0D6F 68                  A   220    	LD	L,B
-0B0D70 01580000            A   221    	LD	BC,88
-0B0D74 B7                  A   222    	OR	A,A
-0B0D75 ED42                A   223    	SBC	HL,BC
-0B0D77 20 16               A   224    	JR	NZ,L_22
-0B0D79                     A   225    L_5:
+0B107B 01300000            A   202    	LD	BC,48
+0B107F DD27FD              A   203    	LD	HL,(IX+%FFFFFFFD)
+0B1082 B7                  A   204    	OR	A,A
+0B1083 ED42                A   205    	SBC	HL,BC
+0B1085 20 3A               A   206    	JR	NZ,L_22
+0B1087 DD27FA              A   207    	LD	HL,(IX+%FFFFFFFA)
+0B108A 7E                  A   208    	LD	A,(HL)
+0B108B 47                  A   209    	LD	B,A
+0B108C 17ED62              A   210    	SEXT	HL
+0B108F 68                  A   211    	LD	L,B
+0B1090 01780000            A   212    	LD	BC,120
+0B1094 B7                  A   213    	OR	A,A
+0B1095 ED42                A   214    	SBC	HL,BC
+0B1097 28 12               A   215    	JR	Z,L_5
+0B1099 DD27FA              A   216    	LD	HL,(IX+%FFFFFFFA)
+0B109C 7E                  A   217    	LD	A,(HL)
+0B109D 47                  A   218    	LD	B,A
+0B109E 17ED62              A   219    	SEXT	HL
+0B10A1 68                  A   220    	LD	L,B
+0B10A2 01580000            A   221    	LD	BC,88
+0B10A6 B7                  A   222    	OR	A,A
+0B10A7 ED42                A   223    	SBC	HL,BC
+0B10A9 20 16               A   224    	JR	NZ,L_22
+0B10AB                     A   225    L_5:
                            A   226    ;   39			c = s[1];
                            A   227    .LINE 39
                            A   228    
-0B0D79 DD27FA              A   229    	LD	HL,(IX+%FFFFFFFA)
-0B0D7C 23                  A   230    	INC	HL
-0B0D7D 7E                  A   231    	LD	A,(HL)
-0B0D7E 47                  A   232    	LD	B,A
-0B0D7F 17ED62              A   233    	SEXT	HL
-0B0D82 68                  A   234    	LD	L,B
-0B0D83 DD2FFD              A   235    	LD	(IX+%FFFFFFFD),HL
+0B10AB DD27FA              A   229    	LD	HL,(IX+%FFFFFFFA)
+0B10AE 23                  A   230    	INC	HL
+0B10AF 7E                  A   231    	LD	A,(HL)
+0B10B0 47                  A   232    	LD	B,A
+0B10B1 17ED62              A   233    	SEXT	HL
+0B10B4 68                  A   234    	LD	L,B
+0B10B5 DD2FFD              A   235    	LD	(IX+%FFFFFFFD),HL
                            A   236    ;   40			s += 2;
                            A   237    .LINE 40
                            A   238    
-0B0D86 DD31FA              A   239    	LD	IY,(IX+%FFFFFFFA)
-0B0D89 ED3302              A   240    	LEA	IY,IY+%2
-0B0D8C DD3EFA              A   241    	LD	(IX+%FFFFFFFA),IY
+0B10B8 DD31FA              A   239    	LD	IY,(IX+%FFFFFFFA)
+0B10BB ED3302              A   240    	LEA	IY,IY+%2
+0B10BE DD3EFA              A   241    	LD	(IX+%FFFFFFFA),IY
                            A   242    ;   41		}
-0B0D8F                     A   243    L_22:
+0B10C1                     A   243    L_22:
                            A   244    .LINE 41
                            A   245    
                            A   246    ;   42	
                            A   247    ;   43		for (acc = 0;; c = *s++) {
                            A   248    .LINE 43
                            A   249    
-0B0D8F 01000000            A   250    	LD	BC,0
-0B0D93 1600                A   251    	LD	D,%0
-0B0D95 DD0FF6              A   252    	LD	(IX+%FFFFFFF6),BC
-0B0D98 DD72F9              A   253    	LD	(IX+%FFFFFFF9),D
-0B0D9B                     A   254    L_20:
+0B10C1 01000000            A   250    	LD	BC,0
+0B10C5 1600                A   251    	LD	D,%0
+0B10C7 DD0FF6              A   252    	LD	(IX+%FFFFFFF6),BC
+0B10CA DD72F9              A   253    	LD	(IX+%FFFFFFF9),D
+0B10CD                     A   254    L_20:
                            A   255    ;   44			if (isdigit(c))
                            A   256    .LINE 44
                            A   257    
-0B0D9B DD07FD              A   258    	LD	BC,(IX+%FFFFFFFD)
-0B0D9E C5                  A   259    	PUSH	BC
-0B0D9F DD77E9              A   260    	LD	(IX+%FFFFFFE9),A
-0B0DA2 CD 02 15 0B         A   261    	CALL	_isdigit
-0B0DA6 DD7EE9              A   262    	LD	A,(IX+%FFFFFFE9)
-0B0DA9 C1                  A   263    	POP	BC
-0B0DAA CD F6 14 0B         A   264    	CALL	__icmpzero
-0B0DAE 28 0B               A   265    	JR	Z,L_15
+0B10CD DD07FD              A   258    	LD	BC,(IX+%FFFFFFFD)
+0B10D0 C5                  A   259    	PUSH	BC
+0B10D1 DD77E9              A   260    	LD	(IX+%FFFFFFE9),A
+0B10D4 CD 6F 18 0B         A   261    	CALL	_isdigit
+0B10D8 DD7EE9              A   262    	LD	A,(IX+%FFFFFFE9)
+0B10DB C1                  A   263    	POP	BC
+0B10DC CD 63 18 0B         A   264    	CALL	__icmpzero
+0B10E0 28 0B               A   265    	JR	Z,L_15
                            A   266    ;   45				c -= '0';
                            A   267    .LINE 45
                            A   268    
-0B0DB0 DD31FD              A   269    	LD	IY,(IX+%FFFFFFFD)
-0B0DB3 ED33D0              A   270    	LEA	IY,IY+%FFFFFFD0
-0B0DB6 DD3EFD              A   271    	LD	(IX+%FFFFFFFD),IY
+0B10E2 DD31FD              A   269    	LD	IY,(IX+%FFFFFFFD)
+0B10E5 ED33D0              A   270    	LEA	IY,IY+%FFFFFFD0
+0B10E8 DD3EFD              A   271    	LD	(IX+%FFFFFFFD),IY
                            A   272    ;   46			else if (isalpha(c))
                            A   273    .LINE 46
                            A   274    
-0B0DB9 18 48               A   275    	JR	L_19
-0B0DBB                     A   276    L_15:
-0B0DBB DD07FD              A   277    	LD	BC,(IX+%FFFFFFFD)
-0B0DBE C5                  A   278    	PUSH	BC
-0B0DBF DD77E9              A   279    	LD	(IX+%FFFFFFE9),A
-0B0DC2 CD 0C 17 0B         A   280    	CALL	_isalpha
-0B0DC6 DD7EE9              A   281    	LD	A,(IX+%FFFFFFE9)
-0B0DC9 C1                  A   282    	POP	BC
-0B0DCA CD F6 14 0B         A   283    	CALL	__icmpzero
-0B0DCE CA 60 0E 0B         A   284    	JR	Z,L_24
+0B10EB 18 48               A   275    	JR	L_19
+0B10ED                     A   276    L_15:
+0B10ED DD07FD              A   277    	LD	BC,(IX+%FFFFFFFD)
+0B10F0 C5                  A   278    	PUSH	BC
+0B10F1 DD77E9              A   279    	LD	(IX+%FFFFFFE9),A
+0B10F4 CD 79 1A 0B         A   280    	CALL	_isalpha
+0B10F8 DD7EE9              A   281    	LD	A,(IX+%FFFFFFE9)
+0B10FB C1                  A   282    	POP	BC
+0B10FC CD 63 18 0B         A   283    	CALL	__icmpzero
+0B1100 CA 92 11 0B         A   284    	JR	Z,L_24
                            A   285    ;   47				c -= isupper(c) ? 'A' - 10 
                            A   286    .LINE 47
                            A   287    
-0B0DD2 DD07FD              A   288    	LD	BC,(IX+%FFFFFFFD)
-0B0DD5 C5                  A   289    	PUSH	BC
-0B0DD6 DD77E9              A   290    	LD	(IX+%FFFFFFE9),A
-0B0DD9 CD 7A 0F 0B         A   291    	CALL	_isupper
-0B0DDD DD7EE9              A   292    	LD	A,(IX+%FFFFFFE9)
-0B0DE0 C1                  A   293    	POP	BC
-0B0DE1 CD F6 14 0B         A   294    	CALL	__icmpzero
-0B0DE5 28 09               A   295    	JR	Z,L_10
-0B0DE7 01370000            A   296    	LD	BC,55
-0B0DEB DD0FF0              A   297    	LD	(IX+%FFFFFFF0),BC
-0B0DEE 18 07               A   298    	JR	L_11
-0B0DF0                     A   299    L_10:
-0B0DF0 01570000            A   300    	LD	BC,87
-0B0DF4 DD0FF0              A   301    	LD	(IX+%FFFFFFF0),BC
-0B0DF7                     A   302    L_11:
-0B0DF7 DD07F0              A   303    	LD	BC,(IX+%FFFFFFF0)
-0B0DFA DD27FD              A   304    	LD	HL,(IX+%FFFFFFFD)
-0B0DFD B7                  A   305    	OR	A,A
-0B0DFE ED42                A   306    	SBC	HL,BC
-0B0E00 DD2FFD              A   307    	LD	(IX+%FFFFFFFD),HL
+0B1104 DD07FD              A   288    	LD	BC,(IX+%FFFFFFFD)
+0B1107 C5                  A   289    	PUSH	BC
+0B1108 DD77E9              A   290    	LD	(IX+%FFFFFFE9),A
+0B110B CD 9D 12 0B         A   291    	CALL	_isupper
+0B110F DD7EE9              A   292    	LD	A,(IX+%FFFFFFE9)
+0B1112 C1                  A   293    	POP	BC
+0B1113 CD 63 18 0B         A   294    	CALL	__icmpzero
+0B1117 28 09               A   295    	JR	Z,L_10
+0B1119 01370000            A   296    	LD	BC,55
+0B111D DD0FF0              A   297    	LD	(IX+%FFFFFFF0),BC
+0B1120 18 07               A   298    	JR	L_11
+0B1122                     A   299    L_10:
+0B1122 01570000            A   300    	LD	BC,87
+0B1126 DD0FF0              A   301    	LD	(IX+%FFFFFFF0),BC
+0B1129                     A   302    L_11:
+0B1129 DD07F0              A   303    	LD	BC,(IX+%FFFFFFF0)
+0B112C DD27FD              A   304    	LD	HL,(IX+%FFFFFFFD)
+0B112F B7                  A   305    	OR	A,A
+0B1130 ED42                A   306    	SBC	HL,BC
+0B1132 DD2FFD              A   307    	LD	(IX+%FFFFFFFD),HL
                            A   308    ;   48			else
                            A   309    .LINE 48
                            A   310    
                            A   311    ;   49				break;
                            A   312    .LINE 49
                            A   313    
-0B0E03                     A   314    L_19:
+0B1135                     A   314    L_19:
                            A   315    ;   50			if (c >= 16)
                            A   316    .LINE 50
                            A   317    
-0B0E03 01100000            A   318    	LD	BC,16
-0B0E07 DD27FD              A   319    	LD	HL,(IX+%FFFFFFFD)
-0B0E0A B7                  A   320    	OR	A,A
-0B0E0B ED42                A   321    	SBC	HL,BC
-0B0E0D CD 6B 0F 0B         A   322    	CALL	__setflag
-0B0E11 F2 60 0E 0B         A   323    	JP	P,L_24
+0B1135 01100000            A   318    	LD	BC,16
+0B1139 DD27FD              A   319    	LD	HL,(IX+%FFFFFFFD)
+0B113C B7                  A   320    	OR	A,A
+0B113D ED42                A   321    	SBC	HL,BC
+0B113F CD C6 12 0B         A   322    	CALL	__setflag
+0B1143 F2 92 11 0B         A   323    	JP	P,L_24
                            A   324    ;   51				break;
                            A   325    ;   52			else {
                            A   326    ;   53				acc *= 16;
                            A   327    .LINE 53
                            A   328    
-0B0E15 DD27F6              A   329    	LD	HL,(IX+%FFFFFFF6)
-0B0E18 DD5EF9              A   330    	LD	E,(IX+%FFFFFFF9)
-0B0E1B AF                  A   331    	XOR	A,A
-0B0E1C CD 5D 1A 0B         A   332    	CALL	__lmulu
-0B0E20 DD2FF6              A   333    	LD	(IX+%FFFFFFF6),HL
-0B0E23 DD73F9              A   334    	LD	(IX+%FFFFFFF9),E
+0B1147 DD27F6              A   329    	LD	HL,(IX+%FFFFFFF6)
+0B114A DD5EF9              A   330    	LD	E,(IX+%FFFFFFF9)
+0B114D AF                  A   331    	XOR	A,A
+0B114E CD E4 1D 0B         A   332    	CALL	__lmulu
+0B1152 DD2FF6              A   333    	LD	(IX+%FFFFFFF6),HL
+0B1155 DD73F9              A   334    	LD	(IX+%FFFFFFF9),E
                            A   335    ;   54				acc += c;
                            A   336    .LINE 54
                            A   337    
-0B0E26 DD07FD              A   338    	LD	BC,(IX+%FFFFFFFD)
-0B0E29 CD D1 17 0B         A   339    	CALL	__itol
-0B0E2D DD27F6              A   340    	LD	HL,(IX+%FFFFFFF6)
-0B0E30 DD5EF9              A   341    	LD	E,(IX+%FFFFFFF9)
-0B0E33 CD 65 0F 0B         A   342    	CALL	__ladd
-0B0E37 DD2FF6              A   343    	LD	(IX+%FFFFFFF6),HL
-0B0E3A DD73F9              A   344    	LD	(IX+%FFFFFFF9),E
+0B1158 DD07FD              A   338    	LD	BC,(IX+%FFFFFFFD)
+0B115B CD 3E 1B 0B         A   339    	CALL	__itol
+0B115F DD27F6              A   340    	LD	HL,(IX+%FFFFFFF6)
+0B1162 DD5EF9              A   341    	LD	E,(IX+%FFFFFFF9)
+0B1165 CD 97 12 0B         A   342    	CALL	__ladd
+0B1169 DD2FF6              A   343    	LD	(IX+%FFFFFFF6),HL
+0B116C DD73F9              A   344    	LD	(IX+%FFFFFFF9),E
                            A   345    ;   55				digits++;
                            A   346    .LINE 55
                            A   347    
-0B0E3D DD07F3              A   348    	LD	BC,(IX+%FFFFFFF3)
-0B0E40 03                  A   349    	INC	BC
-0B0E41 DD0FF3              A   350    	LD	(IX+%FFFFFFF3),BC
-0B0E44 DD07FA              A   351    	LD	BC,(IX+%FFFFFFFA)
-0B0E47 DD0FEA              A   352    	LD	(IX+%FFFFFFEA),BC
-0B0E4A C5E1                A   353    	LD	HL,BC
-0B0E4C 7E                  A   354    	LD	A,(HL)
-0B0E4D 47                  A   355    	LD	B,A
-0B0E4E 17ED62              A   356    	SEXT	HL
-0B0E51 68                  A   357    	LD	L,B
-0B0E52 DD2FFD              A   358    	LD	(IX+%FFFFFFFD),HL
-0B0E55 DD07FA              A   359    	LD	BC,(IX+%FFFFFFFA)
-0B0E58 03                  A   360    	INC	BC
-0B0E59 DD0FFA              A   361    	LD	(IX+%FFFFFFFA),BC
+0B116F DD07F3              A   348    	LD	BC,(IX+%FFFFFFF3)
+0B1172 03                  A   349    	INC	BC
+0B1173 DD0FF3              A   350    	LD	(IX+%FFFFFFF3),BC
+0B1176 DD07FA              A   351    	LD	BC,(IX+%FFFFFFFA)
+0B1179 DD0FEA              A   352    	LD	(IX+%FFFFFFEA),BC
+0B117C C5E1                A   353    	LD	HL,BC
+0B117E 7E                  A   354    	LD	A,(HL)
+0B117F 47                  A   355    	LD	B,A
+0B1180 17ED62              A   356    	SEXT	HL
+0B1183 68                  A   357    	LD	L,B
+0B1184 DD2FFD              A   358    	LD	(IX+%FFFFFFFD),HL
+0B1187 DD07FA              A   359    	LD	BC,(IX+%FFFFFFFA)
+0B118A 03                  A   360    	INC	BC
+0B118B DD0FFA              A   361    	LD	(IX+%FFFFFFFA),BC
                            A   362    ;   56			}
                            A   363    ;   57		}
                            A   364    .LINE 57
                            A   365    
-0B0E5C C3 9B 0D 0B         A   366    	JR	L_20
-0B0E60                     A   367    L_24:
+0B118E C3 CD 10 0B         A   366    	JR	L_20
+0B1192                     A   367    L_24:
                            A   368    ;   58		if(digits > 8) errno = ERANGE;
                            A   369    .LINE 58
                            A   370    
-0B0E60 DD07F3              A   371    	LD	BC,(IX+%FFFFFFF3)
-0B0E63 21080000            A   372    	LD	HL,8
-0B0E67 B7                  A   373    	OR	A,A
-0B0E68 ED42                A   374    	SBC	HL,BC
-0B0E6A CD 6B 0F 0B         A   375    	CALL	__setflag
-0B0E6E F2 7B 0E 0B         A   376    	JP	P,L_25
-0B0E72 01050000            A   377    	LD	BC,5
-0B0E76 ED43 03 1B 0B       A   378    	LD	(_errno),BC
-0B0E7B                     A   379    L_25:
+0B1192 DD07F3              A   371    	LD	BC,(IX+%FFFFFFF3)
+0B1195 21080000            A   372    	LD	HL,8
+0B1199 B7                  A   373    	OR	A,A
+0B119A ED42                A   374    	SBC	HL,BC
+0B119C CD C6 12 0B         A   375    	CALL	__setflag
+0B11A0 F2 AD 11 0B         A   376    	JP	P,L_25
+0B11A4 01050000            A   377    	LD	BC,5
+0B11A8 ED43 E9 27 0B       A   378    	LD	(_errno),BC
+0B11AD                     A   379    L_25:
                            A   380    ;   59		return (acc);
                            A   381    .LINE 59
                            A   382    
-0B0E7B DD27F6              A   383    	LD	HL,(IX+%FFFFFFF6)
-0B0E7E DD5EF9              A   384    	LD	E,(IX+%FFFFFFF9)
+0B11AD DD27F6              A   383    	LD	HL,(IX+%FFFFFFF6)
+0B11B0 DD5EF9              A   384    	LD	E,(IX+%FFFFFFF9)
                            A   385    ;   60	}
                            A   386    .LINE 60
                            A   387    
-0B0E81 DDF9                A   388    	LD	SP,IX
-0B0E83 DDE1                A   389    	POP	IX
-0B0E85 C9                  A   390    	RET	
+0B11B3 DDF9                A   388    	LD	SP,IX
+0B11B5 DDE1                A   389    	POP	IX
+0B11B7 C9                  A   390    	RET	
                            A   391    
                            A   392    
                            A   393    ;**************************** _strtoll ********

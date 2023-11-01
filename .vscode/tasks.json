@@ -15,5 +15,17 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Upload Intel HEX file",
+            "type": "shell",
+            "command": "py.exe ./send.py ./src/Debug/flash.hex",
+            "group": "test",
+            "presentation": {
+              "reveal": "always",
+              "panel": "new",
+              "close": true
+            }
         }
+    ]
 }

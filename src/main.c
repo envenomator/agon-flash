@@ -26,9 +26,15 @@
 #include <string.h>
 
 #define UNLOCKMATCHLENGTH 9
-
 #define EXIT_FILENOTFOUND	4
 #define EXIT_INVALIDPARAMETER	19
+#define DEFAULT_MOSFIRMWARE	"MOS.bin"
+#define DEFAULT_VDPFIRMWARE	"firmware.bin"
+
+#define CMDUNKNOWN	0
+#define CMDALL		1
+#define CMDMOS		2
+#define CMDVDP		3
 
 int errno; // needed by standard library
 enum states{firmware,retry,systemreset};
@@ -107,12 +113,12 @@ bool containsESP32Header(uint8_t *filestart) {
 }
 
 void print_version(void) {
-	printf("Agon firmware upgrade utility v1.5\n\r\n\r");
+	printf("Agon firmware upgrade utility v1.6\n\r\n\r");
 }
 
 void usage(void) {
 	print_version();
-	printf("Usage: FLASH <mos|vdp> <filename>\n\r");
+	printf("Usage: FLASH [full | [mos <filename>] [vdp <filename>]] <-s|-silent>\n\r");
 }
 
 typedef enum {
@@ -357,10 +363,86 @@ void echoVDP(uint8_t value) {
 	delayms(100);
 }
 
+int getCommand(const char *command) {
+	if(memcmp(command, "all", 4) == 0) return CMDALL;
+	if(memcmp(command, "mos", 3) == 0) return CMDMOS;
+	if(memcmp(command, "vdp", 3) == 0) return CMDVDP;
+	return CMDUNKNOWN;
+}
+
+bool flashmos = false;
+char mosfilename[256];
+bool flashvdp = false;
+char vdpfilename[256];
+
+bool parseCommands(int argc, char *argv[]) {
+	int argcounter;
+	int command;
+
+	argcounter = 1;
+	while(argcounter < argc) {
+		command = getCommand(argv[argcounter]);
+		switch(command) {
+			case CMDUNKNOWN:
+				return false;
+				break;
+			case CMDALL:
+				if(flashmos || flashvdp) return false;
+				strcpy(mosfilename, DEFAULT_MOSFIRMWARE);
+				strcpy(vdpfilename, DEFAULT_VDPFIRMWARE);
+				flashmos = true;
+				flashvdp = true;
+				break;
+			case CMDMOS:
+				if(flashmos) return false;
+				if((argc > (argcounter+1)) && (getCommand(argv[argcounter + 1]) == CMDUNKNOWN)) {
+					strcpy(mosfilename, argv[argcounter + 1]);
+					argcounter++;
+				}
+				else {
+					strcpy(mosfilename, DEFAULT_MOSFIRMWARE);
+				}
+				flashmos = true;
+				break;
+			case CMDVDP:
+				if(flashvdp) return false;
+				if((argc > (argcounter+1)) && (getCommand(argv[argcounter + 1]) == CMDUNKNOWN)) {
+					strcpy(vdpfilename, argv[argcounter + 1]);
+					argcounter++;
+				}
+				else {
+					strcpy(vdpfilename, DEFAULT_VDPFIRMWARE);
+				}
+				flashvdp = true;
+				break;
+		}
+		argcounter++;
+	}
+	return (flashvdp || flashmos);
+}
 int main(int argc, char * argv[]) {	
 	uint8_t *gp, gpvalue;
 	sysvar_t *sysvars;
-	
+
+	if(argc == 1) {
+		usage();
+		return 0;
+	}
+
+	if(!parseCommands(argc, argv)) {
+		usage();
+		return EXIT_INVALIDPARAMETER;
+	}
+
+	printf("Result:\r\n");
+	printf("Flash MOS: %d\r\n", flashmos);
+	if(flashmos) printf("filename \"%s\"\r\n", mosfilename);
+	printf("Flash VDP: %d\r\n", flashvdp);
+	if(flashvdp) printf("filename \"%s\"\r\n", vdpfilename);
+	return 0;
+	//
+
+
 	sysvars = getsysvars();
 	while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
 	beep(1);
