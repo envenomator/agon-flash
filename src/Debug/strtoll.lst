@@ -1,0 +1,433 @@
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     17:40:14     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Zilog eZ80 ANSI C Compiler Release 3.4
+                           A     2    ; -nomodsect -optsize -noreduceopt -nopadbranch
+                           A     3    ; -peephole -globalopt -localcse -const=ROM 
+                           A     4    	FILE	"..\strtoll.c"
+                           A     5    	.assume ADL=1
+                           A     6    .DEBUG "C"
+                           A     7    	SEGMENT CODE
+                           A     8    .BEGREC "NONAME0",6
+                           A     9    .DEFINE "quot"
+                           A    10    .VALUE 0
+                           A    11    .CLASS 8
+                           A    12    .TYPE 4
+                           A    13    .ENDEF
+                           A    14    .DEFINE "rem"
+                           A    15    .VALUE 3
+                           A    16    .CLASS 8
+                           A    17    .TYPE 4
+                           A    18    .ENDEF
+                           A    19    .ENDREC "NONAME0"
+                           A    20    .BEGREC "NONAME1",8
+                           A    21    .DEFINE "quot"
+                           A    22    .VALUE 0
+                           A    23    .CLASS 8
+                           A    24    .TYPE 5
+                           A    25    .ENDEF
+                           A    26    .DEFINE "rem"
+                           A    27    .VALUE 4
+                           A    28    .CLASS 8
+                           A    29    .TYPE 5
+                           A    30    .ENDEF
+                           A    31    .ENDREC "NONAME1"
+                           A    32    .BEGREC "header",6
+                           A    33    .DEFINE "s"
+                           A    34    .VALUE 0
+                           A    35    .CLASS 11
+                           A    36    .TAG "NONAME2"
+                           A    37    .TYPE 8
+                           A    38    .ENDEF
+                           A    39    .DEFINE "x"
+                           A    40    .VALUE 0
+                           A    41    .CLASS 11
+                           A    42    .TYPE 2
+                           A    43    .ENDEF
+                           A    44    .ENDREC "header"
+                           A    45    .BEGREC "NONAME2",6
+                           A    46    .DEFINE "ptr"
+                           A    47    .VALUE 0
+                           A    48    .CLASS 8
+                           A    49    .TAG "header"
+                           A    50    .TYPE 40
+                           A    51    .ENDEF
+                           A    52    .DEFINE "size"
+                           A    53    .VALUE 3
+                           A    54    .CLASS 8
+                           A    55    .TYPE 14
+                           A    56    .ENDEF
+                           A    57    .ENDREC "NONAME2"
+                           A    58    ;    1	/*
+                           A    59    ;    2	 * Title:			CRC32 functions
+                           A    60    ;    3	 * Author:			Jeroen Venema
+                           A    61    ;    4	 * Created:			17/12/2022
+                           A    62    ;    5	 * Last Updated:	17/12/2022
+                           A    63    ;    6	 * 
+                           A    64    ;    7	 * Modinfo:
+                           A    65    ;    8	 * 17/12/2022:		Initial version
+                           A    66    ;    9	 */
+                           A    67    ;   10	
+                           A    68    ;   11	#include <defines.h>
+                           A    69    ;   12	#include <ctype.h>
+                           A    70    ;   13	#include <stdlib.h>
+                           A    71    ;   14	#include <ez80.h>
+                           A    72    ;   15	#include "crc32.h"
+                           A    73    ;   16	
+                           A    74    ;   17	extern int errno;
+                           A    75    ;   18	
+                           A    76    ;   19	/*
+                           A    77    ;   20	 * Convert a string to a UINT32 integer
+                           A    78    ;   21	 *
+                           A    79    ;   22	 * Ignores `locale' stuff.  Assumes tha
+                           A    80    ;   23	 * alphabets and digits are each contig
+                           A    81    ;   24	 */
+                           A    82    ;   25	 
+                           A    83    ;   26	UINT32
+                           A    84    ;   27	strtoll(const char *nptr)
+                           A    85    ;   28	{
+0B0D02                     A    86    _strtoll:
+                           A    87    .DEFINE "_strtoll"
+                           A    88    
+                           A    89    .VALUE _strtoll
+                           A    90    
+                           A    91    .CLASS 2
+                           A    92    
+                           A    93    .TYPE 79
+                           A    94    
+                           A    95    .ENDEF
+                           A    96    
+                           A    97    .BEGFUNC "strtoll",28,"_strtoll"
+                           A    98    
+                           A    99    .LINE 28
+                           A   100    
+                           A   101    .DEFINE "nptr"
+                           A   102    
+                           A   103    .CLASS 65
+                           A   104    
+                           A   105    .VALUE 6
+                           A   106    
+                           A   107    .TYPE 194
+                           A   108    
+                           A   109    .ENDEF
+                           A   110    
+                           A   111    .DEFINE "c"
+                           A   112    
+                           A   113    .CLASS 65
+                           A   114    
+                           A   115    .VALUE -3
+                           A   116    
+                           A   117    .TYPE 4
+                           A   118    
+                           A   119    .ENDEF
+                           A   120    
+                           A   121    .DEFINE "s"
+                           A   122    
+                           A   123    .CLASS 65
+                           A   124    
+                           A   125    .VALUE -6
+                           A   126    
+                           A   127    .TYPE 194
+                           A   128    
+                           A   129    .ENDEF
+                           A   130    
+                           A   131    .DEFINE "acc"
+                           A   132    
+                           A   133    .CLASS 65
+                           A   134    
+                           A   135    .VALUE -10
+                           A   136    
+                           A   137    .TYPE 15
+                           A   138    
+                           A   139    .ENDEF
+                           A   140    
+                           A   141    .DEFINE "digits"
+                           A   142    
+                           A   143    .CLASS 65
+                           A   144    
+                           A   145    .VALUE -13
+                           A   146    
+                           A   147    .TYPE 4
+                           A   148    
+                           A   149    .ENDEF
+                           A   150    
+0B0D02 DDE5                A   151    	PUSH	IX
+0B0D04 DD210000 00         A   152    	LD	IX,0
+0B0D09 DD39                A   153    	ADD	IX,SP
+0B0D0B ED22E9              A   154    	LEA	HL,IX+%FFFFFFE9
+0B0D0E F9                  A   155    	LD	SP,HL
+                           A   156    ;   29		const char *s = nptr;
+                           A   157    .LINE 29
+                           A   158    
+0B0D0F DD0706              A   159    	LD	BC,(IX+%6)
+0B0D12 DD0FFA              A   160    	LD	(IX+%FFFFFFFA),BC
+                           A   161    ;   30		UINT32 acc;
+                           A   162    ;   31		int c;
+                           A   163    ;   32		int digits = 0;
+                           A   164    .LINE 32
+                           A   165    
+0B0D15 01000000            A   166    	LD	BC,0
+0B0D19 DD0FF3              A   167    	LD	(IX+%FFFFFFF3),BC
+                           A   168    ;   33	
+                           A   169    ;   34		do {
+0B0D1C                     A   170    L_1:
+                           A   171    .LINE 34
+                           A   172    
+                           A   173    ;   35			c = *s++;
+                           A   174    .LINE 35
+                           A   175    
+0B0D1C DD07FA              A   176    	LD	BC,(IX+%FFFFFFFA)
+0B0D1F DD0FED              A   177    	LD	(IX+%FFFFFFED),BC
+0B0D22 C5E1                A   178    	LD	HL,BC
+0B0D24 7E                  A   179    	LD	A,(HL)
+0B0D25 47                  A   180    	LD	B,A
+0B0D26 17ED62              A   181    	SEXT	HL
+0B0D29 68                  A   182    	LD	L,B
+0B0D2A DD2FFD              A   183    	LD	(IX+%FFFFFFFD),HL
+0B0D2D DD07FA              A   184    	LD	BC,(IX+%FFFFFFFA)
+0B0D30 03                  A   185    	INC	BC
+0B0D31 DD0FFA              A   186    	LD	(IX+%FFFFFFFA),BC
+                           A   187    ;   36		} while (isspace(c));
+                           A   188    .LINE 36
+                           A   189    
+0B0D34 DD07FD              A   190    	LD	BC,(IX+%FFFFFFFD)
+0B0D37 C5                  A   191    	PUSH	BC
+0B0D38 DD77E9              A   192    	LD	(IX+%FFFFFFE9),A
+0B0D3B CD 2B 15 0B         A   193    	CALL	_isspace
+0B0D3F DD7EE9              A   194    	LD	A,(IX+%FFFFFFE9)
+0B0D42 C1                  A   195    	POP	BC
+0B0D43 CD F6 14 0B         A   196    	CALL	__icmpzero
+0B0D47 20 D3               A   197    	JR	NZ,L_1
+                           A   198    ;   37		if (
+                           A   199    ;   38		    c == '0' && (*s == 'x' || *s ==
+                           A   200    .LINE 38
+                           A   201    
+0B0D49 01300000            A   202    	LD	BC,48
+0B0D4D DD27FD              A   203    	LD	HL,(IX+%FFFFFFFD)
+0B0D50 B7                  A   204    	OR	A,A
+0B0D51 ED42                A   205    	SBC	HL,BC
+0B0D53 20 3A               A   206    	JR	NZ,L_22
+0B0D55 DD27FA              A   207    	LD	HL,(IX+%FFFFFFFA)
+0B0D58 7E                  A   208    	LD	A,(HL)
+0B0D59 47                  A   209    	LD	B,A
+0B0D5A 17ED62              A   210    	SEXT	HL
+0B0D5D 68                  A   211    	LD	L,B
+0B0D5E 01780000            A   212    	LD	BC,120
+0B0D62 B7                  A   213    	OR	A,A
+0B0D63 ED42                A   214    	SBC	HL,BC
+0B0D65 28 12               A   215    	JR	Z,L_5
+0B0D67 DD27FA              A   216    	LD	HL,(IX+%FFFFFFFA)
+0B0D6A 7E                  A   217    	LD	A,(HL)
+0B0D6B 47                  A   218    	LD	B,A
+0B0D6C 17ED62              A   219    	SEXT	HL
+0B0D6F 68                  A   220    	LD	L,B
+0B0D70 01580000            A   221    	LD	BC,88
+0B0D74 B7                  A   222    	OR	A,A
+0B0D75 ED42                A   223    	SBC	HL,BC
+0B0D77 20 16               A   224    	JR	NZ,L_22
+0B0D79                     A   225    L_5:
+                           A   226    ;   39			c = s[1];
+                           A   227    .LINE 39
+                           A   228    
+0B0D79 DD27FA              A   229    	LD	HL,(IX+%FFFFFFFA)
+0B0D7C 23                  A   230    	INC	HL
+0B0D7D 7E                  A   231    	LD	A,(HL)
+0B0D7E 47                  A   232    	LD	B,A
+0B0D7F 17ED62              A   233    	SEXT	HL
+0B0D82 68                  A   234    	LD	L,B
+0B0D83 DD2FFD              A   235    	LD	(IX+%FFFFFFFD),HL
+                           A   236    ;   40			s += 2;
+                           A   237    .LINE 40
+                           A   238    
+0B0D86 DD31FA              A   239    	LD	IY,(IX+%FFFFFFFA)
+0B0D89 ED3302              A   240    	LEA	IY,IY+%2
+0B0D8C DD3EFA              A   241    	LD	(IX+%FFFFFFFA),IY
+                           A   242    ;   41		}
+0B0D8F                     A   243    L_22:
+                           A   244    .LINE 41
+                           A   245    
+                           A   246    ;   42	
+                           A   247    ;   43		for (acc = 0;; c = *s++) {
+                           A   248    .LINE 43
+                           A   249    
+0B0D8F 01000000            A   250    	LD	BC,0
+0B0D93 1600                A   251    	LD	D,%0
+0B0D95 DD0FF6              A   252    	LD	(IX+%FFFFFFF6),BC
+0B0D98 DD72F9              A   253    	LD	(IX+%FFFFFFF9),D
+0B0D9B                     A   254    L_20:
+                           A   255    ;   44			if (isdigit(c))
+                           A   256    .LINE 44
+                           A   257    
+0B0D9B DD07FD              A   258    	LD	BC,(IX+%FFFFFFFD)
+0B0D9E C5                  A   259    	PUSH	BC
+0B0D9F DD77E9              A   260    	LD	(IX+%FFFFFFE9),A
+0B0DA2 CD 02 15 0B         A   261    	CALL	_isdigit
+0B0DA6 DD7EE9              A   262    	LD	A,(IX+%FFFFFFE9)
+0B0DA9 C1                  A   263    	POP	BC
+0B0DAA CD F6 14 0B         A   264    	CALL	__icmpzero
+0B0DAE 28 0B               A   265    	JR	Z,L_15
+                           A   266    ;   45				c -= '0';
+                           A   267    .LINE 45
+                           A   268    
+0B0DB0 DD31FD              A   269    	LD	IY,(IX+%FFFFFFFD)
+0B0DB3 ED33D0              A   270    	LEA	IY,IY+%FFFFFFD0
+0B0DB6 DD3EFD              A   271    	LD	(IX+%FFFFFFFD),IY
+                           A   272    ;   46			else if (isalpha(c))
+                           A   273    .LINE 46
+                           A   274    
+0B0DB9 18 48               A   275    	JR	L_19
+0B0DBB                     A   276    L_15:
+0B0DBB DD07FD              A   277    	LD	BC,(IX+%FFFFFFFD)
+0B0DBE C5                  A   278    	PUSH	BC
+0B0DBF DD77E9              A   279    	LD	(IX+%FFFFFFE9),A
+0B0DC2 CD 0C 17 0B         A   280    	CALL	_isalpha
+0B0DC6 DD7EE9              A   281    	LD	A,(IX+%FFFFFFE9)
+0B0DC9 C1                  A   282    	POP	BC
+0B0DCA CD F6 14 0B         A   283    	CALL	__icmpzero
+0B0DCE CA 60 0E 0B         A   284    	JR	Z,L_24
+                           A   285    ;   47				c -= isupper(c) ? 'A' - 10 
+                           A   286    .LINE 47
+                           A   287    
+0B0DD2 DD07FD              A   288    	LD	BC,(IX+%FFFFFFFD)
+0B0DD5 C5                  A   289    	PUSH	BC
+0B0DD6 DD77E9              A   290    	LD	(IX+%FFFFFFE9),A
+0B0DD9 CD 7A 0F 0B         A   291    	CALL	_isupper
+0B0DDD DD7EE9              A   292    	LD	A,(IX+%FFFFFFE9)
+0B0DE0 C1                  A   293    	POP	BC
+0B0DE1 CD F6 14 0B         A   294    	CALL	__icmpzero
+0B0DE5 28 09               A   295    	JR	Z,L_10
+0B0DE7 01370000            A   296    	LD	BC,55
+0B0DEB DD0FF0              A   297    	LD	(IX+%FFFFFFF0),BC
+0B0DEE 18 07               A   298    	JR	L_11
+0B0DF0                     A   299    L_10:
+0B0DF0 01570000            A   300    	LD	BC,87
+0B0DF4 DD0FF0              A   301    	LD	(IX+%FFFFFFF0),BC
+0B0DF7                     A   302    L_11:
+0B0DF7 DD07F0              A   303    	LD	BC,(IX+%FFFFFFF0)
+0B0DFA DD27FD              A   304    	LD	HL,(IX+%FFFFFFFD)
+0B0DFD B7                  A   305    	OR	A,A
+0B0DFE ED42                A   306    	SBC	HL,BC
+0B0E00 DD2FFD              A   307    	LD	(IX+%FFFFFFFD),HL
+                           A   308    ;   48			else
+                           A   309    .LINE 48
+                           A   310    
+                           A   311    ;   49				break;
+                           A   312    .LINE 49
+                           A   313    
+0B0E03                     A   314    L_19:
+                           A   315    ;   50			if (c >= 16)
+                           A   316    .LINE 50
+                           A   317    
+0B0E03 01100000            A   318    	LD	BC,16
+0B0E07 DD27FD              A   319    	LD	HL,(IX+%FFFFFFFD)
+0B0E0A B7                  A   320    	OR	A,A
+0B0E0B ED42                A   321    	SBC	HL,BC
+0B0E0D CD 6B 0F 0B         A   322    	CALL	__setflag
+0B0E11 F2 60 0E 0B         A   323    	JP	P,L_24
+                           A   324    ;   51				break;
+                           A   325    ;   52			else {
+                           A   326    ;   53				acc *= 16;
+                           A   327    .LINE 53
+                           A   328    
+0B0E15 DD27F6              A   329    	LD	HL,(IX+%FFFFFFF6)
+0B0E18 DD5EF9              A   330    	LD	E,(IX+%FFFFFFF9)
+0B0E1B AF                  A   331    	XOR	A,A
+0B0E1C CD 5D 1A 0B         A   332    	CALL	__lmulu
+0B0E20 DD2FF6              A   333    	LD	(IX+%FFFFFFF6),HL
+0B0E23 DD73F9              A   334    	LD	(IX+%FFFFFFF9),E
+                           A   335    ;   54				acc += c;
+                           A   336    .LINE 54
+                           A   337    
+0B0E26 DD07FD              A   338    	LD	BC,(IX+%FFFFFFFD)
+0B0E29 CD D1 17 0B         A   339    	CALL	__itol
+0B0E2D DD27F6              A   340    	LD	HL,(IX+%FFFFFFF6)
+0B0E30 DD5EF9              A   341    	LD	E,(IX+%FFFFFFF9)
+0B0E33 CD 65 0F 0B         A   342    	CALL	__ladd
+0B0E37 DD2FF6              A   343    	LD	(IX+%FFFFFFF6),HL
+0B0E3A DD73F9              A   344    	LD	(IX+%FFFFFFF9),E
+                           A   345    ;   55				digits++;
+                           A   346    .LINE 55
+                           A   347    
+0B0E3D DD07F3              A   348    	LD	BC,(IX+%FFFFFFF3)
+0B0E40 03                  A   349    	INC	BC
+0B0E41 DD0FF3              A   350    	LD	(IX+%FFFFFFF3),BC
+0B0E44 DD07FA              A   351    	LD	BC,(IX+%FFFFFFFA)
+0B0E47 DD0FEA              A   352    	LD	(IX+%FFFFFFEA),BC
+0B0E4A C5E1                A   353    	LD	HL,BC
+0B0E4C 7E                  A   354    	LD	A,(HL)
+0B0E4D 47                  A   355    	LD	B,A
+0B0E4E 17ED62              A   356    	SEXT	HL
+0B0E51 68                  A   357    	LD	L,B
+0B0E52 DD2FFD              A   358    	LD	(IX+%FFFFFFFD),HL
+0B0E55 DD07FA              A   359    	LD	BC,(IX+%FFFFFFFA)
+0B0E58 03                  A   360    	INC	BC
+0B0E59 DD0FFA              A   361    	LD	(IX+%FFFFFFFA),BC
+                           A   362    ;   56			}
+                           A   363    ;   57		}
+                           A   364    .LINE 57
+                           A   365    
+0B0E5C C3 9B 0D 0B         A   366    	JR	L_20
+0B0E60                     A   367    L_24:
+                           A   368    ;   58		if(digits > 8) errno = ERANGE;
+                           A   369    .LINE 58
+                           A   370    
+0B0E60 DD07F3              A   371    	LD	BC,(IX+%FFFFFFF3)
+0B0E63 21080000            A   372    	LD	HL,8
+0B0E67 B7                  A   373    	OR	A,A
+0B0E68 ED42                A   374    	SBC	HL,BC
+0B0E6A CD 6B 0F 0B         A   375    	CALL	__setflag
+0B0E6E F2 7B 0E 0B         A   376    	JP	P,L_25
+0B0E72 01050000            A   377    	LD	BC,5
+0B0E76 ED43 03 1B 0B       A   378    	LD	(_errno),BC
+0B0E7B                     A   379    L_25:
+                           A   380    ;   59		return (acc);
+                           A   381    .LINE 59
+                           A   382    
+0B0E7B DD27F6              A   383    	LD	HL,(IX+%FFFFFFF6)
+0B0E7E DD5EF9              A   384    	LD	E,(IX+%FFFFFFF9)
+                           A   385    ;   60	}
+                           A   386    .LINE 60
+                           A   387    
+0B0E81 DDF9                A   388    	LD	SP,IX
+0B0E83 DDE1                A   389    	POP	IX
+0B0E85 C9                  A   390    	RET	
+                           A   391    
+                           A   392    
+                           A   393    ;**************************** _strtoll ********
+                           A   394    ;Name                         Addr/Register   S
+                           A   395    ;_errno                              IMPORT    
+                           A   396    ;_isupper                            IMPORT  --
+                           A   397    ;_isalpha                            IMPORT  --
+                           A   398    ;_isdigit                            IMPORT  --
+                           A   399    ;_isspace                            IMPORT  --
+                           A   400    ;temp8                                IX-16    
+                           A   401    ;digits                               IX-13    
+                           A   402    ;acc                                  IX-10    
+                           A   403    ;s                                     IX-6    
+                           A   404    ;c                                     IX-3    
+                           A   405    ;nptr                                  IX+6    
+                           A   406    
+                           A   407    
+                           A   408    ; Stack Frame Size: 32 (bytes)
+                           A   409    ;       Spill Code: 0 (instruction)
+                           A   410    
+                           A   411    
+                           A   412    .ENDFUNC "strtoll",60,"_strtoll"
+                           A   413    	XREF _errno:ROM
+                           A   414    	XREF _isupper:ROM
+                           A   415    	XREF _isspace:ROM
+                           A   416    	XREF _isdigit:ROM
+                           A   417    	XREF _isalpha:ROM
+                           A   418    	XREF __ladd:ROM
+                           A   419    	XREF __lmulu:ROM
+                           A   420    	XREF __itol:ROM
+                           A   421    	XREF __setflag:ROM
+                           A   422    	XREF __icmpzero:ROM
+                           A   423    	XDEF _strtoll
+                           A   424    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 425

@@ -27,7 +27,9 @@
 	XDEF _getsysvar_cursorX
 	XDEF _getsysvar_cursorY
 	XDEF _getsysvar_scrchar
-	
+
+	XDEF _getsysvars
+
 	segment CODE
 	.assume ADL=1
 	
@@ -57,6 +59,14 @@ $$:	cp a, (ix + sysvar_time + 0)
 	pop ix
 	ret
 
+_getsysvars:
+	push	ix
+	ld		a, mos_sysvars
+	rst.lil	08h
+	push	ix
+	pop		hl
+	pop		ix
+	ret
 
 _getsysvar_cursorX:
 	push ix

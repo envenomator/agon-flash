@@ -45,7 +45,15 @@ int putch(int c)
 	return c;
 }
 
+void beep(unsigned int number) {
+	while(number--) {
+		putch(7);
+		delayms(250);
+	}
+}
+
 uint8_t getCharAt(uint16_t x, uint16_t y) {
+	sysvar_t *sysvars = getsysvars();
 	delayms(20);
 	putch(23);
 	putch(0);
@@ -54,8 +62,8 @@ uint8_t getCharAt(uint16_t x, uint16_t y) {
 	putch((x >> 8) & 0xFF);
 	putch(y & 0xFF);
 	putch((y >> 8) & 0xFF);
-	delayms(20);
-	return getsysvar_scrchar();
+	delayms(100);
+	return sysvars->scrchar;
 }
 
 bool vdp_ota_present(void) {
@@ -134,7 +142,7 @@ uint8_t update_vdp(char *filename) {
 	uint8_t file;
 	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
 	uint24_t filesize;
-	uint32_t crcresult;
+	//uint32_t crcresult;
 	uint24_t size, n;
 	uint8_t response;
 
@@ -144,8 +152,10 @@ uint8_t update_vdp(char *filename) {
 	
 	if(!vdp_ota_present()) {
 		printf(" failed - incompatible VDP\r\n");
+		beep(5);
 		return 0;
 	}
+	//vdp_ota_present();
 
 	file = mos_fopen(filename, fa_read);
 	if(!file) {
@@ -159,27 +169,25 @@ uint8_t update_vdp(char *filename) {
 		mos_fclose(file);
 		return EXIT_INVALIDPARAMETER;
 	}
-	printf("\r\nValid ESP32 code\r\nCalculating CRC32");
-	crc32_initialize();
-	mos_flseek(file, 0);
-	while(1) {
-		size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
-		if(size == 0) break;
-		putch('.');
-		crc32((char *)BUFFER1, size);
-	}
-	crcresult = crc32_finalize();
-	if(!getResponse(VDP, crcresult)) {
-		mos_fclose(file);
-		return 0;
-	}
+	//printf("\r\nValid ESP32 code\r\nCalculating CRC32");
+	printf("\r\nValid ESP32 code\r\n");
+	//crc32_initialize();
+	//mos_flseek(file, 0);
+	//while(1) {
+	//	size = mos_fread(file, (char *)BUFFER1, BLOCKSIZE);
+	//	if(size == 0) break;
+	//	putch('.');
+		//crc32((char *)BUFFER1, size);
+	//}
+	//crcresult = crc32_finalize();
+
 	// Do actual work here
 	mos_flseek(file, 0); // reset to zero, because we read part of the header already
 	printf("Updating VDP firmware\r\n");
 	filesize = getFileSize(file);	
 	startVDPupdate(file, filesize);
 	mos_fclose(file);
-	reset();
+	//reset();
 	return 0; // will never return, but let's give the compiler a break
 }
 
@@ -231,11 +239,6 @@ uint8_t update_mos(char *filename) {
 		putch('.');
 	}		
 	crcresult = crc32_finalize();
-	if(!getResponse(MOS, crcresult)) {
-		mos_fclose(file);
-		return 0;
-	}
-
 	// Actual work here	
 	di();								// prohibit any access to the old MOS firmware
 
@@ -264,8 +267,9 @@ uint8_t update_mos(char *filename) {
 				// RESET SYSTEM
 				printf("\r\n");
 				printf("Done\r\n");
-				printf("Press reset button");
-				while(1); // force cold boot for the user, so VDP will reset optimally
+				//printf("Press reset button");
+				//while(1); // force cold boot for the user, so VDP will reset optimally
+				return 0;
 		}
 
 		// Unprotect and erase flash
@@ -345,24 +349,30 @@ uint8_t update_mos(char *filename) {
 	return 0;
 }
 
-int main(int argc, char * argv[]) {
+void echoVDP(uint8_t value) {
+	putch(23);
+	putch(0);
+	putch(0x80);
+	putch(value);
+	delayms(100);
+}
 
-	if(argc != 3) {
-		usage();
-		return 0;
-	}
+int main(int argc, char * argv[]) {	
+	uint8_t *gp, gpvalue;
+	sysvar_t *sysvars;
+	
+	sysvars = getsysvars();
+	while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
+	beep(1);
+	sysvars->scrheight = 0;
 
-	if(memcmp(argv[1], "mos", 3) == 0) {
-		return update_mos(argv[2]);
-	}
-	else {
-		if(memcmp(argv[1], "vdp", 3) == 0) {
-			return update_vdp(argv[2]);
-		}
-		else {
-			usage();
-			return 0;
-		}
-	}
+	update_vdp("firmware.bin");
+	echoVDP(1);
+	while(sysvars->scrheight == 0);
+	beep(2);
+	update_mos("MOS.bin");
+	beep(3);
+	printf("Press reset button");
+	while(1);
 }
 

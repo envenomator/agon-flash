@@ -1,0 +1,191 @@
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     17:40:13     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ;
+                           A     2    ; Title:	Hello World - Initialisation Code
+                           A     3    ; Author:	Dean Belfield
+                           A     4    ; Created:	22/11/2022
+                           A     5    ; Last Updated: 25/11/2022
+                           A     6    ;
+                           A     7    ; Modinfo:
+                           A     8    ; 25/11/2022:	Added parameter parsing; now ac
+                           A     9    
+                           A    10    			SEGMENT CODE
+                           A    11    			
+                           A    12    			XREF	__low_bss
+                           A    13    			XREF	__len_bss
+                           A    14    			
+                           A    15    			XREF	_main
+                           A    16    				
+                           A    17    			.ASSUME	ADL = 1	
+                           A    18    
+       00000010            A    19    argv_ptrs_max:		EQU	16			; Maximum n
+                           A    20    
+                           A    21    ;
+                           A    22    ; Start in ADL mode
+                           A    23    ;
+                           A    24    
+0B0000 C3 45 00 0B         A    25    			JP	_start			; Jump to start
+                           A    26    
+                           A    27    ;
+                           A    28    ; The header stuff
+                           A    29    ;
+0B0004 464C4153 482E4249   A    30    _exec_name:		DB	"FLASH.BIN", 0		; The e
+0B000C 4E00 
+                           A    31    
+                           A    32    			ALIGN	64			; The executabl
+                           A    33    			
+0B0040 4D4F53              A    34    			DB	"MOS"			; Flag for MOS 
+0B0043 00                  A    35    			DB	00h			; MOS header versio
+0B0044 01                  A    36    			DB	01h			; Flag for run mode
+                           A    37    
+                           A    38    ;
+                           A    39    ; And the code follows on immediately after the
+                           A    40    ;
+0B0045 F5                  A    41    _start:			PUSH	AF			; Preserve 
+0B0046 C5                  A    42    			PUSH	BC
+0B0047 D5                  A    43    			PUSH	DE
+0B0048 DDE5                A    44    			PUSH	IX
+0B004A FDE5                A    45    			PUSH	IY			; Need to prese
+                           A    46    
+0B004C ED6E                A    47    			LD	A, MB			; Save MB
+0B004E F5                  A    48    			PUSH 	AF
+0B004F AF                  A    49    			XOR 	A
+0B0050 ED6D                A    50    			LD 	MB, A                   ; Clear
+                           A    51    
+0B0052 E5                  A    52    			PUSH	HL			; Clear the RAM
+0B0053 CD 77 00 0B         A    53    			CALL	_clear_bss
+0B0057 E1                  A    54    			POP	HL
+                           A    55    ;
+0B0058 DD21 CA 1A 0B       A    56    			LD	IX, argv_ptrs		; The argv 
+0B005D DDE5                A    57    			PUSH	IX			; Parameter 2: 
+0B005F CD 96 00 0B         A    58    			CALL	_parse_params		; Parse
+0B0063 0600                A    59    			LD	B, 0			; Clear B from 
+0B0065 C5                  A    60    			PUSH	BC			; Parameter 1: 
+0B0066 CD 14 0A 0B         A    61    			CALL	_main			; int main(
+0B006A D1                  A    62    			POP	DE			; Balance the stack
+0B006B D1                  A    63    			POP	DE
+                           A    64    
+0B006C F1                  A    65    			POP AF
+0B006D ED6D                A    66    			LD	MB, A
+                           A    67    
+0B006F FDE1                A    68    			POP	IY			; Restore registers
+0B0071 DDE1                A    69    			POP	IX
+0B0073 D1                  A    70    			POP	DE
+0B0074 C1                  A    71    			POP 	BC
+0B0075 F1                  A    72    			POP	AF
+0B0076 C9                  A    73    			RET
+                           A    74    			
+                           A    75    ; Clear the memory
+                           A    76    ;
+0B0077 01 29 00 00         A    77    _clear_bss:		LD	BC, __len_bss		; Check
+0B007B 3E 00               A    78    			LD	a, __len_bss >> 16
+0B007D B1                  A    79    			OR	A, C
+0B007E B0                  A    80    			OR	A, B
+0B007F C8                  A    81    			RET	Z			; BSS is zero-lengt
+0B0080 AF                  A    82    			XOR	A, A
+0B0081 32 03 1B 0B         A    83    			LD 	(__low_bss), A
+0B0085 ED62                A    84    			SBC	HL, HL			; HL = 0
+0B0087 0B                  A    85    			DEC	BC			; 1st byte's taken 
+0B0088 ED42                A    86    			SBC	HL, BC
+0B008A C8                  A    87    			RET	Z		  	; Just 1 byte ...
+0B008B 21 03 1B 0B         A    88    			LD	HL, __low_bss		; Reset HL
+0B008F 11 04 1B 0B         A    89    			LD	DE, __low_bss + 1	; [DE] = bs
+0B0093 EDB0                A    90    			LDIR				; Clear this se
+0B0095 C9                  A    91    			RET
+                           A    92    			
+                           A    93    ; Parse the parameter string into a C array
+                           A    94    ; Parameters
+                           A    95    ; - HL: Address of parameter string
+                           A    96    ; - IX: Address for array pointer storage
+                           A    97    ; Returns:
+                           A    98    ; -  C: Number of parameters parsed
+                           A    99    ;
+0B0096 01 04 00 0B         A   100    _parse_params:		LD	BC, _exec_name
+0B009A DD0F00              A   101    			LD	(IX+0), BC		; ARGV[0] = the
+0B009D DD23                A   102    			INC	IX
+0B009F DD23                A   103    			INC	IX
+0B00A1 DD23                A   104    			INC	IX
+0B00A3 CD DE 00 0B         A   105    			CALL	_skip_spaces		; Skip 
+                           A   106    ;
+0B00A7 01010000            A   107    			LD	BC, 1			; C: ARGC = 1 -
+0B00AB 060F                A   108    			LD	B, argv_ptrs_max - 1	; B: Ma
+                           A   109    ;
+0B00AD                     A   110    _parse_params_1:	
+0B00AD C5                  A   111    			PUSH	BC			; Stack ARGC	
+0B00AE E5                  A   112    			PUSH	HL			; Stack start a
+0B00AF CD CF 00 0B         A   113    			CALL	_get_token		; Get the n
+0B00B3 79                  A   114    			LD	A, C			; A: Length of 
+0B00B4 D1                  A   115    			POP	DE			; Start address of 
+0B00B5 C1                  A   116    			POP	BC			; ARGC
+0B00B6 B7                  A   117    			OR	A			; Check for A=0 (no
+0B00B7 C8                  A   118    			RET	Z
+                           A   119    ;
+0B00B8 DD1F00              A   120    			LD	(IX+0), DE		; Store the poi
+0B00BB E5                  A   121    			PUSH	HL			; DE=HL
+0B00BC D1                  A   122    			POP	DE
+0B00BD CD DE 00 0B         A   123    			CALL	_skip_spaces		; And s
+0B00C1 AF                  A   124    			XOR	A
+0B00C2 12                  A   125    			LD	(DE), A			; Zero-terminat
+0B00C3 DD23                A   126    			INC	IX
+0B00C5 DD23                A   127    			INC	IX
+0B00C7 DD23                A   128    			INC	IX			; Advance to next p
+0B00C9 0C                  A   129    			INC	C			; Increment ARGC
+0B00CA 79                  A   130    			LD	A, C			; Check for C >
+0B00CB B8                  A   131    			CP	B
+0B00CC 38 DF               A   132    			JR	C, _parse_params_1	; And loop
+0B00CE C9                  A   133    			RET
+                           A   134    
+                           A   135    ; Get the next token
+                           A   136    ; Parameters:
+                           A   137    ; - HL: Address of parameter string
+                           A   138    ; Returns:
+                           A   139    ; - HL: Address of first character after token
+                           A   140    ; -  C: Length of token (in characters)
+                           A   141    ;
+0B00CF 0E00                A   142    _get_token:		LD	C, 0			; Initialis
+0B00D1 7E                  A   143    $$:			LD	A, (HL)			; Get the chara
+0B00D2 B7                  A   144    			OR	A			; Exit if 0 (end of
+0B00D3 C8                  A   145    			RET 	Z
+0B00D4 FE0D                A   146    			CP	13			; Exit if CR (end o
+0B00D6 C8                  A   147    			RET	Z
+0B00D7 FE20                A   148    			CP	' '			; Exit if space (en
+0B00D9 C8                  A   149    			RET	Z
+0B00DA 23                  A   150    			INC	HL			; Advance to next c
+0B00DB 0C                  A   151    			INC 	C			; Increment len
+0B00DC 18 F3               A   152    			JR	$B
+                           A   153    	
+                           A   154    ; Skip spaces in the parameter string
+                           A   155    ; Parameters:
+                           A   156    ; - HL: Address of parameter string
+                           A   157    ; Returns:
+                           A   158    ; - HL: Address of next none-space character
+                           A   159    ;    F: Z if at end of string, otherwise NZ if 
+                           A   160    ;
+0B00DE 7E                  A   161    _skip_spaces:		LD	A, (HL)			; Get t
+0B00DF FE20                A   162    			CP	' '			; Exit if not space
+0B00E1 C0                  A   163    			RET	NZ
+0B00E2 23                  A   164    			INC	HL			; Advance to next c
+0B00E3 18 F9               A   165    			JR	_skip_spaces		; Increment
+                           A   166    
+                           A   167    			SEGMENT DATA
+                           A   168    
+                           A   169    
+                           A   170    ; Storage for the argv array pointers
+                           A   171    ;
+0B1ACA 000000 000000       A   172    argv_ptrs:		BLKP	argv_ptrs_max, 0
+0B1AD0 000000 000000 
+0B1AD6 000000 000000 
+0B1ADC 000000 000000 
+0B1AE2 000000 000000 
+0B1AE8 000000 000000 
+0B1AEE 000000 000000 
+0B1AF4 000000 000000 
+                           A   173    			
+                           A   174    			END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 175
