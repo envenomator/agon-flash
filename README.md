@@ -1,87 +1,43 @@
-# Agon firmware upgrade utility
-The utility version you need, depends on the *current* version of MOS. When you reset your AgonLight, the MOS version is displayed on the first line.
+# Agon firmware update utility
+The Agon firmware update utility is able to flash MOS / VDP firmware from files on the SD card on any Agon, without using any cables.
+## Requirements
+The utility needs at least MOS version 1.03. If you are still running an older MOS version, please see this legacy [utility](https://github.com/envenomator/agon-flashlegacy).
 
-Please follow the guide for your *current* MOS version:
-1. [*Current* MOS Version 1.03 or higher](#current-mos-firmware-103-or-higher)
-2. [*Current* MOS Version 1.02](#current-mos-firmware-102)
-3. [*Current* MOS Version 1.00 or 1.01](#current-mos-firmware-100101-legacy-version)
-
-## Current MOS firmware 1.03 or higher
-This version needs at least MOS version 1.03, which supports several enhancements to the MOS file API.
+Flashing VDP firmware from a file on the SD card, requires a programmed VDP that has OTA (Over-the-air) functionality built in. This is available in Console8 VDP 2.0.0+ and Quark VDP 1.4+ firmware versions. Once a compatible VDP is present in the system, new VDP versions can be flashed using the flash utility. 
 ### Installation
-1. Make sure to create a 'mos' directory on the microSD card
-2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.03%20or%20higher/flash.bin) in the 'mos' directory
-3. Place the required (MOS or VDP) firmware file in the root directory of the microSD card
+1. Make sure to create a **mos** directory on the microSD card, if it's not already present.
+2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/flash.bin) in the **mos** directory
+3. Place the firmware files in the **root** directory of the microSD card:
+- MOS firmware - default filename 'MOS.bin'
+- VDP firmware - default filename 'firmware.bin'
 
-## Usage (version 1.4+)
+## Usage
+
 ```console
-Usage: FLASH <mos|vdp> <filename>
+Usage: FLASH [all | [mos <filename>] [vdp <filename>] | batch] <-f>
 ```
 
-### Target MOS version
-Any new MOS version can be flashed using this utility version. Precompiled binaries can be found at my [agon-binaries](https://github.com/envenomator/agon-binaries) repository.
+Using the *all* command tries to flash all firmware, using the default filenames 'MOS.bin' for MOS firmware, 'firmware.bin' for VDP firmware.
 
-### Target VDP version
-Any new VDP version can be flashed using this utility version, as long as the required update receiver is present in the VDP. It looks like this might be planned for VDP 1.04 release version.
+Using the *mos* or *vdp* commands, the user can specify a specific type of firmware to flash, optionally using a different firmware filename for each command. Using both *mos* and *vdp* commands without a filename option is similar to the *all* command.
 
-## Current MOS firmware 1.02
-This version needs at least MOS version 1.02, which supports loadable commands with arguments.
-### Installation
-1. Make sure to create a 'mos' directory on the microSD card
-2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%201.02/flash.bin) from in the 'mos' directory
-3. Place the required firmware file in the root directory of the microSD card
-4. Obtain the CRC32 checksum for the new firmware. [This table](https://github.com/envenomator/agon-binaries/blob/master/README.md) at agon-binaries lists the checksums for common MOS versions. If you like to provide a checksum for your own MOS binary, some good tips are: The crc32 utility on Linux, or a website like https://simplycalc.com/crc32-file.php. For the latter, use the default polynomial of 04C11DB7, upload the firmware and note the result for use in the upgrade utility.
+The *batch* command can be used to batch-flash an Agon system using the command in autoexec.txt. In order to facilitate headless flashing, the utility beeps during the flashing sequence (1 for startup, 2 for completing VDP firmware, 3 for completing the MOS firmware) and waits at completion forever.
 
-### Target MOS version
-Any new MOS version can be flashed using this utility version. Precompiled binaries can be found at my [agon-binaries](https://github.com/envenomator/agon-binaries) repository.
+The *-f* option skips asking the user to verify firmware CRC codes and is set by default using the *batch* command.
 
-## Usage for *current* MOS versions 1.02+
-```console
-Usage: FLASH <filename> <crc32>
-```
-The provided CRC32 needs to be 4byte, with or without a leading 0x, in hexadecimal format. 
 
-To upgrade from MOS 1.02 to version 1.03 for example:
-```console
-FLASH MOS103.bin 0x81E397C9
-```
+### Target firmware versions
+Any MOS / VDP version can be flashed.
 
-## Current MOS firmware 1.00/1.01 (Legacy version)
-This version can run on MOS version 1.00 or 1.01 and will do a single upgrade to MOS version 1.02 only.
-### Installation
-1. Place the [flash_legacy.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/Current%20MOS%20version%20up%20to%201.01/flash_legacy.bin) in the *root* directory of the microSD card
-2. Place the [firmware102.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/firmware102.bin) in the root directory of the microSD card
+Precompiled binaries can be found at my [agon-binaries](https://github.com/envenomator/agon-binaries) repository.
 
-### Target MOS version
-Only MOS version 1.02 can be flashed using this utility version. For additional MOS upgrades, you need [this](#current-mos-firmware-102) utility version afterwards.
-
-### Usage for *current* MOS version 1.00/1.01
-First make sure you are on the MOS console, presented with the MOS prompt
-
-    *
-
-If you are in BBC Basic (Prompted with '>'), first type *BYE to exit BBC basic and return to MOS.
-
-Load and Jump to the binary in memory:
-```console
-LOAD flash_legacy.bin
-JMP &040000
-```
-
-## Workflow
-The utility reads in the given firmware file to memory and verifies this against the given CRC32 checksum.
-If the file is larger than the amount of flash, the tool will exit.
-Upon checksum verification, the user is asked whether or not to proceed.
-
-The utility then creates an image backup of the entire current flash area, stores that in memory and checksums it.
-The entire flash is unlocked and erased and the given firmware is programmed.
-Verification to the given CRC32 checksum is done on the flash. When this fails, the backup image is reprogrammed to the flash drive in similar fashion and verified to it's original CRC32 checksum.
-
-The MOS currently has no built-in backup code, or second slot, that it can access from flash. If for whatever reason, the checksum of the new firmware should fail, the utility automatically tries to recover by reprogramming the backup code to the flash drive again. If that too fails, the only remaining option is to use a Zilog Programming cable and recover the firmware using it.
+Because literally ANY version can be flashed, please be mindful going back to older versions. The Pleistocene may not have a wall-outlet to charge your time travel device.
 
 ## Disclaimer
-Having subjected my own gear muuuuultiple times to this utility, I feel it's safe for general use in upgrading the MOS firmware to a new version.
+Having subjected my own gear to this utility many hundreds of times, I feel it is safe for general use in upgrading the MOS firmware to a new version.
 The responsibility for any issues during and/or after the firmware upgrade, lies with the user of this utility.
 
 ## If all else fails
-Stuff breaks, things happen. Yeah, wonderful, but what if after whatever happened, you have bricked your AgonLight? Take a deep breath, and have a look at [this](https://github.com/envenomator/agon-vdpflash) utility to perform a *baremetal* recovery.
+Did you also update your VDP firmware, after updating the MOS? Weird things may happen if both are far apart.
+
+And even then; stuff breaks, things happen. Yeah, wonderful, but what if after whatever happened, you have bricked your AgonLight? Take a deep breath, and have a look at [this](https://github.com/envenomator/agon-vdpflash) utility to perform a *baremetal* recovery.

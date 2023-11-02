@@ -496,7 +496,7 @@ int main(int argc, char * argv[]) {
 
 	if(flashvdp) {
 		while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
-		tmp = sysvars->scr_height;
+		tmp = sysvars->scrheight;
 		sysvars->scrheight = 0;
 		if(update_vdp(vdpfilename)) {
 			echoVDP(1);
