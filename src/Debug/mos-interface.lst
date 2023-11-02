@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED02-Nov-23     09:01:35     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED02-Nov-23     10:06:31     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -262,193 +262,193 @@ PC     Object              I  Line    Source
                            A    33    	segment CODE
                            A    34    	.assume ADL=1
                            A    35    	
-0B1039                     A    36    _getch:
-0B1039 DDE5                A    37    	push ix
-0B103B 3E08                A    38    	ld a, mos_sysvars			; MOS Call for 
-0B103D 5BCF                A    39    	rst.lil 08h					; returns point
-0B103F                     A    40    _getch0:
-0B103F DD7E05              A    41    	ld a, (ix+sysvar_keyascii)	; get current k
-0B1042 B7                  A    42    	or a,a
-0B1043 28 FA               A    43    	jr z, _getch0				; wait for keyp
+0B1189                     A    36    _getch:
+0B1189 DDE5                A    37    	push ix
+0B118B 3E08                A    38    	ld a, mos_sysvars			; MOS Call for 
+0B118D 5BCF                A    39    	rst.lil 08h					; returns point
+0B118F                     A    40    _getch0:
+0B118F DD7E05              A    41    	ld a, (ix+sysvar_keyascii)	; get current k
+0B1192 B7                  A    42    	or a,a
+0B1193 28 FA               A    43    	jr z, _getch0				; wait for keyp
                            A    44    	
-0B1045 F5                  A    45    	push af						; debounce key,
-0B1046 AF                  A    46    	xor a
-0B1047 DD7705              A    47    	ld (ix+sysvar_keyascii),a
-0B104A F1                  A    48    	pop af
-0B104B DDE1                A    49    	pop ix
-0B104D C9                  A    50    	ret
+0B1195 F5                  A    45    	push af						; debounce key,
+0B1196 AF                  A    46    	xor a
+0B1197 DD7705              A    47    	ld (ix+sysvar_keyascii),a
+0B119A F1                  A    48    	pop af
+0B119B DDE1                A    49    	pop ix
+0B119D C9                  A    50    	ret
                            A    51    
-0B104E                     A    52    _waitvblank:
-0B104E DDE5                A    53    	push ix
-0B1050 3E08                A    54    	ld a, mos_sysvars
-0B1052 5BCF                A    55    	rst.lil 08h
-0B1054 DD7E00              A    56    	ld a, (ix + sysvar_time + 0)
-0B1057 DDBE00              A    57    $$:	cp a, (ix + sysvar_time + 0)
-0B105A 28 FB               A    58    	jr z, $B
-0B105C DDE1                A    59    	pop ix
-0B105E C9                  A    60    	ret
+0B119E                     A    52    _waitvblank:
+0B119E DDE5                A    53    	push ix
+0B11A0 3E08                A    54    	ld a, mos_sysvars
+0B11A2 5BCF                A    55    	rst.lil 08h
+0B11A4 DD7E00              A    56    	ld a, (ix + sysvar_time + 0)
+0B11A7 DDBE00              A    57    $$:	cp a, (ix + sysvar_time + 0)
+0B11AA 28 FB               A    58    	jr z, $B
+0B11AC DDE1                A    59    	pop ix
+0B11AE C9                  A    60    	ret
                            A    61    
-0B105F                     A    62    _getsysvars:
-0B105F DDE5                A    63    	push	ix
-0B1061 3E08                A    64    	ld		a, mos_sysvars
-0B1063 5BCF                A    65    	rst.lil	08h
-0B1065 DDE5                A    66    	push	ix
-0B1067 E1                  A    67    	pop		hl
-0B1068 DDE1                A    68    	pop		ix
-0B106A C9                  A    69    	ret
+0B11AF                     A    62    _getsysvars:
+0B11AF DDE5                A    63    	push	ix
+0B11B1 3E08                A    64    	ld		a, mos_sysvars
+0B11B3 5BCF                A    65    	rst.lil	08h
+0B11B5 DDE5                A    66    	push	ix
+0B11B7 E1                  A    67    	pop		hl
+0B11B8 DDE1                A    68    	pop		ix
+0B11BA C9                  A    69    	ret
                            A    70    
-0B106B                     A    71    _getsysvar_cursorX:
-0B106B DDE5                A    72    	push ix
-0B106D 3E08                A    73    	ld a, mos_sysvars			; MOS Call for 
-0B106F 5BCF                A    74    	rst.lil 08h					; returns point
-0B1071 DD7E07              A    75    	ld a, (ix+sysvar_cursorX)	; get current k
-0B1074 DDE1                A    76    	pop ix
-0B1076 C9                  A    77    	ret
+0B11BB                     A    71    _getsysvar_cursorX:
+0B11BB DDE5                A    72    	push ix
+0B11BD 3E08                A    73    	ld a, mos_sysvars			; MOS Call for 
+0B11BF 5BCF                A    74    	rst.lil 08h					; returns point
+0B11C1 DD7E07              A    75    	ld a, (ix+sysvar_cursorX)	; get current k
+0B11C4 DDE1                A    76    	pop ix
+0B11C6 C9                  A    77    	ret
                            A    78    
-0B1077                     A    79    _getsysvar_cursorY:
-0B1077 DDE5                A    80    	push ix
-0B1079 3E08                A    81    	ld a, mos_sysvars			; MOS Call for 
-0B107B 5BCF                A    82    	rst.lil 08h					; returns point
-0B107D DD7E08              A    83    	ld a, (ix+sysvar_cursorY)	; get current k
-0B1080 DDE1                A    84    	pop ix
-0B1082 C9                  A    85    	ret
+0B11C7                     A    79    _getsysvar_cursorY:
+0B11C7 DDE5                A    80    	push ix
+0B11C9 3E08                A    81    	ld a, mos_sysvars			; MOS Call for 
+0B11CB 5BCF                A    82    	rst.lil 08h					; returns point
+0B11CD DD7E08              A    83    	ld a, (ix+sysvar_cursorY)	; get current k
+0B11D0 DDE1                A    84    	pop ix
+0B11D2 C9                  A    85    	ret
                            A    86    
-0B1083                     A    87    _getsysvar_scrchar:
-0B1083 DDE5                A    88    	push ix
-0B1085 3E08                A    89    	ld a, mos_sysvars			; MOS Call for 
-0B1087 5BCF                A    90    	rst.lil 08h					; returns point
-0B1089 DD7E09              A    91    	ld a, (ix+sysvar_scrchar)	; get current k
-0B108C DDE1                A    92    	pop ix
-0B108E C9                  A    93    	ret
+0B11D3                     A    87    _getsysvar_scrchar:
+0B11D3 DDE5                A    88    	push ix
+0B11D5 3E08                A    89    	ld a, mos_sysvars			; MOS Call for 
+0B11D7 5BCF                A    90    	rst.lil 08h					; returns point
+0B11D9 DD7E09              A    91    	ld a, (ix+sysvar_scrchar)	; get current k
+0B11DC DDE1                A    92    	pop ix
+0B11DE C9                  A    93    	ret
                            A    94    
-0B108F                     A    95    _mos_fopen:
-0B108F DDE5                A    96    	push ix
-0B1091 DD210000 00         A    97    	ld ix,0
-0B1096 DD39                A    98    	add ix, sp
+0B11DF                     A    95    _mos_fopen:
+0B11DF DDE5                A    96    	push ix
+0B11E1 DD210000 00         A    97    	ld ix,0
+0B11E6 DD39                A    98    	add ix, sp
                            A    99    	
-0B1098 DD2706              A   100    	ld hl, (ix+6)	; address to 0-terminated f
-0B109B DD4E09              A   101    	ld c,  (ix+9)	; mode : fa_read / fa_write
-0B109E 3E0A                A   102    	ld a, mos_fopen
-0B10A0 5BCF                A   103    	rst.lil 08h		; returns filehandle in A
+0B11E8 DD2706              A   100    	ld hl, (ix+6)	; address to 0-terminated f
+0B11EB DD4E09              A   101    	ld c,  (ix+9)	; mode : fa_read / fa_write
+0B11EE 3E0A                A   102    	ld a, mos_fopen
+0B11F0 5BCF                A   103    	rst.lil 08h		; returns filehandle in A
                            A   104    	
-0B10A2 DDF9                A   105    	ld sp,ix
-0B10A4 DDE1                A   106    	pop ix
-0B10A6 C9                  A   107    	ret	
+0B11F2 DDF9                A   105    	ld sp,ix
+0B11F4 DDE1                A   106    	pop ix
+0B11F6 C9                  A   107    	ret	
                            A   108    
-0B10A7                     A   109    _mos_fclose:
-0B10A7 DDE5                A   110    	push ix
-0B10A9 DD210000 00         A   111    	ld ix,0
-0B10AE DD39                A   112    	add ix, sp
+0B11F7                     A   109    _mos_fclose:
+0B11F7 DDE5                A   110    	push ix
+0B11F9 DD210000 00         A   111    	ld ix,0
+0B11FE DD39                A   112    	add ix, sp
                            A   113    	
-0B10B0 DD4E06              A   114    	ld c, (ix+6)	; filehandle, or 0 to close
-0B10B3 3E0B                A   115    	ld a, mos_fclose
-0B10B5 5BCF                A   116    	rst.lil 08h		; returns number of files s
+0B1200 DD4E06              A   114    	ld c, (ix+6)	; filehandle, or 0 to close
+0B1203 3E0B                A   115    	ld a, mos_fclose
+0B1205 5BCF                A   116    	rst.lil 08h		; returns number of files s
                            A   117    	
-0B10B7 DDF9                A   118    	ld sp,ix
-0B10B9 DDE1                A   119    	pop ix
-0B10BB C9                  A   120    	ret	
+0B1207 DDF9                A   118    	ld sp,ix
+0B1209 DDE1                A   119    	pop ix
+0B120B C9                  A   120    	ret	
                            A   121    
-0B10BC                     A   122    _mos_fgetc:
-0B10BC DDE5                A   123    	push ix
-0B10BE DD210000 00         A   124    	ld ix,0
-0B10C3 DD39                A   125    	add ix, sp
+0B120C                     A   122    _mos_fgetc:
+0B120C DDE5                A   123    	push ix
+0B120E DD210000 00         A   124    	ld ix,0
+0B1213 DD39                A   125    	add ix, sp
                            A   126    	
-0B10C5 DD4E06              A   127    	ld c, (ix+6)	; filehandle
-0B10C8 3E0C                A   128    	ld a, mos_fgetc
-0B10CA 5BCF                A   129    	rst.lil 08h		; returns character in A
+0B1215 DD4E06              A   127    	ld c, (ix+6)	; filehandle
+0B1218 3E0C                A   128    	ld a, mos_fgetc
+0B121A 5BCF                A   129    	rst.lil 08h		; returns character in A
                            A   130    	
-0B10CC DDF9                A   131    	ld sp,ix
-0B10CE DDE1                A   132    	pop ix
-0B10D0 C9                  A   133    	ret	
+0B121C DDF9                A   131    	ld sp,ix
+0B121E DDE1                A   132    	pop ix
+0B1220 C9                  A   133    	ret	
                            A   134    
-0B10D1                     A   135    _mos_fread:
-0B10D1 DDE5                A   136    	push ix
-0B10D3 DD210000 00         A   137    	ld ix,0
-0B10D8 DD39                A   138    	add ix,sp
+0B1221                     A   135    _mos_fread:
+0B1221 DDE5                A   136    	push ix
+0B1223 DD210000 00         A   137    	ld ix,0
+0B1228 DD39                A   138    	add ix,sp
                            A   139    
-0B10DA DD4E06              A   140    	ld c, (ix+6)	; filehandle
-0B10DD DD2709              A   141    	ld hl, (ix+9)	; buffer
-0B10E0 DD170C              A   142    	ld de, (ix+12)	; bytes to read
+0B122A DD4E06              A   140    	ld c, (ix+6)	; filehandle
+0B122D DD2709              A   141    	ld hl, (ix+9)	; buffer
+0B1230 DD170C              A   142    	ld de, (ix+12)	; bytes to read
                            A   143    
-0B10E3 3E1A                A   144    	ld a, mos_fread
-0B10E5 5BCF                A   145    	rst.lil 08h
+0B1233 3E1A                A   144    	ld a, mos_fread
+0B1235 5BCF                A   145    	rst.lil 08h
                            A   146    
-0B10E7 D5                  A   147    	push	de	; Move 24-bit result from DE in
-0B10E8 E1                  A   148    	pop	hl
+0B1237 D5                  A   147    	push	de	; Move 24-bit result from DE in
+0B1238 E1                  A   148    	pop	hl
                            A   149    
-0B10E9 DDF9                A   150    	ld sp,ix
-0B10EB DDE1                A   151    	pop ix
-0B10ED C9                  A   152    	ret
+0B1239 DDF9                A   150    	ld sp,ix
+0B123B DDE1                A   151    	pop ix
+0B123D C9                  A   152    	ret
                            A   153    
-0B10EE                     A   154    _mos_fputc:
-0B10EE DDE5                A   155    	push ix
-0B10F0 DD210000 00         A   156    	ld ix,0
-0B10F5 DD39                A   157    	add ix, sp
+0B123E                     A   154    _mos_fputc:
+0B123E DDE5                A   155    	push ix
+0B1240 DD210000 00         A   156    	ld ix,0
+0B1245 DD39                A   157    	add ix, sp
                            A   158    	
-0B10F7 DD4E06              A   159    	ld c, (ix+6)	; filehandle
-0B10FA DD4609              A   160    	ld b, (ix+9)	; character to write
-0B10FD 3E0D                A   161    	ld a, mos_fputc
-0B10FF 5BCF                A   162    	rst.lil 08h		; returns nothing
+0B1247 DD4E06              A   159    	ld c, (ix+6)	; filehandle
+0B124A DD4609              A   160    	ld b, (ix+9)	; character to write
+0B124D 3E0D                A   161    	ld a, mos_fputc
+0B124F 5BCF                A   162    	rst.lil 08h		; returns nothing
                            A   163    	
-0B1101 DDF9                A   164    	ld sp,ix
-0B1103 DDE1                A   165    	pop ix
-0B1105 C9                  A   166    	ret	
+0B1251 DDF9                A   164    	ld sp,ix
+0B1253 DDE1                A   165    	pop ix
+0B1255 C9                  A   166    	ret	
                            A   167    
-0B1106                     A   168    _mos_feof:
-0B1106 DDE5                A   169    	push ix
-0B1108 DD210000 00         A   170    	ld ix,0
-0B110D DD39                A   171    	add ix, sp
+0B1256                     A   168    _mos_feof:
+0B1256 DDE5                A   169    	push ix
+0B1258 DD210000 00         A   170    	ld ix,0
+0B125D DD39                A   171    	add ix, sp
                            A   172    	
-0B110F DD4E06              A   173    	ld c, (ix+6)	; filehandle
-0B1112 3E0E                A   174    	ld a, mos_feof
-0B1114 5BCF                A   175    	rst.lil 08h		; returns A: 1 at End-of-Fi
+0B125F DD4E06              A   173    	ld c, (ix+6)	; filehandle
+0B1262 3E0E                A   174    	ld a, mos_feof
+0B1264 5BCF                A   175    	rst.lil 08h		; returns A: 1 at End-of-Fi
                            A   176    	
-0B1116 DDF9                A   177    	ld sp,ix
-0B1118 DDE1                A   178    	pop ix
-0B111A C9                  A   179    	ret	
+0B1266 DDF9                A   177    	ld sp,ix
+0B1268 DDE1                A   178    	pop ix
+0B126A C9                  A   179    	ret	
                            A   180    
                            A   181    
-0B111B                     A   182    _mos_del:
-0B111B DDE5                A   183    	push	ix
-0B111D DD210000 00         A   184    	ld 		ix,0
-0B1122 DD39                A   185    	add 	ix, sp
+0B126B                     A   182    _mos_del:
+0B126B DDE5                A   183    	push	ix
+0B126D DD210000 00         A   184    	ld 		ix,0
+0B1272 DD39                A   185    	add 	ix, sp
                            A   186    
-0B1124 DD2706              A   187    	ld 		hl, (ix+6)	; filename address (zer
-0B1127 3E05                A   188    	ld a,	mos_del
-0B1129 5BCF                A   189    	rst.lil	08h			; save file to SD card
+0B1274 DD2706              A   187    	ld 		hl, (ix+6)	; filename address (zer
+0B1277 3E05                A   188    	ld a,	mos_del
+0B1279 5BCF                A   189    	rst.lil	08h			; save file to SD card
                            A   190    
-0B112B DDF9                A   191    	ld		sp,ix
-0B112D DDE1                A   192    	pop		ix
-0B112F C9                  A   193    	ret
+0B127B DDF9                A   191    	ld		sp,ix
+0B127D DDE1                A   192    	pop		ix
+0B127F C9                  A   193    	ret
                            A   194    	
-0B1130                     A   195    _mos_save:
-0B1130 DDE5                A   196    	push	ix
-0B1132 DD210000 00         A   197    	ld 		ix,0
-0B1137 DD39                A   198    	add 	ix, sp
+0B1280                     A   195    _mos_save:
+0B1280 DDE5                A   196    	push	ix
+0B1282 DD210000 00         A   197    	ld 		ix,0
+0B1287 DD39                A   198    	add 	ix, sp
                            A   199    
-0B1139 DD2706              A   200    	ld 		hl, (ix+6)	; filename address (zer
-0B113C DD1709              A   201    	ld		de, (ix+9)	; address to save from
-0B113F DD070C              A   202    	ld		bc, (ix+12)	; number of bytes to sa
-0B1142 3E02                A   203    	ld a,	mos_save
-0B1144 5BCF                A   204    	rst.lil	08h			; save file to SD card
+0B1289 DD2706              A   200    	ld 		hl, (ix+6)	; filename address (zer
+0B128C DD1709              A   201    	ld		de, (ix+9)	; address to save from
+0B128F DD070C              A   202    	ld		bc, (ix+12)	; number of bytes to sa
+0B1292 3E02                A   203    	ld a,	mos_save
+0B1294 5BCF                A   204    	rst.lil	08h			; save file to SD card
                            A   205    
-0B1146 DDF9                A   206    	ld		sp,ix
-0B1148 DDE1                A   207    	pop		ix
-0B114A C9                  A   208    	ret
+0B1296 DDF9                A   206    	ld		sp,ix
+0B1298 DDE1                A   207    	pop		ix
+0B129A C9                  A   208    	ret
                            A   209    
-0B114B                     A   210    _mos_flseek:
-0B114B DDE5                A   211    	push	ix
-0B114D DD210000 00         A   212    	ld 		ix,0
-0B1152 DD39                A   213    	add 	ix, sp
-0B1154 DD0706              A   214    	ld 		bc, (ix+6)	; file handle
-0B1157 11000000            A   215    	ld		de, 0
-0B115B DD2709              A   216    	ld		hl, (ix+9)  ; 24 least significant 
-0B115E DD5E0C              A   217    	ld		e,  (ix+12)	; 8 most most significa
-0B1161 3E1C                A   218    	ld a,	mos_flseek
-0B1163 5BCF                A   219    	rst.lil	08h
-0B1165 DDF9                A   220    	ld		sp,ix
-0B1167 DDE1                A   221    	pop		ix
-0B1169 C9                  A   222    	ret
+0B129B                     A   210    _mos_flseek:
+0B129B DDE5                A   211    	push	ix
+0B129D DD210000 00         A   212    	ld 		ix,0
+0B12A2 DD39                A   213    	add 	ix, sp
+0B12A4 DD0706              A   214    	ld 		bc, (ix+6)	; file handle
+0B12A7 11000000            A   215    	ld		de, 0
+0B12AB DD2709              A   216    	ld		hl, (ix+9)  ; 24 least significant 
+0B12AE DD5E0C              A   217    	ld		e,  (ix+12)	; 8 most most significa
+0B12B1 3E1C                A   218    	ld a,	mos_flseek
+0B12B3 5BCF                A   219    	rst.lil	08h
+0B12B5 DDF9                A   220    	ld		sp,ix
+0B12B7 DDE1                A   221    	pop		ix
+0B12B9 C9                  A   222    	ret
                            A   223    
                            A   224    	SEGMENT DATA
                            A   225    

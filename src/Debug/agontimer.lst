@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED02-Nov-23     09:01:36     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED02-Nov-23     10:06:31     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -26,7 +26,7 @@ PC     Object              I  Line    Source
                            A    22    ;   15	
                            A    23    ;   16	void delayms(int ms)
                            A    24    ;   17	{
-0B123B                     A    25    _delayms:
+0B138B                     A    25    _delayms:
                            A    26    .DEFINE "_delayms"
                            A    27    
                            A    28    .VALUE _delayms
@@ -61,11 +61,11 @@ PC     Object              I  Line    Source
                            A    57    
                            A    58    .ENDEF
                            A    59    
-0B123B DDE5                A    60    	PUSH	IX
-0B123D DD210000 00         A    61    	LD	IX,0
-0B1242 DD39                A    62    	ADD	IX,SP
-0B1244 3B                  A    63    	DEC	SP
-0B1245 3B                  A    64    	DEC	SP
+0B138B DDE5                A    60    	PUSH	IX
+0B138D DD210000 00         A    61    	LD	IX,0
+0B1392 DD39                A    62    	ADD	IX,SP
+0B1394 3B                  A    63    	DEC	SP
+0B1395 3B                  A    64    	DEC	SP
                            A    65    ;   18		unsigned short rr;
                            A    66    ;   19		UINT16 timer0;
                            A    67    ;   20	
@@ -74,82 +74,82 @@ PC     Object              I  Line    Source
                            A    70    ;   23		TMR0_CTL = 0x00;	// disable time
                            A    71    .LINE 23
                            A    72    
-0B1246 AF                  A    73    	XOR	A,A
-0B1247 ED3980              A    74    	OUT0	(128),A
+0B1396 AF                  A    73    	XOR	A,A
+0B1397 ED3980              A    74    	OUT0	(128),A
                            A    75    ;   24		
                            A    76    ;   25		while(ms)
                            A    77    .LINE 25
                            A    78    
-0B124A 18 43               A    79    	JR	L_4
-0B124C                     A    80    L_5:
+0B139A 18 43               A    79    	JR	L_4
+0B139C                     A    80    L_5:
                            A    81    ;   26		{	
                            A    82    ;   27			TMR0_RR_H = (unsigned char)(rr 
                            A    83    .LINE 27
                            A    84    
-0B124C 3E04                A    85    	LD	A,%4
-0B124E ED3982              A    86    	OUT0	(130),A
+0B139C 3E04                A    85    	LD	A,%4
+0B139E ED3982              A    86    	OUT0	(130),A
                            A    87    ;   28			TMR0_RR_L = (unsigned char)(rr)
                            A    88    .LINE 28
                            A    89    
-0B1251 3E6D                A    90    	LD	A,%6D
-0B1253 ED3981              A    91    	OUT0	(129),A
+0B13A1 3E6D                A    90    	LD	A,%6D
+0B13A3 ED3981              A    91    	OUT0	(129),A
                            A    92    ;   29					
                            A    93    ;   30			TMR0_CTL = 0x87; // enable, sin
                            A    94    .LINE 30
                            A    95    
-0B1256 3E87                A    96    	LD	A,%87
-0B1258 ED3980              A    97    	OUT0	(128),A
+0B13A6 3E87                A    96    	LD	A,%87
+0B13A8 ED3980              A    97    	OUT0	(128),A
                            A    98    ;   31			do
-0B125B                     A    99    L_0:
+0B13AB                     A    99    L_0:
                            A   100    .LINE 31
                            A   101    
                            A   102    ;   32			{
                            A   103    ;   33				timer0 = TMR0_DR_L;
                            A   104    .LINE 33
                            A   105    
-0B125B ED3881              A   106    	IN0	A,(129)
-0B125E 4F                  A   107    	LD	C,A
-0B125F 0600                A   108    	LD	B,%0
-0B1261 C5E1                A   109    	LD	HL,BC
-0B1263 DD75FE              A   110    	LD	(IX+%FFFFFFFE),L
-0B1266 DD74FF              A   111    	LD	(IX+%FFFFFFFF),H
+0B13AB ED3881              A   106    	IN0	A,(129)
+0B13AE 4F                  A   107    	LD	C,A
+0B13AF 0600                A   108    	LD	B,%0
+0B13B1 C5E1                A   109    	LD	HL,BC
+0B13B3 DD75FE              A   110    	LD	(IX+%FFFFFFFE),L
+0B13B6 DD74FF              A   111    	LD	(IX+%FFFFFFFF),H
                            A   112    ;   34				timer0 = timer0 | (TMR0_DR_
                            A   113    .LINE 34
                            A   114    
-0B1269 ED3882              A   115    	IN0	A,(130)
-0B126C 4F                  A   116    	LD	C,A
-0B126D C5E1                A   117    	LD	HL,BC
-0B126F 65                  A   118    	LD	H,L
-0B1270 2E00                A   119    	LD	L,%0
-0B1272 DD07FE              A   120    	LD	BC,(IX+%FFFFFFFE)
-0B1275 CD AB 1E 0B         A   121    	CALL	__sor
-0B1279 DD75FE              A   122    	LD	(IX+%FFFFFFFE),L
-0B127C DD74FF              A   123    	LD	(IX+%FFFFFFFF),H
+0B13B9 ED3882              A   115    	IN0	A,(130)
+0B13BC 4F                  A   116    	LD	C,A
+0B13BD C5E1                A   117    	LD	HL,BC
+0B13BF 65                  A   118    	LD	H,L
+0B13C0 2E00                A   119    	LD	L,%0
+0B13C2 DD07FE              A   120    	LD	BC,(IX+%FFFFFFFE)
+0B13C5 CD FB 1F 0B         A   121    	CALL	__sor
+0B13C9 DD75FE              A   122    	LD	(IX+%FFFFFFFE),L
+0B13CC DD74FF              A   123    	LD	(IX+%FFFFFFFF),H
                            A   124    ;   35			}
                            A   125    ;   36			while(timer0);
                            A   126    .LINE 36
                            A   127    
-0B127F DD27FE              A   128    	LD	HL,(IX+%FFFFFFFE)
-0B1282 CD 21 1E 0B         A   129    	CALL	__scmpzero
-0B1286 20 D3               A   130    	JR	NZ,L_0
+0B13CF DD27FE              A   128    	LD	HL,(IX+%FFFFFFFE)
+0B13D2 CD 71 1F 0B         A   129    	CALL	__scmpzero
+0B13D6 20 D3               A   130    	JR	NZ,L_0
                            A   131    ;   37			ms--;
                            A   132    .LINE 37
                            A   133    
-0B1288 DD0706              A   134    	LD	BC,(IX+%6)
-0B128B 0B                  A   135    	DEC	BC
-0B128C DD0F06              A   136    	LD	(IX+%6),BC
+0B13D8 DD0706              A   134    	LD	BC,(IX+%6)
+0B13DB 0B                  A   135    	DEC	BC
+0B13DC DD0F06              A   136    	LD	(IX+%6),BC
                            A   137    ;   38		}
-0B128F                     A   138    L_4:
+0B13DF                     A   138    L_4:
                            A   139    .LINE 38
                            A   140    
-0B128F DD2706              A   141    	LD	HL,(IX+%6)
-0B1292 CD CC 1A 0B         A   142    	CALL	__icmpzero
-0B1296 20 B4               A   143    	JR	NZ,L_5
+0B13DF DD2706              A   141    	LD	HL,(IX+%6)
+0B13E2 CD 1C 1C 0B         A   142    	CALL	__icmpzero
+0B13E6 20 B4               A   143    	JR	NZ,L_5
                            A   144    .LINE 39
                            A   145    
-0B1298 DDF9                A   146    	LD	SP,IX
-0B129A DDE1                A   147    	POP	IX
-0B129C C9                  A   148    	RET	
+0B13E8 DDF9                A   146    	LD	SP,IX
+0B13EA DDE1                A   147    	POP	IX
+0B13EC C9                  A   148    	RET	
                            A   149    
                            A   150    
                            A   151    ;**************************** _delayms ********

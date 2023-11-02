@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED02-Nov-23     09:01:35     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED02-Nov-23     10:06:31     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -249,142 +249,142 @@ PC     Object              I  Line    Source
        00000400            A    20    BUFFERSIZE	EQU 1024
        00050000            A    21    buffer		EQU 50000h	; memory location
                            A    22    
-0B116A                     A    23    _enableFlashKeyRegister:
-0B116A DDE5                A    24    	PUSH	IX
-0B116C DD210000 00         A    25    	LD		IX, 0
-0B1171 DD39                A    26    	ADD		IX, SP
+0B12BA                     A    23    _enableFlashKeyRegister:
+0B12BA DDE5                A    24    	PUSH	IX
+0B12BC DD210000 00         A    25    	LD		IX, 0
+0B12C1 DD39                A    26    	ADD		IX, SP
                            A    27    	
                            A    28    	; actual work here
-0B1173 3EB6                A    29    	LD		A, b6h	; unlock
-0B1175 ED39F5              A    30    	OUT0	(F5h), A
-0B1178 3E49                A    31    	LD		A, 49h
-0B117A ED39F5              A    32    	OUT0	(F5h), A
+0B12C3 3EB6                A    29    	LD		A, b6h	; unlock
+0B12C5 ED39F5              A    30    	OUT0	(F5h), A
+0B12C8 3E49                A    31    	LD		A, 49h
+0B12CA ED39F5              A    32    	OUT0	(F5h), A
                            A    33    	
-0B117D DDF9                A    34    	LD		SP, IX
-0B117F DDE1                A    35    	POP		IX
-0B1181 C9                  A    36    	RET
+0B12CD DDF9                A    34    	LD		SP, IX
+0B12CF DDE1                A    35    	POP		IX
+0B12D1 C9                  A    36    	RET
                            A    37    
-0B1182                     A    38    _lockFlashKeyRegister:
-0B1182 DDE5                A    39    	PUSH	IX
-0B1184 DD210000 00         A    40    	LD		IX, 0
-0B1189 DD39                A    41    	ADD		IX, SP
+0B12D2                     A    38    _lockFlashKeyRegister:
+0B12D2 DDE5                A    39    	PUSH	IX
+0B12D4 DD210000 00         A    40    	LD		IX, 0
+0B12D9 DD39                A    41    	ADD		IX, SP
                            A    42    	
-0B118B 3EFF                A    43    	LD		A, FFh	; lock
-0B118D ED39F5              A    44    	OUT0	(F5h), A
+0B12DB 3EFF                A    43    	LD		A, FFh	; lock
+0B12DD ED39F5              A    44    	OUT0	(F5h), A
                            A    45    	
-0B1190 DDF9                A    46    	LD		SP, IX
-0B1192 DDE1                A    47    	POP		IX
-0B1194 C9                  A    48    	RET
+0B12E0 DDF9                A    46    	LD		SP, IX
+0B12E2 DDE1                A    47    	POP		IX
+0B12E4 C9                  A    48    	RET
                            A    49    	
-0B1195                     A    50    _reset:
-0B1195 C7                  A    51    	RST	0h
-0B1196 C9                  A    52    	RET ; will never get here
+0B12E5                     A    50    _reset:
+0B12E5 C7                  A    51    	RST	0h
+0B12E6 C9                  A    52    	RET ; will never get here
                            A    53    	
-0B1197                     A    54    _fastmemcpy:
-0B1197 DDE5                A    55    	PUSH	IX
-0B1199 DD210000 00         A    56    	LD		IX, 0
-0B119E DD39                A    57    	ADD		IX, SP
+0B12E7                     A    54    _fastmemcpy:
+0B12E7 DDE5                A    55    	PUSH	IX
+0B12E9 DD210000 00         A    56    	LD		IX, 0
+0B12EE DD39                A    57    	ADD		IX, SP
                            A    58    
-0B11A0 C5                  A    59    	PUSH BC
-0B11A1 D5                  A    60    	PUSH DE
-0B11A2 E5                  A    61    	PUSH HL
+0B12F0 C5                  A    59    	PUSH BC
+0B12F1 D5                  A    60    	PUSH DE
+0B12F2 E5                  A    61    	PUSH HL
                            A    62    	
-0B11A3 DD1706              A    63    	LD		DE, (IX+6)	; destination address
-0B11A6 DD2709              A    64    	LD		HL, (IX+9)	; source
-0B11A9 DD070C              A    65    	LD		BC, (IX+12)	; number of bytes to wr
-0B11AC EDB0                A    66    	LDIR
+0B12F3 DD1706              A    63    	LD		DE, (IX+6)	; destination address
+0B12F6 DD2709              A    64    	LD		HL, (IX+9)	; source
+0B12F9 DD070C              A    65    	LD		BC, (IX+12)	; number of bytes to wr
+0B12FC EDB0                A    66    	LDIR
                            A    67    
-0B11AE E1                  A    68    	POP HL
-0B11AF D1                  A    69    	POP DE
-0B11B0 C1                  A    70    	POP BC
+0B12FE E1                  A    68    	POP HL
+0B12FF D1                  A    69    	POP DE
+0B1300 C1                  A    70    	POP BC
                            A    71    
-0B11B1 DDF9                A    72    	LD		SP, IX
-0B11B3 DDE1                A    73    	POP		IX
-0B11B5 C9                  A    74    	RET
+0B1301 DDF9                A    72    	LD		SP, IX
+0B1303 DDE1                A    73    	POP		IX
+0B1305 C9                  A    74    	RET
                            A    75    
-0B11B6                     A    76    _startVDPupdate:
-0B11B6 DDE5                A    77    	PUSH	IX
-0B11B8 DD210000 00         A    78    	LD		IX, 0
-0B11BD DD39                A    79    	ADD		IX, SP
+0B1306                     A    76    _startVDPupdate:
+0B1306 DDE5                A    77    	PUSH	IX
+0B1308 DD210000 00         A    78    	LD		IX, 0
+0B130D DD39                A    79    	ADD		IX, SP
                            A    80    
-0B11BF DD7E06              A    81    	LD	A, (IX+6)
-0B11C2 32 37 12 0B         A    82    	LD	(filehandle), A
-0B11C6 DD2709              A    83    	LD	HL, (IX+9)
-0B11C9 22 38 12 0B         A    84    	LD	(filesize), HL
+0B130F DD7E06              A    81    	LD	A, (IX+6)
+0B1312 32 87 13 0B         A    82    	LD	(filehandle), A
+0B1316 DD2709              A    83    	LD	HL, (IX+9)
+0B1319 22 88 13 0B         A    84    	LD	(filesize), HL
                            A    85    
-0B11CD                     A    86    sendstartsequence:
-0B11CD 3E17                A    87        LD  A, 23
-0B11CF 5BD7                A    88        RST.LIL 10h
-0B11D1 3E00                A    89        LD  A, 0
-0B11D3 5BD7                A    90        RST.LIL 10h
-0B11D5 3EA1                A    91        LD  A, A1h
-0B11D7 5BD7                A    92        RST.LIL 10h
-0B11D9 3E01                A    93        LD  A, 1
-0B11DB 5BD7                A    94        RST.LIL 10h
+0B131D                     A    86    sendstartsequence:
+0B131D 3E17                A    87        LD  A, 23
+0B131F 5BD7                A    88        RST.LIL 10h
+0B1321 3E00                A    89        LD  A, 0
+0B1323 5BD7                A    90        RST.LIL 10h
+0B1325 3EA1                A    91        LD  A, A1h
+0B1327 5BD7                A    92        RST.LIL 10h
+0B1329 3E01                A    93        LD  A, 1
+0B132B 5BD7                A    94        RST.LIL 10h
                            A    95    
-0B11DD                     A    96    sendsize:
-0B11DD 2A 38 12 0B         A    97    	LD	HL, (filesize)
-0B11E1 7D                  A    98        LD   A, L
-0B11E2 5BD7                A    99        RST.LIL 10h ; send LSB
-0B11E4 7C                  A   100        LD   A, H
-0B11E5 5BD7                A   101        RST.LIL 10h ; send middle byte
-0B11E7 E5                  A   102        PUSH HL
-0B11E8 33                  A   103        INC  SP
-0B11E9 F1                  A   104        POP  AF
-0B11EA 3B                  A   105        DEC  SP
-0B11EB 5BD7                A   106        RST.LIL 10h ; send MSB
+0B132D                     A    96    sendsize:
+0B132D 2A 88 13 0B         A    97    	LD	HL, (filesize)
+0B1331 7D                  A    98        LD   A, L
+0B1332 5BD7                A    99        RST.LIL 10h ; send LSB
+0B1334 7C                  A   100        LD   A, H
+0B1335 5BD7                A   101        RST.LIL 10h ; send middle byte
+0B1337 E5                  A   102        PUSH HL
+0B1338 33                  A   103        INC  SP
+0B1339 F1                  A   104        POP  AF
+0B133A 3B                  A   105        DEC  SP
+0B133B 5BD7                A   106        RST.LIL 10h ; send MSB
                            A   107    
-0B11ED                     A   108    senddata_start:
-0B11ED 3E00                A   109        LD   A, 0
-0B11EF 32 36 12 0B         A   110        LD   (checksum), A
+0B133D                     A   108    senddata_start:
+0B133D 3E00                A   109        LD   A, 0
+0B133F 32 86 13 0B         A   110        LD   (checksum), A
                            A   111    
-0B11F3                     A   112    senddata:
-0B11F3 3A 37 12 0B         A   113        LD   A, (filehandle)
-0B11F7 4F                  A   114        LD   C, A
-0B11F8 21000005            A   115        LD   HL, buffer
-0B11FC 11000400            A   116        LD   DE, BUFFERSIZE
-0B1200 3E1A                A   117        LD   A, mos_fread
-0B1202 5BCF                A   118        RST.LIL 08h
-0B1204 7A                  A   119        LD   A, D
-0B1205 B3                  A   120        OR   E        ; 0 bytes read?
-0B1206 28 21               A   121        JR   Z, sendchecksum
+0B1343                     A   112    senddata:
+0B1343 3A 87 13 0B         A   113        LD   A, (filehandle)
+0B1347 4F                  A   114        LD   C, A
+0B1348 21000005            A   115        LD   HL, buffer
+0B134C 11000400            A   116        LD   DE, BUFFERSIZE
+0B1350 3E1A                A   117        LD   A, mos_fread
+0B1352 5BCF                A   118        RST.LIL 08h
+0B1354 7A                  A   119        LD   A, D
+0B1355 B3                  A   120        OR   E        ; 0 bytes read?
+0B1356 28 21               A   121        JR   Z, sendchecksum
                            A   122    
-0B1208 21000005            A   123        LD   HL, buffer
-0B120C D5                  A   124        PUSH DE
-0B120D C1                  A   125        POP  BC          ; length of the bufferstre
-0B120E 3E00                A   126        LD   A, 0        ; don't care as bc is set
-0B1210 D5                  A   127        PUSH DE
-0B1211 5BDF                A   128        RST.LIL 18h
-0B1213 D1                  A   129        POP  DE
+0B1358 21000005            A   123        LD   HL, buffer
+0B135C D5                  A   124        PUSH DE
+0B135D C1                  A   125        POP  BC          ; length of the bufferstre
+0B135E 3E00                A   126        LD   A, 0        ; don't care as bc is set
+0B1360 D5                  A   127        PUSH DE
+0B1361 5BDF                A   128        RST.LIL 18h
+0B1363 D1                  A   129        POP  DE
                            A   130    ; calculate checksum
-0B1214 21000005            A   131        LD   HL, buffer
-0B1218                     A   132    $$:
-0B1218 3A 36 12 0B         A   133        LD   A, (checksum)
-0B121C 86                  A   134        ADD  A, (HL)
-0B121D 32 36 12 0B         A   135        LD   (checksum), A
-0B1221 1B                  A   136        DEC  DE
-0B1222 23                  A   137        INC  HL
-0B1223 7A                  A   138        LD   A, D ; check if de == 0
-0B1224 B3                  A   139        OR   E
-0B1225 20 F1               A   140        JR   NZ, $B ; more bytes to send
+0B1364 21000005            A   131        LD   HL, buffer
+0B1368                     A   132    $$:
+0B1368 3A 86 13 0B         A   133        LD   A, (checksum)
+0B136C 86                  A   134        ADD  A, (HL)
+0B136D 32 86 13 0B         A   135        LD   (checksum), A
+0B1371 1B                  A   136        DEC  DE
+0B1372 23                  A   137        INC  HL
+0B1373 7A                  A   138        LD   A, D ; check if de == 0
+0B1374 B3                  A   139        OR   E
+0B1375 20 F1               A   140        JR   NZ, $B ; more bytes to send
                            A   141    
-0B1227 18 CA               A   142        JR   senddata ; next buffer read from disk
+0B1377 18 CA               A   142        JR   senddata ; next buffer read from disk
                            A   143    
-0B1229                     A   144    sendchecksum:
-0B1229 3A 36 12 0B         A   145        LD   A, (checksum)
-0B122D ED44                A   146        NEG ; calculate two's complement
-0B122F 5BD7                A   147        RST.LIL 10h
+0B1379                     A   144    sendchecksum:
+0B1379 3A 86 13 0B         A   145        LD   A, (checksum)
+0B137D ED44                A   146        NEG ; calculate two's complement
+0B137F 5BD7                A   147        RST.LIL 10h
                            A   148    
-0B1231 DDF9                A   149    	LD		SP, IX
-0B1233 DDE1                A   150    	POP		IX
-0B1235 C9                  A   151    	RET
+0B1381 DDF9                A   149    	LD		SP, IX
+0B1383 DDE1                A   150    	POP		IX
+0B1385 C9                  A   151    	RET
                            A   152    
-0B1236                     A   153    checksum:
-0B1236                     A   154    	DS	1
-0B1237                     A   155    filehandle:
-0B1237                     A   156    	DS	1
-0B1238                     A   157    filesize:
-0B1238                     A   158    	DS	3
+0B1386                     A   153    checksum:
+0B1386                     A   154    	DS	1
+0B1387                     A   155    filehandle:
+0B1387                     A   156    	DS	1
+0B1388                     A   157    filesize:
+0B1388                     A   158    	DS	3
                            A   159    end
 
 

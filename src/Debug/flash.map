@@ -4,7 +4,7 @@ Copyright (C) 1999-2008 Zilog, Inc. All Rights Reserved
 
 LINK MAP:
 
-DATE:      Thu Nov 02 09:01:35 2023
+DATE:      Thu Nov 02 10:06:31 2023
 PROCESSOR: assembler
 FILES:     .\init.obj             .\main.obj             
            .\mos-interface.obj
@@ -47,8 +47,8 @@ SPACE ALLOCATION:
 
 Space                     Base         Top      Size      Used    Unused
 ------------------ ----------- ----------- --------- --------- ---------
-RAM                   D:0B0000    D:0B2BF6    10000H     2B1EH     D4E2H
-                                          (    65536     11038     54498)
+RAM                   D:0B0000    D:0B2EAD    10000H     2CF5H     D30BH
+                                          (    65536     11509     54027)
 
 
 SEGMENTS WITHIN SPACE:
@@ -56,183 +56,183 @@ SEGMENTS WITHIN SPACE:
 
 RAM                               Type        Base         Top      Size
 ------------------ ------------------- ----------- ----------- ---------
-BSS                normal data            D:0B20F6    D:0B2326      231h
-CODE               normal data            D:0B0000    D:0B20B9     20bah
-DATA               normal data            D:0B20BA    D:0B2886      4c3h
-STRSECT            normal data            D:0B2887    D:0B2BF6      370h
+BSS                normal data            D:0B2C7D    D:0B2EAD      231h
+CODE               normal data            D:0B0000    D:0B2209     220ah
+DATA               normal data            D:0B220A    D:0B2886      4c4h
+STRSECT            normal data            D:0B2887    D:0B2C7C      3f6h
 
 SEGMENTS WITHIN MODULES:
 ========================
 
-Module: ..\agontimer.c (File: agontimer.obj) Version: 1:0 11/02/2023 09:01:35
+Module: ..\agontimer.c (File: agontimer.obj) Version: 1:0 11/02/2023 10:06:31
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B123B    D:0B129C       62h
+    Segment: CODE                              D:0B138B    D:0B13EC       62h
 
 
-Module: ..\main.c (File: main.obj) Version: 1:0 11/02/2023 09:01:35
+Module: ..\main.c (File: main.obj) Version: 1:0 11/02/2023 10:06:31
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: BSS                               D:0B20F6    D:0B2300      20bh
-    Segment: CODE                              D:0B00E5    D:0B1038      f54h
-    Segment: DATA                              D:0B20EA    D:0B20F5        ch
-    Segment: STRSECT                           D:0B2887    D:0B2BF6      370h
+    Segment: BSS                               D:0B2C7D    D:0B2E87      20bh
+    Segment: CODE                              D:0B00E5    D:0B1188     10a4h
+    Segment: DATA                              D:0B223A    D:0B2246        dh
+    Segment: STRSECT                           D:0B2887    D:0B2C7C      3f6h
 
 
 Module: ..\src\boot\common\zsldevinitdummy.asm (File: zsldevinitdummy.obj) Version: 1:0 10/02/2022 22:49:19
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B14F0    D:0B14F0        1h
+    Segment: CODE                              D:0B1640    D:0B1640        1h
 
 
-Module: ..\strtoll.c (File: strtoll.obj) Version: 1:0 11/02/2023 09:01:35
+Module: ..\strtoll.c (File: strtoll.obj) Version: 1:0 11/02/2023 10:06:31
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B129D    D:0B1420      184h
+    Segment: CODE                              D:0B13ED    D:0B1570      184h
 
 
 Module: .\rtl\common\abs.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:07
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B172C    D:0B1754       29h
+    Segment: CODE                              D:0B187C    D:0B18A4       29h
 
 
 Module: .\rtl\common\case8D.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:53
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1DAE    D:0B1DE7       3ah
+    Segment: CODE                              D:0B1EFE    D:0B1F37       3ah
 
 
 Module: .\rtl\common\iand.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1E2E    D:0B1E48       1bh
+    Segment: CODE                              D:0B1F7E    D:0B1F98       1bh
 
 
 Module: .\rtl\common\icmpzero.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1ACC    D:0B1AD7        ch
+    Segment: CODE                              D:0B1C1C    D:0B1C27        ch
 
 
 Module: .\rtl\common\indcall.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1EA9    D:0B1EAA        2h
+    Segment: CODE                              D:0B1FF9    D:0B1FFA        2h
 
 
 Module: .\rtl\common\ineg.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1DE8    D:0B1DF0        9h
+    Segment: CODE                              D:0B1F38    D:0B1F40        9h
 
 
 Module: .\rtl\common\isalpha.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:08
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1CE2    D:0B1D0A       29h
+    Segment: CODE                              D:0B1E32    D:0B1E5A       29h
 
 
 Module: .\rtl\common\isdigit.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:08
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1AD8    D:0B1B00       29h
+    Segment: CODE                              D:0B1C28    D:0B1C50       29h
 
 
 Module: .\rtl\common\ishrs.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B153E    D:0B1562       25h
+    Segment: CODE                              D:0B168E    D:0B16B2       25h
 
 
 Module: .\rtl\common\ishru.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1D82    D:0B1DA6       25h
+    Segment: CODE                              D:0B1ED2    D:0B1EF6       25h
 
 
 Module: .\rtl\common\isspace.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:09
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1B01    D:0B1B29       29h
+    Segment: CODE                              D:0B1C51    D:0B1C79       29h
 
 
 Module: .\rtl\common\isupper.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:09
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1515    D:0B153D       29h
+    Segment: CODE                              D:0B1665    D:0B168D       29h
 
 
 Module: .\rtl\common\itol.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1DA7    D:0B1DAD        7h
+    Segment: CODE                              D:0B1EF7    D:0B1EFD        7h
 
 
 Module: .\rtl\common\ladd.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B14F1    D:0B1505       15h
+    Segment: CODE                              D:0B1641    D:0B1655       15h
 
 
 Module: .\rtl\common\lcmpu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1DF1    D:0B1E06       16h
+    Segment: CODE                              D:0B1F41    D:0B1F56       16h
 
 
 Module: .\rtl\common\lcmpzero.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1A58    D:0B1A6B       14h
+    Segment: CODE                              D:0B1BA8    D:0B1BBB       14h
 
 
 Module: .\rtl\common\ldivu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1A6C    D:0B1AA1       36h
+    Segment: CODE                              D:0B1BBC    D:0B1BF1       36h
 
 
 Module: .\rtl\common\lmulu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B204D    D:0B20B9       6dh
+    Segment: CODE                              D:0B219D    D:0B2209       6dh
 
 
 Module: .\rtl\common\lneg.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1A4B    D:0B1A57        dh
+    Segment: CODE                              D:0B1B9B    D:0B1BA7        dh
 
 
 Module: .\rtl\common\lremu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:50
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1E49    D:0B1E58       10h
+    Segment: CODE                              D:0B1F99    D:0B1FA8       10h
 
 
 Module: .\rtl\common\maptab.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:09
@@ -246,14 +246,14 @@ Module: .\rtl\common\memcmp.asm (Library: crtD.lib) Version: 1:0 10/02/2022 22:4
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1AA2    D:0B1ACB       2ah
+    Segment: CODE                              D:0B1BF2    D:0B1C1B       2ah
 
 
 Module: .\rtl\common\print_globals.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:26
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: BSS                               D:0B2301    D:0B2326       26h
+    Segment: BSS                               D:0B2E88    D:0B2EAD       26h
     Segment: DATA                              D:0B2804    D:0B2806        3h
 
 
@@ -261,156 +261,156 @@ Module: .\rtl\common\print_putch.c (Library: crtSD.lib) Version: 1:0 10/02/2022 
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1E8B    D:0B1EA8       1eh
+    Segment: CODE                              D:0B1FDB    D:0B1FF8       1eh
 
 
 Module: .\rtl\common\print_putstring.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:27
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B159E    D:0B1708      16bh
+    Segment: CODE                              D:0B16EE    D:0B1858      16bh
 
 
 Module: .\rtl\common\print_send.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:27
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1B2A    D:0B1CE1      1b8h
+    Segment: CODE                              D:0B1C7A    D:0B1E31      1b8h
 
 
 Module: .\rtl\common\print_sputch.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:26
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1755    D:0B177F       2bh
+    Segment: CODE                              D:0B18A5    D:0B18CF       2bh
 
 
 Module: .\rtl\common\print_uputch.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:26
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B170F    D:0B172B       1dh
+    Segment: CODE                              D:0B185F    D:0B187B       1dh
 
 
 Module: .\rtl\common\scmpzero.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1E21    D:0B1E2D        dh
+    Segment: CODE                              D:0B1F71    D:0B1F7D        dh
 
 
 Module: .\rtl\common\seqcaseD.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1563    D:0B159D       3bh
+    Segment: CODE                              D:0B16B3    D:0B16ED       3bh
 
 
 Module: .\rtl\common\setflag.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:52
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1506    D:0B1514        fh
+    Segment: CODE                              D:0B1656    D:0B1664        fh
 
 
 Module: .\rtl\common\sor.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:51
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1EAB    D:0B1EB3        9h
+    Segment: CODE                              D:0B1FFB    D:0B2003        9h
 
 
 Module: .\rtl\common\stoiu.asm (Library: chelpD.lib) Version: 1:0 10/02/2022 22:48:51
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1709    D:0B170E        6h
+    Segment: CODE                              D:0B1859    D:0B185E        6h
 
 
 Module: .\rtl\common\tolower.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:12
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1E59    D:0B1E8A       32h
+    Segment: CODE                              D:0B1FA9    D:0B1FDA       32h
 
 
 Module: .\rtl\common\uitoa.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:27
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1795    D:0B17B6       22h
+    Segment: CODE                              D:0B18E5    D:0B1906       22h
 
 
 Module: .\rtl\common\ultoa.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:28
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B17B7    D:0B1A4A      294h
+    Segment: CODE                              D:0B1907    D:0B1B9A      294h
 
 
 Module: .\rtl\common\ureverse.c (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:13
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1D0B    D:0B1D81       77h
+    Segment: CODE                              D:0B1E5B    D:0B1ED1       77h
 
 
 Module: .\rtl\common\uultoa.c (Library: crtSD.lib) Version: 1:0 10/02/2022 22:48:29
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1EB4    D:0B204C      199h
+    Segment: CODE                              D:0B2004    D:0B219C      199h
 
 
 Module: .\strcpy.asm (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:13
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1E07    D:0B1E20       1ah
+    Segment: CODE                              D:0B1F57    D:0B1F70       1ah
 
 
 Module: .\strlen.asm (Library: crtD.lib) Version: 1:0 10/02/2022 22:48:13
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1780    D:0B1794       15h
+    Segment: CODE                              D:0B18D0    D:0B18E4       15h
 
 
-Module: C:\source\agon-flash\src\crc32.asm (File: crc32.obj) Version: 1:0 11/02/2023 09:01:35
+Module: C:\source\agon-flash\src\crc32.asm (File: crc32.obj) Version: 1:0 11/02/2023 10:06:31
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1421    D:0B14D2       b2h
+    Segment: CODE                              D:0B1571    D:0B1622       b2h
     Segment: DATA                              D:0B2400    D:0B2803      404h
 
 
-Module: C:\source\agon-flash\src\filesize.asm (File: filesize.obj) Version: 1:0 11/02/2023 09:01:35
+Module: C:\source\agon-flash\src\filesize.asm (File: filesize.obj) Version: 1:0 11/02/2023 10:06:31
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B14D3    D:0B14EF       1dh
+    Segment: CODE                              D:0B1623    D:0B163F       1dh
 
 
-Module: C:\source\agon-flash\src\flash.asm (File: flash.obj) Version: 1:0 11/02/2023 09:01:35
+Module: C:\source\agon-flash\src\flash.asm (File: flash.obj) Version: 1:0 11/02/2023 10:06:31
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B116A    D:0B123A       d1h
+    Segment: CODE                              D:0B12BA    D:0B138A       d1h
 
 
-Module: C:\source\agon-flash\src\init.asm (File: init.obj) Version: 1:0 11/02/2023 09:01:35
+Module: C:\source\agon-flash\src\init.asm (File: init.obj) Version: 1:0 11/02/2023 10:06:30
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
     Segment: CODE                              D:0B0000    D:0B00E4       e5h
-    Segment: DATA                              D:0B20BA    D:0B20E9       30h
+    Segment: DATA                              D:0B220A    D:0B2239       30h
 
 
-Module: C:\source\agon-flash\src\mos-interface.asm (File: mos-interface.obj) Version: 1:0 11/02/2023 09:01:35
+Module: C:\source\agon-flash\src\mos-interface.asm (File: mos-interface.obj) Version: 1:0 11/02/2023 10:06:31
 
     Name                                           Base         Top      Size
     --------------------------------------- ----------- ----------- ---------
-    Segment: CODE                              D:0B1039    D:0B1169      131h
+    Segment: CODE                              D:0B1189    D:0B12B9      131h
 
 EXTERNAL DEFINITIONS:
 =====================
@@ -418,119 +418,121 @@ EXTERNAL DEFINITIONS:
 Symbol                               Address Module          Segment
 -------------------------------- ----------- --------------- --------------------------------
 ___maptab                           D:0B2807 maptab          DATA                            
-___print_buff                       D:0B2301 print_globals   BSS                             
-___print_fmt                        D:0B230F print_globals   BSS                             
-___print_leading_char               D:0B2323 print_globals   BSS                             
-___print_len                        D:0B2322 print_globals   BSS                             
-___print_out                        D:0B2324 print_globals   BSS                             
-___print_putch                      D:0B1E8B print_putch     CODE                            
-___print_send                       D:0B1B2A print_send      CODE                            
-___print_sendstring                 D:0B159E print_putstring CODE                            
-___print_sputch                     D:0B1755 print_sputch    CODE                            
-___print_uputch                     D:0B170F print_uputch    CODE                            
+___print_buff                       D:0B2E88 print_globals   BSS                             
+___print_fmt                        D:0B2E96 print_globals   BSS                             
+___print_leading_char               D:0B2EAA print_globals   BSS                             
+___print_len                        D:0B2EA9 print_globals   BSS                             
+___print_out                        D:0B2EAB print_globals   BSS                             
+___print_putch                      D:0B1FDB print_putch     CODE                            
+___print_send                       D:0B1C7A print_send      CODE                            
+___print_sendstring                 D:0B16EE print_putstring CODE                            
+___print_sputch                     D:0B18A5 print_sputch    CODE                            
+___print_uputch                     D:0B185F print_uputch    CODE                            
 ___print_xputch                     D:0B2804 print_globals   DATA                            
-__case8D                            D:0B1DAE case8D          CODE                            
-__close_periphdevice                D:0B14F0 zsldevinitdummy CODE                            
-__iand                              D:0B1E2E iand            CODE                            
-__icmpzero                          D:0B1ACC icmpzero        CODE                            
-__indcall                           D:0B1EA9 indcall         CODE                            
-__ineg                              D:0B1DE8 ineg            CODE                            
-__ishrs                             D:0B1546 ishrs           CODE                            
-__ishrs_b                           D:0B153E ishrs           CODE                            
-__ishru                             D:0B1D8A ishru           CODE                            
-__ishru_b                           D:0B1D82 ishru           CODE                            
-__itol                              D:0B1DA7 itol            CODE                            
-__ladd                              D:0B1500 ladd            CODE                            
-__ladd_b                            D:0B14F1 ladd            CODE                            
-__lcmps                             D:0B1DF1 lcmpu           CODE                            
-__lcmpu                             D:0B1DF1 lcmpu           CODE                            
-__lcmpzero                          D:0B1A58 lcmpzero        CODE                            
-__ldivu                             D:0B1A6C ldivu           CODE                            
-__ldvrmu                            D:0B1A7E ldivu           CODE                            
+__case8D                            D:0B1EFE case8D          CODE                            
+__close_periphdevice                D:0B1640 zsldevinitdummy CODE                            
+__iand                              D:0B1F7E iand            CODE                            
+__icmpzero                          D:0B1C1C icmpzero        CODE                            
+__indcall                           D:0B1FF9 indcall         CODE                            
+__ineg                              D:0B1F38 ineg            CODE                            
+__ishrs                             D:0B1696 ishrs           CODE                            
+__ishrs_b                           D:0B168E ishrs           CODE                            
+__ishru                             D:0B1EDA ishru           CODE                            
+__ishru_b                           D:0B1ED2 ishru           CODE                            
+__itol                              D:0B1EF7 itol            CODE                            
+__ladd                              D:0B1650 ladd            CODE                            
+__ladd_b                            D:0B1641 ladd            CODE                            
+__lcmps                             D:0B1F41 lcmpu           CODE                            
+__lcmpu                             D:0B1F41 lcmpu           CODE                            
+__lcmpzero                          D:0B1BA8 lcmpzero        CODE                            
+__ldivu                             D:0B1BBC ldivu           CODE                            
+__ldvrmu                            D:0B1BCE ldivu           CODE                            
 __len_bss                           00000231 (User Defined)
-__lmuls                             D:0B204D lmulu           CODE                            
-__lmulu                             D:0B204D lmulu           CODE                            
-__lneg                              D:0B1A4B lneg            CODE                            
-__low_bss                           000B20F6 (User Defined)
-__lremu                             D:0B1E49 lremu           CODE                            
-__open_periphdevice                 D:0B14F0 zsldevinitdummy CODE                            
-__scmpzero                          D:0B1E21 scmpzero        CODE                            
-__seqcaseD                          D:0B1563 seqcaseD        CODE                            
-__setflag                           D:0B1506 setflag         CODE                            
-__sneg                              D:0B1DE8 ineg            CODE                            
-__sor                               D:0B1EAB sor             CODE                            
-__stoiu                             D:0B1709 stoiu           CODE                            
-__u_itoa                            D:0B1795 uitoa           CODE                            
-__u_ltoa                            D:0B17B7 ultoa           CODE                            
-__u_reverse                         D:0B1D0B ureverse        CODE                            
-__u_ultoa                           D:0B1EB4 uultoa          CODE                            
-_abs                                D:0B172C abs             CODE                            
+__lmuls                             D:0B219D lmulu           CODE                            
+__lmulu                             D:0B219D lmulu           CODE                            
+__lneg                              D:0B1B9B lneg            CODE                            
+__low_bss                           000B2C7D (User Defined)
+__lremu                             D:0B1F99 lremu           CODE                            
+__open_periphdevice                 D:0B1640 zsldevinitdummy CODE                            
+__scmpzero                          D:0B1F71 scmpzero        CODE                            
+__seqcaseD                          D:0B16B3 seqcaseD        CODE                            
+__setflag                           D:0B1656 setflag         CODE                            
+__sneg                              D:0B1F38 ineg            CODE                            
+__sor                               D:0B1FFB sor             CODE                            
+__stoiu                             D:0B1859 stoiu           CODE                            
+__u_itoa                            D:0B18E5 uitoa           CODE                            
+__u_ltoa                            D:0B1907 ultoa           CODE                            
+__u_reverse                         D:0B1E5B ureverse        CODE                            
+__u_ultoa                           D:0B2004 uultoa          CODE                            
+_abs                                D:0B187C abs             CODE                            
+_askEscapeToContinue                D:0B03F9 main            CODE                            
 _beep                               D:0B010B main            CODE                            
-_calculateCRC32                     D:0B0D60 main            CODE                            
-_close_periphdevice                 D:0B14F0 zsldevinitdummy CODE                            
+_calculateCRC32                     D:0B0E48 main            CODE                            
+_close_periphdevice                 D:0B1640 zsldevinitdummy CODE                            
 _containsESP32Header                D:0B02DB main            CODE                            
 _containsMosHeader                  D:0B0290 main            CODE                            
-_crc32                              D:0B1473 crc32           CODE                            
-_crc32_finalize                     D:0B1436 crc32           CODE                            
-_crc32_initialize                   D:0B1421 crc32           CODE                            
-_delayms                            D:0B123B agontimer       CODE                            
-_echoVDP                            D:0B0813 main            CODE                            
-_enableFlashKeyRegister             D:0B116A flash           CODE                            
-_errno                              D:0B20F6 main            BSS                             
-_esp32_magicnumbers                 D:0B20F2 main            DATA                            
-_fastmemcpy                         D:0B1197 flash           CODE                            
-_filesExist                         D:0B0AAB main            CODE                            
-_firmwareContentOK                  D:0B0B68 main            CODE                            
-_flashmos                           D:0B20EA main            DATA                            
-_flashvdp                           D:0B20EB main            DATA                            
-_getch                              D:0B1039 mos-interface   CODE                            
+_crc32                              D:0B15C3 crc32           CODE                            
+_crc32_finalize                     D:0B1586 crc32           CODE                            
+_crc32_initialize                   D:0B1571 crc32           CODE                            
+_delayms                            D:0B138B agontimer       CODE                            
+_echoVDP                            D:0B0872 main            CODE                            
+_enableFlashKeyRegister             D:0B12BA flash           CODE                            
+_errno                              D:0B2C7D main            BSS                             
+_esp32_magicnumbers                 D:0B2243 main            DATA                            
+_fastmemcpy                         D:0B12E7 flash           CODE                            
+_filesExist                         D:0B0B93 main            CODE                            
+_firmwareContentOK                  D:0B0C50 main            CODE                            
+_flashmos                           D:0B223A main            DATA                            
+_flashvdp                           D:0B223B main            DATA                            
+_getch                              D:0B1189 mos-interface   CODE                            
 _getCharAt                          D:0B0141 main            CODE                            
-_getCommand                         D:0B0856 main            CODE                            
-_getFileSize                        D:0B14D3 filesize        CODE                            
+_getCommand                         D:0B08B5 main            CODE                            
+_getFileSize                        D:0B1623 filesize        CODE                            
 _getResponse                        D:0B0375 main            CODE                            
-_getsysvar_cursorX                  D:0B106B mos-interface   CODE                            
-_getsysvar_cursorY                  D:0B1077 mos-interface   CODE                            
-_getsysvar_scrchar                  D:0B1083 mos-interface   CODE                            
-_getsysvars                         D:0B105F mos-interface   CODE                            
-_isalpha                            D:0B1CE2 isalpha         CODE                            
-_isdigit                            D:0B1AD8 isdigit         CODE                            
-_isspace                            D:0B1B01 isspace         CODE                            
-_isupper                            D:0B1515 isupper         CODE                            
-_lockFlashKeyRegister               D:0B1182 flash           CODE                            
-_main                               D:0B0EA5 main            CODE                            
-_memcmp                             D:0B1AA2 memcmp          CODE                            
-_mos_del                            D:0B111B mos-interface   CODE                            
-_mos_fclose                         D:0B10A7 mos-interface   CODE                            
-_mos_feof                           D:0B1106 mos-interface   CODE                            
-_mos_fgetc                          D:0B10BC mos-interface   CODE                            
-_mos_flseek                         D:0B114B mos-interface   CODE                            
-_mos_fopen                          D:0B108F mos-interface   CODE                            
-_mos_fread                          D:0B10D1 mos-interface   CODE                            
-_mos_magicnumbers                   D:0B20ED main            DATA                            
-_mos_save                           D:0B1130 mos-interface   CODE                            
-_moscrc                             D:0B21F9 main            BSS                             
-_mosfilename                        D:0B20F9 main            BSS                             
-_open_periphdevice                  D:0B14F0 zsldevinitdummy CODE                            
-_parseCommands                      D:0B08EB main            CODE                            
+_getsysvar_cursorX                  D:0B11BB mos-interface   CODE                            
+_getsysvar_cursorY                  D:0B11C7 mos-interface   CODE                            
+_getsysvar_scrchar                  D:0B11D3 mos-interface   CODE                            
+_getsysvars                         D:0B11AF mos-interface   CODE                            
+_isalpha                            D:0B1E32 isalpha         CODE                            
+_isdigit                            D:0B1C28 isdigit         CODE                            
+_isspace                            D:0B1C51 isspace         CODE                            
+_isupper                            D:0B1665 isupper         CODE                            
+_lockFlashKeyRegister               D:0B12D2 flash           CODE                            
+_main                               D:0B0F8D main            CODE                            
+_memcmp                             D:0B1BF2 memcmp          CODE                            
+_mos_del                            D:0B126B mos-interface   CODE                            
+_mos_fclose                         D:0B11F7 mos-interface   CODE                            
+_mos_feof                           D:0B1256 mos-interface   CODE                            
+_mos_fgetc                          D:0B120C mos-interface   CODE                            
+_mos_flseek                         D:0B129B mos-interface   CODE                            
+_mos_fopen                          D:0B11DF mos-interface   CODE                            
+_mos_fread                          D:0B1221 mos-interface   CODE                            
+_mos_magicnumbers                   D:0B223E main            DATA                            
+_mos_save                           D:0B1280 mos-interface   CODE                            
+_moscrc                             D:0B2D80 main            BSS                             
+_mosfilename                        D:0B2C80 main            BSS                             
+_open_periphdevice                  D:0B1640 zsldevinitdummy CODE                            
+_optbatch                           D:0B223C main            DATA                            
+_optforce                           D:0B223D main            DATA                            
+_parseCommands                      D:0B09B3 main            CODE                            
 _print_version                      D:0B032F main            CODE                            
 _putch                              D:0B00E5 main            CODE                            
-_reset                              D:0B1195 flash           CODE                            
-_showCRC32                          D:0B0CAB main            CODE                            
-_silent                             D:0B20EC main            DATA                            
-_startVDPupdate                     D:0B11B6 flash           CODE                            
-_strcpy                             D:0B1E07 strcpy          CODE                            
-_strlen                             D:0B1780 strlen          CODE                            
-_strtoll                            D:0B129D strtoll         CODE                            
-_tolower                            D:0B1E59 tolower         CODE                            
-_update_mos                         D:0B049F main            CODE                            
-_update_vdp                         D:0B03F9 main            CODE                            
+_reset                              D:0B12E5 flash           CODE                            
+_showCRC32                          D:0B0D93 main            CODE                            
+_startVDPupdate                     D:0B1306 flash           CODE                            
+_strcpy                             D:0B1F57 strcpy          CODE                            
+_strlen                             D:0B18D0 strlen          CODE                            
+_strtoll                            D:0B13ED strtoll         CODE                            
+_tolower                            D:0B1FA9 tolower         CODE                            
+_update_mos                         D:0B04FE main            CODE                            
+_update_vdp                         D:0B044E main            CODE                            
 _usage                              D:0B0350 main            CODE                            
 _vdp_ota_present                    D:0B01E3 main            CODE                            
-_vdpcrc                             D:0B22FD main            BSS                             
-_vdpfilename                        D:0B21FD main            BSS                             
-_waitvblank                         D:0B104E mos-interface   CODE                            
+_vdpcrc                             D:0B2E84 main            BSS                             
+_vdpfilename                        D:0B2D84 main            BSS                             
+_waitvblank                         D:0B119E mos-interface   CODE                            
 
-112 external symbol(s).
+114 external symbol(s).
 
 SYMBOL CROSS REFERENCE:
 =======================
@@ -657,6 +659,7 @@ __u_ultoa                         Defined     .\rtl\common\uultoa.c
 _abs                              Defined     .\rtl\common\abs.c
                                   Referenced  .\rtl\common\print_putstring.c
                                   Referenced  .\rtl\common\print_send.c
+_askEscapeToContinue              Defined     ..\main.c
 _beep                             Defined     ..\main.c
 _calculateCRC32                   Defined     ..\main.c
 _close_periphdevice               Defined     ..\src\boot\common\zsldevinitdummy.asm
@@ -724,6 +727,8 @@ _mos_save                         Defined     C:\source\agon-flash\src\mos-inter
 _moscrc                           Defined     ..\main.c
 _mosfilename                      Defined     ..\main.c
 _open_periphdevice                Defined     ..\src\boot\common\zsldevinitdummy.asm
+_optbatch                         Defined     ..\main.c
+_optforce                         Defined     ..\main.c
 _parseCommands                    Defined     ..\main.c
 _print_version                    Defined     ..\main.c
 _putch                            Defined     ..\main.c
@@ -731,7 +736,6 @@ _putch                            Defined     ..\main.c
 _reset                            Defined     C:\source\agon-flash\src\flash.asm
                                   Referenced  ..\main.c
 _showCRC32                        Defined     ..\main.c
-_silent                           Defined     ..\main.c
 _startVDPupdate                   Defined     C:\source\agon-flash\src\flash.asm
                                   Referenced  ..\main.c
 _strcpy                           Defined     .\strcpy.asm
@@ -754,8 +758,8 @@ _waitvblank                       Defined     C:\source\agon-flash\src\mos-inter
 
 OUTPUT CHECKSUM
 ===============
-flash.hex            115AAC
-flash.lod            115AAC
+flash.hex            12308E
+flash.lod            12308E
 
 
 

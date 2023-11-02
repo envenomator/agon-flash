@@ -35,7 +35,8 @@
 #define CMDALL		1
 #define CMDMOS		2
 #define CMDVDP		3
-#define CMDSILENT	4
+#define CMDFORCE	4
+#define CMDBATCH	5
 
 int errno; // needed by standard library
 enum states{firmware,retry,systemreset};
@@ -46,7 +47,8 @@ uint32_t	moscrc;
 bool		flashvdp = false;
 char		vdpfilename[256];
 uint32_t	vdpcrc;
-bool		silent = false;
+bool		optbatch = false;
+bool		optforce = false;		// No y/n user input required
 
 // separate putch function that doesn't rely on a running MOS firmware
 // UART0 initialization done by MOS firmware previously
@@ -127,7 +129,7 @@ void print_version(void) {
 
 void usage(void) {
 	print_version();
-	printf("Usage: FLASH [full | [mos <filename>] [vdp <filename>]] <-s|-silent>\n\r");
+	printf("Usage: FLASH [all | [mos <filename>] [vdp <filename>] | batch] <-f>\n\r");
 }
 
 typedef enum {
@@ -145,7 +147,15 @@ bool getResponse(void) {
 	return response == 'y';
 }
 
-uint8_t update_vdp(char *filename) {
+void askEscapeToContinue(void) {
+	uint8_t response = 0;
+
+	printf("Press ESC to continue");
+	while(response != 0x1B) response = tolower(getch());
+	printf("\r\n");
+}
+
+bool update_vdp(char *filename) {
 	uint8_t file;
 	uint24_t filesize;
 	uint24_t size, n;
@@ -155,9 +165,9 @@ uint8_t update_vdp(char *filename) {
 	printf("Unlocking VDP updater...\r\n");
 	
 	if(!vdp_ota_present()) {
-		printf(" failed - incompatible VDP\r\n");
-		beep(5);
-		return 0;
+		printf(" failed - OTA not present in current VDP\r\n\r\n");
+		printf("Program the VDP using Arduino / PlatformIO / esptool\r\n\r\n");
+		return false;
 	}
 
 	file = mos_fopen(filename, fa_read);
@@ -166,7 +176,7 @@ uint8_t update_vdp(char *filename) {
 	filesize = getFileSize(file);	
 	startVDPupdate(file, filesize);
 	mos_fclose(file);
-	return 0;
+	return true;
 }
 
 bool update_mos(char *filename) {
@@ -284,10 +294,13 @@ void echoVDP(uint8_t value) {
 }
 
 int getCommand(const char *command) {
-	if(memcmp(command, "all", 4) == 0) return CMDALL;
-	if(memcmp(command, "mos", 3) == 0) return CMDMOS;
-	if(memcmp(command, "vdp", 3) == 0) return CMDVDP;
-	if(memcmp(command, "silent", 6) == 0) return CMDSILENT;
+	if(memcmp(command, "all\0", 4) == 0) return CMDALL;
+	if(memcmp(command, "mos\0", 4) == 0) return CMDMOS;
+	if(memcmp(command, "vdp\0", 4) == 0) return CMDVDP;
+	if(memcmp(command, "batch\0", 6) == 0) return CMDBATCH;
+	if(memcmp(command, "-f\0", 3) == 0) return CMDFORCE;
+	if(memcmp(command, "force\0", 6) == 0) return CMDFORCE;
+	if(memcmp(command, "-force\0", 7) == 0) return CMDFORCE;
 	return CMDUNKNOWN;
 }
 
@@ -331,9 +344,14 @@ bool parseCommands(int argc, char *argv[]) {
 				}
 				flashvdp = true;
 				break;
-			case CMDSILENT:
-				if(silent) return false;
-				silent = true;
+			case CMDBATCH:
+				if(optbatch) return false;
+				optbatch = true;
+				optforce = true;
+				break;
+			case CMDFORCE:
+				if(optforce && !optbatch) return false;
+				optforce = true;
 				break;
 		}
 		argcounter++;
@@ -462,40 +480,53 @@ int main(int argc, char * argv[]) {
 		return EXIT_INVALIDPARAMETER;
 	}
 
+	putch(12);
+	print_version();
 	calculateCRC32();
 	// Skip showing CRC32 and user input when 'silent' is requested
-	if(!silent) {
+	if(!optforce) {
 		putch(12);
 		print_version();
 		showCRC32();
 		if(!getResponse()) return 0;
 	}
+	if(optbatch) beep(1);
 
 	if(flashvdp) {
 		while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
-		//beep(1);
 		sysvars->scrheight = 0;
-		if(flashvdp) update_vdp(vdpfilename);
-		echoVDP(1);
-		while(sysvars->scrheight == 0);
+		if(update_vdp(vdpfilename)) {
+			echoVDP(1);
+			while(sysvars->scrheight == 0);
+			if(optbatch) beep(2);
+		}
+		else {
+			if(!optforce && flashmos) {
+				askEscapeToContinue();
+			}
+		}
 	}
+
 	if(flashmos) {
-		//beep(2);
 		if(update_mos(mosfilename)) {
 			printf("\r\nDone\r\n\r\n");
-			//beep(3);
-			//printf("Press reset button");
-			//while(1);
-			printf("System reset in ");
-			for(n = 3; n > 0; n--) {
-				printf("%d...", n);
-				delayms(1000);
+			if(optbatch) {
+				printf("Press reset button");
+				beep(3);
+				while(1); // don't repeatedly run this command batched (autoexec.txt)
 			}
-			reset();
+			else {
+				printf("System reset in ");
+				for(n = 3; n > 0; n--) {
+					printf("%d...", n);
+					delayms(1000);
+				}
+				reset();
+			}
 		}
 		else {
 			printf("\r\nMultiple errors occured during flash write.\r\n");
-			printf("System needs bare-metal recovery.\r\n");
+			printf("Bare-metal recovery required.\r\n");
 			while(1); // No live MOS to return to
 		}
 	}
