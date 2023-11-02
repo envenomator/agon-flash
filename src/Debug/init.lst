@@ -1,4 +1,4 @@
-Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED01-Nov-23     22:19:39     page:   1
+Zilog eZ80 Macro Assembler Version 4.3 (19073001) RELISTED02-Nov-23     08:55:48     page:   1
 
 
 PC     Object              I  Line    Source 
@@ -58,12 +58,12 @@ PC     Object              I  Line    Source
 0B0053 CD 77 00 0B         A    53    			CALL	_clear_bss
 0B0057 E1                  A    54    			POP	HL
                            A    55    ;
-0B0058 DD21 17 1F 0B       A    56    			LD	IX, argv_ptrs		; The argv 
+0B0058 DD21 A6 20 0B       A    56    			LD	IX, argv_ptrs		; The argv 
 0B005D DDE5                A    57    			PUSH	IX			; Parameter 2: 
 0B005F CD 96 00 0B         A    58    			CALL	_parse_params		; Parse
 0B0063 0600                A    59    			LD	B, 0			; Clear B from 
 0B0065 C5                  A    60    			PUSH	BC			; Parameter 1: 
-0B0066 CD 48 0D 0B         A    61    			CALL	_main			; int main(
+0B0066 CD D3 0E 0B         A    61    			CALL	_main			; int main(
 0B006A D1                  A    62    			POP	DE			; Balance the stack
 0B006B D1                  A    63    			POP	DE
                            A    64    
@@ -79,19 +79,19 @@ PC     Object              I  Line    Source
                            A    74    			
                            A    75    ; Clear the memory
                            A    76    ;
-0B0077 01 29 02 00         A    77    _clear_bss:		LD	BC, __len_bss		; Check
+0B0077 01 31 02 00         A    77    _clear_bss:		LD	BC, __len_bss		; Check
 0B007B 3E 00               A    78    			LD	a, __len_bss >> 16
 0B007D B1                  A    79    			OR	A, C
 0B007E B0                  A    80    			OR	A, B
 0B007F C8                  A    81    			RET	Z			; BSS is zero-lengt
 0B0080 AF                  A    82    			XOR	A, A
-0B0081 32 32 27 0B         A    83    			LD 	(__low_bss), A
+0B0081 32 E2 20 0B         A    83    			LD 	(__low_bss), A
 0B0085 ED62                A    84    			SBC	HL, HL			; HL = 0
 0B0087 0B                  A    85    			DEC	BC			; 1st byte's taken 
 0B0088 ED42                A    86    			SBC	HL, BC
 0B008A C8                  A    87    			RET	Z		  	; Just 1 byte ...
-0B008B 21 32 27 0B         A    88    			LD	HL, __low_bss		; Reset HL
-0B008F 11 33 27 0B         A    89    			LD	DE, __low_bss + 1	; [DE] = bs
+0B008B 21 E2 20 0B         A    88    			LD	HL, __low_bss		; Reset HL
+0B008F 11 E3 20 0B         A    89    			LD	DE, __low_bss + 1	; [DE] = bs
 0B0093 EDB0                A    90    			LDIR				; Clear this se
 0B0095 C9                  A    91    			RET
                            A    92    			
@@ -174,14 +174,14 @@ PC     Object              I  Line    Source
                            A   169    
                            A   170    ; Storage for the argv array pointers
                            A   171    ;
-0B1F17 000000 000000       A   172    argv_ptrs:		BLKP	argv_ptrs_max, 0
-0B1F1D 000000 000000 
-0B1F23 000000 000000 
-0B1F29 000000 000000 
-0B1F2F 000000 000000 
-0B1F35 000000 000000 
-0B1F3B 000000 000000 
-0B1F41 000000 000000 
+0B20A6 000000 000000       A   172    argv_ptrs:		BLKP	argv_ptrs_max, 0
+0B20AC 000000 000000 
+0B20B2 000000 000000 
+0B20B8 000000 000000 
+0B20BE 000000 000000 
+0B20C4 000000 000000 
+0B20CA 000000 000000 
+0B20D0 000000 000000 
                            A   173    			
                            A   174    			END
 

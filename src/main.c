@@ -40,6 +40,14 @@
 int errno; // needed by standard library
 enum states{firmware,retry,systemreset};
 
+bool		flashmos = false;
+char		mosfilename[256];
+uint32_t	moscrc;
+bool		flashvdp = false;
+char		vdpfilename[256];
+uint32_t	vdpcrc;
+bool		silent = false;
+
 // separate putch function that doesn't rely on a running MOS firmware
 // UART0 initialization done by MOS firmware previously
 // This utility doesn't run without MOS to load it anyway
@@ -161,7 +169,8 @@ uint8_t update_vdp(char *filename) {
 	return 0;
 }
 
-uint8_t update_mos(char *filename) {
+bool update_mos(char *filename) {
+	uint32_t crcresult;
 	uint24_t got;
 	uint8_t file;
 	char* ptr = (char*)BUFFER1;
@@ -169,75 +178,107 @@ uint8_t update_mos(char *filename) {
 	uint24_t counter,pagemax, lastpagebytes;
 	uint24_t addressto,addressfrom;
 	uint24_t filesize;
+	int attempt;
+	bool success = false;
 
 	putch(12); // cls
 	print_version();	
 	
-	printf("\r\nReading MOS firmware");
+	printf("Programming MOS firmware to ez80 flash...\r\n\r\n");
+	printf("Reading MOS firmware");
 	file = mos_fopen(filename, fa_read);
 	filesize = getFileSize(file);
 	// Read file to memory
+	crc32_initialize();
 	while((got = mos_fread(file, ptr, BLOCKSIZE)) > 0) {
 		crc32(ptr, got);
 		ptr += got;
 		putch('.');
-	}	
+	}
+	crcresult = crc32_finalize();
+	printf("\r\n");
+	// Final memory check to given crc32
+	if(crcresult != moscrc) {
+		printf("Error reading file to memory\r\n");
+		return false;
+	}
 	printf("\r\n");	
 	// Actual work here	
 	di();								// prohibit any access to the old MOS firmware
 
-	// start address in flash
-	addressto = FLASHSTART;
-	addressfrom = BUFFER1;
-
-	// Unprotect and erase flash
-	printf("Erasing flash... ");
-	enableFlashKeyRegister();	// unlock Flash Key Register, so we can write to the Flash Write/Erase protection registers
-	FLASH_PROT = 0;				// disable protection on all 8x16KB blocks in the flash
-	enableFlashKeyRegister();	// will need to unlock again after previous write to the flash protection register
-	FLASH_FDIV = 0x5F;			// Ceiling(18Mhz * 5,1us) = 95, or 0x5F
-	
-	for(counter = 0; counter < FLASHPAGES; counter++)
-	{
-		FLASH_PAGE = counter;
-		FLASH_PGCTL = 0x02;			// Page erase bit enable, start erase
-
-		do
-		{
-			value = FLASH_PGCTL;
-		}
-		while(value & 0x02);// wait for completion of erase			
-	}
-	
-	printf("\r\nWriting new firmware...\r\n");
-	
-	// determine number of pages to write
-	pagemax = filesize/PAGESIZE;
-	if(filesize%PAGESIZE) // last page has less than PAGESIZE bytes
-	{
-		pagemax += 1;
-		lastpagebytes = filesize%PAGESIZE;			
-	}
-	else lastpagebytes = PAGESIZE; // normal last page
-	
-	// write out each page to flash
-	for(counter = 0; counter < pagemax; counter++)
-	{
-		printf("\rWriting flash page %03d/%03d", counter+1, pagemax);
+	attempt = 0;
+	while((!success) && (attempt < 3)) {
+		// start address in flash
+		addressto = FLASHSTART;
+		addressfrom = BUFFER1;
+		// Write attempt#
+		if(attempt > 0) printf("Retry attempt #%d\r\n", attempt);
+		// Unprotect and erase flash
+		printf("Erasing flash... ");
+		enableFlashKeyRegister();	// unlock Flash Key Register, so we can write to the Flash Write/Erase protection registers
+		FLASH_PROT = 0;				// disable protection on all 8x16KB blocks in the flash
+		enableFlashKeyRegister();	// will need to unlock again after previous write to the flash protection register
+		FLASH_FDIV = 0x5F;			// Ceiling(18Mhz * 5,1us) = 95, or 0x5F
 		
-		if(counter == (pagemax - 1)) // last page to write - might need to write less than PAGESIZE
-			fastmemcpy(addressto,addressfrom,lastpagebytes);				
-			//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, lastpagebytes);
-		else 
-			fastmemcpy(addressto,addressfrom,PAGESIZE);
-			//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, PAGESIZE);
-	
-		addressto += PAGESIZE;
-		addressfrom += PAGESIZE;
+		for(counter = 0; counter < FLASHPAGES; counter++)
+		{
+			FLASH_PAGE = counter;
+			FLASH_PGCTL = 0x02;			// Page erase bit enable, start erase
+
+			do
+			{
+				value = FLASH_PGCTL;
+			}
+			while(value & 0x02);// wait for completion of erase			
+		}
+		printf("\r\n");
+				
+		// determine number of pages to write
+		pagemax = filesize/PAGESIZE;
+		if(filesize%PAGESIZE) // last page has less than PAGESIZE bytes
+		{
+			pagemax += 1;
+			lastpagebytes = filesize%PAGESIZE;			
+		}
+		else lastpagebytes = PAGESIZE; // normal last page
+		
+		// write out each page to flash
+		for(counter = 0; counter < pagemax; counter++)
+		{
+			printf("\rWriting flash page %03d/%03d", counter+1, pagemax);
+			
+			if(counter == (pagemax - 1)) // last page to write - might need to write less than PAGESIZE
+				fastmemcpy(addressto,addressfrom,lastpagebytes);				
+				//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, lastpagebytes);
+			else 
+				fastmemcpy(addressto,addressfrom,PAGESIZE);
+				//printf("Fake copy to %lx, from %lx, %lx bytes\r\n",addressto, addressfrom, PAGESIZE);
+		
+			addressto += PAGESIZE;
+			addressfrom += PAGESIZE;
+		}
+		lockFlashKeyRegister();	// lock the flash before WARM reset
+		printf("\r\nCalculating Flash CRC - ");
+		crc32_initialize();
+		crc32(FLASHSTART, filesize);
+		crcresult = crc32_finalize();
+		if(crcresult == moscrc) {
+			printf("OK\r\n");
+			success = true;
+		}
+		else {
+			printf("ERROR\r\n");
+		}
+		attempt++;
 	}
-	lockFlashKeyRegister();	// lock the flash before WARM reset
-	printf("\r\n\r\nDone\r\n\r\n");
-	return 0;
+	if(success) {
+		printf("\r\nDone\r\n\r\n");
+	}
+	else {
+		printf("\r\nMultiple errors occured during flash write.\r\n");
+		printf("System needs bare-metal recovery.\r\n");
+	}
+	return success;
 }
 
 void echoVDP(uint8_t value) {
@@ -255,12 +296,6 @@ int getCommand(const char *command) {
 	if(memcmp(command, "silent", 6) == 0) return CMDSILENT;
 	return CMDUNKNOWN;
 }
-
-bool flashmos = false;
-char mosfilename[256];
-bool flashvdp = false;
-char vdpfilename[256];
-bool silent = false;
 
 bool parseCommands(int argc, char *argv[]) {
 	int argcounter;
@@ -368,10 +403,16 @@ bool firmwareContentOK(void) {
 	}
 	return validfirmware;
 }
+
 void showCRC32(void) {
+	if(flashmos) printf("MOS CRC 0x%04lX\r\n", moscrc);
+	if(flashvdp) printf("VDP CRC 0x%04lX\r\n", vdpcrc);
+	printf("\r\n");
+}
+
+void calculateCRC32(void) {
 	uint8_t file;
 	uint24_t got,size;
-	uint32_t moscrc,vdpcrc;
 	char* ptr;
 
 	moscrc = 0;
@@ -406,9 +447,6 @@ void showCRC32(void) {
 		mos_fclose(file);
 	}
 	printf("\r\n\r\n");
-	if(flashmos) printf("MOS CRC 0x%04lX\r\n", moscrc);
-	if(flashvdp) printf("VDP CRC 0x%04lX\r\n", vdpcrc);
-	printf("\r\n");
 }
 
 int main(int argc, char * argv[]) {	
@@ -430,7 +468,8 @@ int main(int argc, char * argv[]) {
 		return EXIT_INVALIDPARAMETER;
 	}
 
-	// Skip CRC32 and user input when 'silent' is requested
+	calculateCRC32();
+	// Skip showing CRC32 and user input when 'silent' is requested
 	if(!silent) {
 		putch(12);
 		print_version();
