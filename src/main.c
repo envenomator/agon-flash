@@ -349,6 +349,10 @@ bool parseCommands(int argc, char *argv[]) {
 				if(optbatch) return false;
 				optbatch = true;
 				optforce = true;
+				strcpy(mosfilename, DEFAULT_MOSFIRMWARE);
+				strcpy(vdpfilename, DEFAULT_VDPFIRMWARE);
+				flashmos = true;
+				flashvdp = true;
 				break;
 			case CMDFORCE:
 				if(optforce && !optbatch) return false;
