@@ -271,13 +271,7 @@ bool update_mos(char *filename) {
 		}
 		attempt++;
 	}
-	if(success) {
-		printf("\r\nDone\r\n\r\n");
-	}
-	else {
-		printf("\r\nMultiple errors occured during flash write.\r\n");
-		printf("System needs bare-metal recovery.\r\n");
-	}
+	printf("\r\n");
 	return success;
 }
 
@@ -487,16 +481,23 @@ int main(int argc, char * argv[]) {
 	}
 	if(flashmos) {
 		//beep(2);
-		update_mos(mosfilename);
-		//beep(3);
-		//printf("Press reset button");
-		//while(1);
-		printf("System reset in ");
-		for(n = 3; n > 0; n--) {
-			printf("%d...", n);
-			delayms(1000);
+		if(update_mos(mosfilename)) {
+			printf("\r\nDone\r\n\r\n");
+			//beep(3);
+			//printf("Press reset button");
+			//while(1);
+			printf("System reset in ");
+			for(n = 3; n > 0; n--) {
+				printf("%d...", n);
+				delayms(1000);
+			}
+			reset();
 		}
-		reset();
+		else {
+			printf("\r\nMultiple errors occured during flash write.\r\n");
+			printf("System needs bare-metal recovery.\r\n");
+			while(1); // No live MOS to return to
+		}
 	}
 	return 0;
 }
