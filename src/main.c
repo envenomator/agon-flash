@@ -384,7 +384,7 @@ bool filesExist(void) {
 	return filesexist;
 }
 
-bool firmwareContentOK(void) {
+bool validFirmwareFiles(void) {
 	uint8_t file;
 	uint24_t filesize;
 	uint8_t buffer[ESP32_MAGICLENGTH + ESP32_MAGICSTART];
@@ -464,6 +464,7 @@ void calculateCRC32(void) {
 int main(int argc, char * argv[]) {	
 	sysvar_t *sysvars;
 	int n;
+	uint16_t tmp;
 	sysvars = getsysvars();
 
 	// All checks
@@ -476,7 +477,7 @@ int main(int argc, char * argv[]) {
 		return EXIT_INVALIDPARAMETER;
 	}
 	if(!filesExist()) return EXIT_FILENOTFOUND;
-	if(!firmwareContentOK()) {
+	if(!validFirmwareFiles()) {
 		return EXIT_INVALIDPARAMETER;
 	}
 
@@ -494,6 +495,7 @@ int main(int argc, char * argv[]) {
 
 	if(flashvdp) {
 		while(sysvars->scrheight == 0); // wait for 1st feedback from VDP
+		tmp = sysvars->scr_height;
 		sysvars->scrheight = 0;
 		if(update_vdp(vdpfilename)) {
 			echoVDP(1);
@@ -503,6 +505,7 @@ int main(int argc, char * argv[]) {
 		else {
 			if(!optforce && flashmos) {
 				askEscapeToContinue();
+				sysvars->scrheight = tmp;
 			}
 		}
 	}
