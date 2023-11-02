@@ -2,7 +2,7 @@
  * Title:			Agon firmware upgrade utility
  * Author:			Jeroen Venema
  * Created:			17/12/2022
- * Last Updated:	14/10/2023
+ * Last Updated:	02/11/2023
  * 
  * Modinfo:
  * 17/12/2022:		Initial version
@@ -10,6 +10,7 @@
  *                  Sends cls just before reset
  * 07/06/2023:		Included faster crc32, by Leigh Brown
  * 14/10/2023:		VDP update code, MOS update rewritten for simplicity
+ * 02/11/2023:		Batched mode, rewrite of UI
  */
 
 #include <ez80.h>
@@ -124,7 +125,7 @@ bool containsESP32Header(uint8_t *filestart) {
 }
 
 void print_version(void) {
-	printf("Agon firmware upgrade utility v1.6\n\r\n\r");
+	printf("Agon firmware update utility v1.6\n\r\n\r");
 }
 
 void usage(void) {
@@ -268,7 +269,7 @@ bool update_mos(char *filename) {
 			addressfrom += PAGESIZE;
 		}
 		lockFlashKeyRegister();	// lock the flash before WARM reset
-		printf("\r\nCalculating Flash CRC - ");
+		printf("\r\nChecking CRC... ");
 		crc32_initialize();
 		crc32(FLASHSTART, filesize);
 		crcresult = crc32_finalize();
