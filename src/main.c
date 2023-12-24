@@ -24,6 +24,7 @@
 #include "crc32.h"
 #include "filesize.h"
 #include "./stdint.h"
+#include "switch-kernel.h"
 #include <string.h>
 
 #define UNLOCKMATCHLENGTH 9
@@ -38,6 +39,8 @@
 #define CMDVDP		3
 #define CMDFORCE	4
 #define CMDBATCH	5
+#define CMDSWITCHVDP	6
+#define CMDSWITCHMOS	7
 
 int errno; // needed by standard library
 enum states{firmware,retry,systemreset};
@@ -50,6 +53,7 @@ char		vdpfilename[256];
 uint32_t	vdpcrc;
 bool		optbatch = false;
 bool		optforce = false;		// No y/n user input required
+bool		optswitch = false;
 
 // separate putch function that doesn't rely on a running MOS firmware
 // UART0 initialization done by MOS firmware previously
@@ -85,7 +89,7 @@ uint8_t getCharAt(uint16_t x, uint16_t y) {
 }
 
 bool vdp_ota_present(void) {
-	char test[UNLOCKMATCHLENGTH];
+	char test[UNLOCKMATCHLENGTH+1];
 	uint16_t n;
 
 	putch(23);
@@ -130,7 +134,10 @@ void print_version(void) {
 
 void usage(void) {
 	print_version();
-	printf("Usage: FLASH [all | [mos <filename>] [vdp <filename>] | batch] <-f>\n\r");
+	printf("FLASH [commands] <-f>\n\r");
+	printf("---------------------\n\r");
+	printf("Commands: [all | [mos <filename>] [vdp <filename>] | batch |\n\r");
+	printf("           vdp-switch | mos-switch]\n\r");
 }
 
 typedef enum {
@@ -294,6 +301,29 @@ void echoVDP(uint8_t value) {
 	delayms(100);
 }
 
+void switch_vdp () {
+	// vdp_ota_present() only works when the below is exactly written to the screen in MOS
+	putch(12); // cls
+	print_version();	
+	printf("Unlocking VDP updater...\r\n");
+	// vdp_ota_present() only works when the above is exactly written to the screen in MOS
+	if(!vdp_ota_present()) {
+		printf(" failed - OTA not present in current VDP\r\n\r\n");
+		printf("Program the VDP using Arduino / PlatformIO / esptool\r\n\r\n");
+		return;
+	}
+	// Switch
+	printf("Switching VDP...\r\n");
+	// VDU 23 0 161 2
+	putch (23);
+	putch (0);
+	putch (161);
+	putch (2);
+	delayms(1000);
+	// activate vdp
+	echoVDP(1);
+}
+
 int getCommand(const char *command) {
 	if(memcmp(command, "all\0", 4) == 0) return CMDALL;
 	if(memcmp(command, "mos\0", 4) == 0) return CMDMOS;
@@ -302,6 +332,8 @@ int getCommand(const char *command) {
 	if(memcmp(command, "-f\0", 3) == 0) return CMDFORCE;
 	if(memcmp(command, "force\0", 6) == 0) return CMDFORCE;
 	if(memcmp(command, "-force\0", 7) == 0) return CMDFORCE;
+	if(memcmp(command, "vdp-switch\0", 11) == 0) return CMDSWITCHVDP;
+	if(memcmp(command, "mos-switch\0", 11) == 0) return CMDSWITCHMOS;
 	return CMDUNKNOWN;
 }
 
@@ -357,6 +389,14 @@ bool parseCommands(int argc, char *argv[]) {
 			case CMDFORCE:
 				if(optforce && !optbatch) return false;
 				optforce = true;
+				break;
+			case CMDSWITCHVDP:
+				optswitch = true;
+				flashvdp = true;
+				break;
+			case CMDSWITCHMOS:
+				optswitch = true;
+				flashmos = true;
 				break;
 		}
 		argcounter++;
@@ -480,6 +520,14 @@ int main(int argc, char * argv[]) {
 	if(!parseCommands(argc, argv)) {
 		usage();
 		return EXIT_INVALIDPARAMETER;
+	}
+	if (optswitch)
+	{
+		if (flashvdp)
+			switch_vdp ();
+		if (flashmos)
+			switch_kernel ();
+		return 0;
 	}
 	if(!filesExist()) return EXIT_FILENOTFOUND;
 	if(!validFirmwareFiles()) {

@@ -1,0 +1,69 @@
+Assumptions
+* running as a process under Quark MOS
+* ROM = 000000 - 01ffff
+*       MOS resides in 000000 - 00ffff
+*       ElectronOS resides in 010000 - 01ffff
+*       ElectronOS is compiled against 000000 base address
+* RAM = 040000 - 0bffff
+*
+* FLASH binary runs at 0b0000
+* MOS data at 0bc0000
+
+Method
+* switch off interrupts
+* move FLASH_ADDR_U to 0C.... 
+* copy shadow-kernel from 0D0000 to 080000
+* copy flash binary from 0b0000 to 070000
+
+* move CS0_LBR to 00....
+* 04-0b is shifted to 00-07
+* repeats from 08-0b
+* 07 becomes 03 and vice-versa
+* 07 also becomes 0b => flash binary can continue
+* 04 becomes 00, see below
+
+Memory layout before
+00 - rom 0 - Quark MOS                  << FLASH_ADDR_U
+01 - rom 1 - ElectronOS
+02
+03
+04 - ram 0                              << CS0_LBR
+05 - ram 1
+06 - ram 2
+07 - ram 3
+08 - ram 4
+09 - ram 5
+0a - ram 6
+0b - ram 7 - Flash binary               << CS0_UBR
+0b - c000  - .data
+b7 - e000  - internal RAM               << RAM_ADDR_U
+
+Memory layout after
+00 - ram 0 - ElectronOS                 << CS0_LBR
+01 - ram 1
+02 - ram 2
+03 - ram 3
+04 - ram 4
+05 - ram 5
+06 - ram 6
+07 - ram 7                              << CS0_UBR
+07 - c000  - .data
+08 - rom 0 - Quark MOS                  << FLASH_ADDR_U
+09 - rom 1 - ElectronOS
+b7 - e000  - internal RAM               << RAM_ADDR_U
+
+Reality, peculiar effects
+writing to 04-07 means writing to 00-03
+writing to 00-03 means writing to 04-07
+00 0000 - 04 - 0100 0000 0000 0000 0000
+01 0001 - 05 - 0101 0000 0000 0000 0000
+02 0010 - 06 - 0110 0000 0000 0000 0000
+03 0011 - 07 - 0111 0000 0000 0000 0000
+04 0100 - 00 - 0000 0000 0000 0000 0000
+05 0101 - 01 - 0001 0000 0000 0000 0000
+06 0110 - 02 - 0010 0000 0000 0000 0000
+07 0111 - 03 - 0011 0000 0000 0000 0000
+08 1000 - 04 - 0100 0000 0000 0000 0000
+09 1001 - 05 - 0101 0000 0000 0000 0000
+0a 1010 - 06 - 0110 0000 0000 0000 0000
+0b 1011 - 07 - 0111 0000 0000 0000 0000
