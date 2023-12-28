@@ -36,8 +36,15 @@ _switch_kernel:
 	out0 (CS0_LBR), a
 	jp 000000h ; init
 	; kernel will now run from RAM
-	; DATA should be in 07c000 - 07ffff
-	; SP should be in 07ffff
+	;
+	; normal initialisation routines will take over
+	; make sure you have setup your OS with the following
+	; (virtual) ROM address space 000000 - 01ffff
+	; RAM address space 07c000 - 07ffff
+	; External RAM 000000 - 07ffff
+	; CS0 from 00 to 07
+	; Data RAM out of the way to FF
+	; Flash to 08 (you can do 0 wait-states)
 _switch_kernel_end:
 
 end	
