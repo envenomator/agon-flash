@@ -4,6 +4,10 @@ The Agon firmware update utility is able to flash MOS / VDP firmware from files 
 The utility needs at least MOS version 1.03. If you are still running an older MOS version, please see this legacy [utility](https://github.com/envenomator/agon-flashlegacy).
 
 Flashing VDP firmware from a file on the SD card, requires a programmed VDP that has OTA (Over-the-air) functionality built in. This is available in Console8 VDP 2.0.0+ and Quark VDP 1.4+ firmware versions. Once a compatible VDP is present in the system, new VDP versions can be flashed using the flash utility. 
+
+This workflow outlines the update process, depending on your specific current MOS/VDP versions:
+![process](assets/update_process.png)
+
 ### Installation
 1. Make sure to create a **mos** directory on the microSD card, if it's not already present.
 2. Place the [flash.bin](https://github.com/envenomator/agon-flash/blob/master/binaries/flash.bin) in the **mos** directory
