@@ -170,7 +170,8 @@ OBJS =  \
             $(WORKDIR_ESCSPACE)\agontimer.obj  \
             $(WORKDIR_ESCSPACE)\strtoll.obj  \
             $(WORKDIR_ESCSPACE)\crc32.obj  \
-            $(WORKDIR_ESCSPACE)\filesize.obj
+            $(WORKDIR_ESCSPACE)\filesize.obj \
+            $(WORKDIR_ESCSPACE)\switch-kernel.obj
 
 flash: $(OBJS)
 	 $(LD) $(LDFLAGS)
