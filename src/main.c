@@ -125,7 +125,7 @@ bool containsESP32Header(uint8_t *filestart) {
 }
 
 void print_version(void) {
-	printf("Agon firmware update utility v1.6\n\r\n\r");
+	printf("Agon firmware update utility v1.7\n\r\n\r");
 }
 
 void usage(void) {
@@ -268,7 +268,10 @@ bool update_mos(char *filename) {
 			addressto += PAGESIZE;
 			addressfrom += PAGESIZE;
 		}
-		lockFlashKeyRegister();	// lock the flash before WARM reset
+		// lock the flash before WARM reset
+		enableFlashKeyRegister();	// unlock Flash Key Register, so we can write to the Flash Write/Erase protection registers
+		FLASH_PROT = 0xff;			// enable protection on all 8x16KB blocks in the flash
+		
 		printf("\r\nChecking CRC... ");
 		crc32_initialize();
 		crc32(FLASHSTART, filesize);

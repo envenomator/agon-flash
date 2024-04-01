@@ -8,7 +8,6 @@
 ;	14/10/2023: VDP update routine added
 
 	XDEF _enableFlashKeyRegister
-	XDEF _lockFlashKeyRegister
 	XDEF _fastmemcpy
 	XDEF _reset
 	XDEF _startVDPupdate
@@ -29,18 +28,6 @@ _enableFlashKeyRegister:
 	LD		A, b6h	; unlock
 	OUT0	(F5h), A
 	LD		A, 49h
-	OUT0	(F5h), A
-	
-	LD		SP, IX
-	POP		IX
-	RET
-
-_lockFlashKeyRegister:
-	PUSH	IX
-	LD		IX, 0
-	ADD		IX, SP
-	
-	LD		A, FFh	; lock
 	OUT0	(F5h), A
 	
 	LD		SP, IX
