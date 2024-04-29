@@ -10,8 +10,8 @@ Flashing VDP firmware from a file on the SD card, requires a programmed VDP that
 1. Make sure to create a **mos** directory on the microSD card, if it's not already present.
 2. Place the [flash.bin](https://github.com/envenomator/agon-flash/releases/latest/download/flash.bin) in the **mos** directory
 3. Place the firmware files in the **root** directory of the microSD card:
-    - MOS firmware - default filename 'MOS.bin'
-    - VDP firmware - default filename 'firmware.bin'
+    - MOS firmware - default filename 'MOS.bin' (download [latest](https://github.com/AgonConsole8/agon-mos/releases/latest/download/MOS.bin) version)
+    - VDP firmware - default filename 'firmware.bin' (download [latest](https://github.com/AgonConsole8/agon-vdp/releases/latest/download/firmware.bin) version)
 
 ## Usage
 
